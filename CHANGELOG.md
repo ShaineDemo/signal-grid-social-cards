@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 — 2026-08-20
+
+- Documented native installation for Codex, Claude Code, Kimi Code CLI, and DeepSeek Harness.
+- Added portable runtime requirements and an explicit distinction between model compatibility and agent-host capabilities.
+- Added cross-host routing language and portable license metadata to `SKILL.md`.
+
 ## 1.2.0 — 2026-08-20
 
 - Added three sourced showcase carousels to both README editions.

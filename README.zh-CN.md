@@ -24,6 +24,24 @@
 
 三端不会直接复用同一批成品 PNG。X 和 LinkedIn 版本从同一事实账本重新排版，并分别调整卡片数量和发布文案。详细规则见 [platform-system.md](references/platform-system.md)。
 
+## Agent 产品支持
+
+仓库采用可移植的目录型 Agent Skill 结构：根目录是 `SKILL.md`，并通过相对路径引用 `references/`、`scripts/` 和 `assets/`。放入对应扫描目录后，可被以下产品原生发现：
+
+| Agent 产品 | 支持情况 | 个人或项目目录 |
+| --- | --- | --- |
+| OpenAI Codex | 原生支持 | `~/.codex/skills/signal-grid-social-cards/` |
+| Claude Code | 原生支持 | `~/.claude/skills/signal-grid-social-cards/` 或 `.claude/skills/signal-grid-social-cards/` |
+| Kimi Code CLI | 原生支持 | `~/.kimi-code/skills/signal-grid-social-cards/` 或 `~/.agents/skills/signal-grid-social-cards/` |
+| DeepSeek Harness | 原生支持，开发者预览 | `.dsh/skills/signal-grid-social-cards/` 或 `.agents/skills/signal-grid-social-cards/` |
+| 其他兼容 Agent Skills 的工具 | 预计兼容 | 将完整目录放入产品文档指定的 Skill 根目录 |
+
+官方说明：[Claude Code Skills](https://code.claude.com/docs/en/skills)、[Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md)、[DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md)。
+
+兼容性取决于 **Agent 宿主**，不只是模型名称。普通网页聊天或裸 API 在拿到文件后可以执行文案部分，但只有宿主具备联网检索、读取资源、写文件及运行 Node.js/Python 的能力，才能完成 HTML、PNG、总览图和 PDF 的完整生产流程。DeepSeek Harness 当前仍处于开发者预览阶段，后续可能出现破坏性改动。
+
+`agents/openai.yaml` 只提供 Codex 界面元数据；Claude Code、Kimi Code CLI 和 DeepSeek Harness 可以忽略它，共同使用同一份 `SKILL.md` 工作流。
+
 ## 主要能力
 
 - 默认生成 5–6 张 `1080×1440` 小红书图文卡片，并支持 X、LinkedIn 专用 4:5 重排。
@@ -40,17 +58,38 @@
 
 ## 安装
 
-将发布 ZIP 解压到 Codex Skills 目录：
+必须安装完整目录，不能只复制 `SKILL.md`，因为渲染流程还需要模板、references 和 scripts。
+
+Codex：
 
 ```bash
-mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills/signal-grid-social-cards"
-unzip signal-grid-social-cards.zip -d "${CODEX_HOME:-$HOME/.codex}/skills/signal-grid-social-cards"
+git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.codex/skills/signal-grid-social-cards
 ```
 
-重新加载 Codex 后可以这样使用：
+Claude Code：
+
+```bash
+git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.claude/skills/signal-grid-social-cards
+```
+
+Kimi Code CLI：
+
+```bash
+git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.kimi-code/skills/signal-grid-social-cards
+```
+
+DeepSeek Harness 项目级安装：
+
+```bash
+git clone https://github.com/ShaineDemo/signal-grid-social-cards.git .dsh/skills/signal-grid-social-cards
+```
+
+重新加载 Agent 后按宿主对应方式调用：
 
 ```text
 使用 $signal-grid-social-cards 把这个选题做成 6 张小红书图文，并一起生成发布标题和正文。
+/signal-grid-social-cards 把这个选题做成 6 张图文。
+/skill:signal-grid-social-cards 把这个选题做成 6 张图文。
 ```
 
 英文版本：
