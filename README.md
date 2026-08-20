@@ -33,14 +33,15 @@ This repository uses the portable directory-form Agent Skill layout: `SKILL.md` 
 | OpenAI Codex | Native | `~/.codex/skills/signal-grid-social-cards/` |
 | Claude Code | Native | `~/.claude/skills/signal-grid-social-cards/` or `.claude/skills/signal-grid-social-cards/` |
 | Kimi Code CLI | Native | `~/.kimi-code/skills/signal-grid-social-cards/` or `~/.agents/skills/signal-grid-social-cards/` |
+| Grok Build / Grok CLI | Native | `~/.grok/skills/signal-grid-social-cards/` or `.grok/skills/signal-grid-social-cards/` |
 | DeepSeek Harness | Native, developer preview | `.dsh/skills/signal-grid-social-cards/` or `.agents/skills/signal-grid-social-cards/` |
 | Other Agent Skills-compatible harnesses | Expected to work | Install the whole directory in that product's documented Skill root |
 
-Official references: [Claude Code Skills](https://code.claude.com/docs/en/skills), [Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md), and [DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md).
+Official references: [Claude Code Skills](https://code.claude.com/docs/en/skills), [Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md), [Grok Build Skills](https://docs.x.ai/build/features/skills-plugins-marketplaces), and [DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md).
 
 Compatibility belongs to the **agent host**, not just the model name. Plain web chat or API calls can follow the writing instructions when the files are supplied, but cannot complete the full workflow unless the host can browse sources, read bundled resources, write files, and run Node.js/Python. DeepSeek Harness is currently a developer preview and may introduce breaking changes.
 
-`agents/openai.yaml` only adds Codex-facing UI metadata. Claude Code, Kimi Code CLI, and DeepSeek Harness can ignore it and use the shared `SKILL.md` workflow.
+`agents/openai.yaml` only adds Codex-facing UI metadata. Claude Code, Kimi Code CLI, Grok Build, and DeepSeek Harness can ignore it and use the shared `SKILL.md` workflow.
 
 ## What it produces
 
@@ -77,6 +78,13 @@ Kimi Code CLI:
 git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.kimi-code/skills/signal-grid-social-cards
 ```
 
+Grok Build / Grok CLI:
+
+```bash
+git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.grok/skills/signal-grid-social-cards
+grok inspect
+```
+
 DeepSeek Harness, project scope:
 
 ```bash
@@ -103,7 +111,7 @@ Cross-platform output:
 Use $signal-grid-social-cards to create Chinese editions for Xiaohongshu, X, and LinkedIn, with platform-specific layouts and post copy.
 ```
 
-Invocation syntax varies by host: Codex commonly uses `$signal-grid-social-cards`, Claude Code exposes a slash command, and Kimi Code CLI supports `/skill:signal-grid-social-cards`. DeepSeek Harness can load it through its Skill catalog/tool. Automatic discovery remains enabled where the host supports it.
+Invocation syntax varies by host: Codex commonly uses `$signal-grid-social-cards`; Claude Code and Grok Build expose `/signal-grid-social-cards`; Kimi Code CLI supports `/skill:signal-grid-social-cards`; DeepSeek Harness can load it through its Skill catalog/tool. Automatic discovery remains enabled where the host supports it.
 
 ## Upload through the OpenAI Skills API
 

@@ -33,14 +33,15 @@
 | OpenAI Codex | 原生支持 | `~/.codex/skills/signal-grid-social-cards/` |
 | Claude Code | 原生支持 | `~/.claude/skills/signal-grid-social-cards/` 或 `.claude/skills/signal-grid-social-cards/` |
 | Kimi Code CLI | 原生支持 | `~/.kimi-code/skills/signal-grid-social-cards/` 或 `~/.agents/skills/signal-grid-social-cards/` |
+| Grok Build / Grok CLI | 原生支持 | `~/.grok/skills/signal-grid-social-cards/` 或 `.grok/skills/signal-grid-social-cards/` |
 | DeepSeek Harness | 原生支持，开发者预览 | `.dsh/skills/signal-grid-social-cards/` 或 `.agents/skills/signal-grid-social-cards/` |
 | 其他兼容 Agent Skills 的工具 | 预计兼容 | 将完整目录放入产品文档指定的 Skill 根目录 |
 
-官方说明：[Claude Code Skills](https://code.claude.com/docs/en/skills)、[Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md)、[DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md)。
+官方说明：[Claude Code Skills](https://code.claude.com/docs/en/skills)、[Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md)、[Grok Build Skills](https://docs.x.ai/build/features/skills-plugins-marketplaces)、[DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md)。
 
 兼容性取决于 **Agent 宿主**，不只是模型名称。普通网页聊天或裸 API 在拿到文件后可以执行文案部分，但只有宿主具备联网检索、读取资源、写文件及运行 Node.js/Python 的能力，才能完成 HTML、PNG、总览图和 PDF 的完整生产流程。DeepSeek Harness 当前仍处于开发者预览阶段，后续可能出现破坏性改动。
 
-`agents/openai.yaml` 只提供 Codex 界面元数据；Claude Code、Kimi Code CLI 和 DeepSeek Harness 可以忽略它，共同使用同一份 `SKILL.md` 工作流。
+`agents/openai.yaml` 只提供 Codex 界面元数据；Claude Code、Kimi Code CLI、Grok Build 和 DeepSeek Harness 可以忽略它，共同使用同一份 `SKILL.md` 工作流。
 
 ## 主要能力
 
@@ -76,6 +77,13 @@ Kimi Code CLI：
 
 ```bash
 git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.kimi-code/skills/signal-grid-social-cards
+```
+
+Grok Build / Grok CLI：
+
+```bash
+git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.grok/skills/signal-grid-social-cards
+grok inspect
 ```
 
 DeepSeek Harness 项目级安装：

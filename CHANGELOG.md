@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1 — 2026-08-20
+
+- Added Grok Build / Grok CLI to the native Agent Skill compatibility table.
+- Added Grok installation, inspection, invocation, and official documentation links.
+
 ## 1.3.0 — 2026-08-20
 
 - Documented native installation for Codex, Claude Code, Kimi Code CLI, and DeepSeek Harness.

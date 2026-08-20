@@ -1,6 +1,6 @@
 ---
 name: signal-grid-social-cards
-description: Create Chinese or English social-card carousels for Xiaohongshu/RedNote, X, and LinkedIn with platform-ready titles and post copy in a modular modernist “signal grid” style. Portable across Codex, Claude Code, Kimi Code CLI, and DeepSeek Harness. Use for explainers, product updates, launch summaries, trend cards, and visual news briefs that may benefit from sourced company logos, product images, or interview portraits; do not use for photo-led lifestyle posts or ornate editorial layouts.
+description: Create Chinese or English social-card carousels for Xiaohongshu/RedNote, X, and LinkedIn with platform-ready titles and post copy in a modular modernist “signal grid” style. Portable across Codex, Claude Code, Kimi Code CLI, Grok Build, and DeepSeek Harness. Use for explainers, product updates, launch summaries, trend cards, and visual news briefs that may benefit from sourced company logos, product images, or interview portraits; do not use for photo-led lifestyle posts or ornate editorial layouts.
 license: AGPL-3.0
 ---
 
