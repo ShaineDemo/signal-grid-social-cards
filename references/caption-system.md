@@ -55,7 +55,9 @@ Use bullets only when they make conditions or features easier to scan. Avoid rep
 ## Platform tone
 
 - RedNote/Xiaohongshu is the default: conversational, concise, useful; use short paragraphs and 3–6 relevant hashtags. English posts should remain readable for an international or bilingual Xiaohongshu audience and avoid unexplained local slang.
-- Weibo/X: more compressed and news-forward; one strong first paragraph and 2–4 hashtags.
+- Weibo: more compressed and news-forward; one strong first paragraph and 2–4 hashtags.
+- X: follow the four-media and 280-character rules in `platform-system.md`; longer visual stories become threads.
+- LinkedIn: lead with the professional implication, add evidence and a measured takeaway, and use 0–3 precise hashtags.
 - WeChat: more explanatory; hashtags are optional.
 
 If the platform is unspecified, optimize for Xiaohongshu/RedNote rather than a generic cross-platform compromise.

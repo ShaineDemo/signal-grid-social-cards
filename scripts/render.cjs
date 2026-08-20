@@ -30,13 +30,24 @@ async function main() {
   const cards = page.locator('.poster');
   const count = await cards.count();
   if (!count) throw new Error('No .poster elements found.');
+  const platform = await page.locator('body').getAttribute('data-platform') || 'xiaohongshu';
+  const expectedSizes = {
+    xiaohongshu: { width: 1080, height: 1440 },
+    rednote: { width: 1080, height: 1440 },
+    x: { width: 1080, height: 1350 },
+    linkedin: { width: 1080, height: 1350 },
+  };
+  const expected = expectedSizes[platform];
+  if (!expected) throw new Error(`Unsupported data-platform: ${platform}`);
 
   const issues = [];
   for (let i = 0; i < count; i++) {
     const card = cards.nth(i);
     const filename = await card.getAttribute('data-filename') || `${String(i + 1).padStart(2, '0')}.png`;
     const size = await card.evaluate(el => ({ width: el.offsetWidth, height: el.offsetHeight, scrollWidth: el.scrollWidth, scrollHeight: el.scrollHeight }));
-    if (size.width !== 1080 || size.height !== 1440) issues.push(`${filename}: ${size.width}x${size.height}, expected 1080x1440`);
+    if (size.width !== expected.width || size.height !== expected.height) {
+      issues.push(`${filename}: ${size.width}x${size.height}, expected ${expected.width}x${expected.height} for ${platform}`);
+    }
     if (size.scrollWidth > size.width || size.scrollHeight > size.height) issues.push(`${filename}: poster overflow ${size.scrollWidth}x${size.scrollHeight}`);
     await card.screenshot({ path: path.join(outputDir, filename) });
     process.stdout.write(`rendered ${filename}\n`);

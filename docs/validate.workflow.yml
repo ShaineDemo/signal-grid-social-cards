@@ -22,6 +22,7 @@ jobs:
       - run: python scripts/validate_skill.py .
       - run: npm run render:example
       - run: python scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png
+      - run: python scripts/pngs_to_pdf.py examples/palette-preview/png examples/palette-preview/palette-preview.pdf
       - uses: actions/upload-artifact@v4
         with:
           name: palette-preview

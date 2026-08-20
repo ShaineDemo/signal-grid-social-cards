@@ -14,6 +14,12 @@ The source language is a modular modernist interface rather than a conventional 
 
 Translate these principles to 3:4 cards; do not reproduce the source image's exact 3×3 composition, wording, or proportions.
 
+## Canvas routing
+
+- Xiaohongshu/RedNote: 1080×1440 (3:4), the native/default canvas.
+- X and LinkedIn: 1080×1350 (4:5), rebuilt from the same page plan rather than cropped from 3:4.
+- Keep the same horizontal safe area and type hierarchy at 1080-pixel width. Recover the shorter 4:5 height by tightening empty vertical zones, shortening copy, or changing page grammar—not by shrinking body text below the minimum.
+
 ## Palette routing
 
 Choose one palette for the entire carousel. Do not mix palette families page by page. Let the subject, recognition asset, and editorial tone decide:

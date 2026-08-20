@@ -17,10 +17,12 @@ REQUIRED_FILES = {
     "references/caption-system.md",
     "references/cover-evidence.md",
     "references/narrative-system.md",
+    "references/platform-system.md",
     "references/qa.md",
     "references/visual-system.md",
     "scripts/render.cjs",
     "scripts/make_contact_sheet.py",
+    "scripts/pngs_to_pdf.py",
 }
 
 TEXT_EXTENSIONS = {".md", ".html", ".yaml", ".yml", ".py", ".cjs", ".json", ".txt"}
@@ -62,6 +64,8 @@ def validate(root: Path) -> None:
         'class="poster',
         "width:1080px",
         "height:1440px",
+        'data-platform="xiaohongshu"',
+        'data-platform="x"',
         "palette-violet-moss",
         "palette-petrol-raspberry",
     ):

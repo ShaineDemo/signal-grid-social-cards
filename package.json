@@ -1,13 +1,14 @@
 {
   "name": "signal-grid-social-cards",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Rendering utilities for a bilingual Xiaohongshu social-card Codex Skill",
   "license": "AGPL-3.0",
   "scripts": {
     "render:example": "node scripts/render.cjs examples/palette-preview/index.html examples/palette-preview/png",
     "validate": "python3 scripts/validate_skill.py .",
-    "build": "python3 scripts/build_release.py"
+    "build": "python3 scripts/build_release.py",
+    "pdf": "python3 scripts/pngs_to_pdf.py"
   },
   "devDependencies": {
     "playwright": "1.62.1"

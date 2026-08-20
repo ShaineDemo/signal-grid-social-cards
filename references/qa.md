@@ -20,7 +20,7 @@
 
 ## Layout
 
-- Every poster is exactly 1080×1440.
+- Every Xiaohongshu poster is exactly 1080×1440; every X or LinkedIn poster is exactly 1080×1350.
 - No visible element crosses the 64 px safe margin unless it is a deliberate full-bleed field.
 - No overflow or clipping.
 - Body copy is at least 30 px.
@@ -42,3 +42,5 @@
 ## Final inspection
 
 Open the contact sheet, then inspect the cover and densest page at full size. Check line breaks, contrast, hierarchy, bottom balance, logo/portrait integrity, and whether the recognition asset genuinely helps. Re-render after any edit. Read `POST_COPY.md` once as a user and once against the source ledger.
+
+For X, verify no post contains more than four images and ordinary post copy stays within 280 characters. For LinkedIn, verify 4:5 output and open the generated PDF when document-carousel delivery was requested.

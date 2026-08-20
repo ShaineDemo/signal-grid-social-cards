@@ -4,7 +4,7 @@ Signal Grid Social Cards is built on workflow and social-storytelling ideas from
 
 The upstream project is licensed under GNU AGPL-3.0. This project therefore uses GNU AGPL-3.0 and retains the upstream attribution. Signal Grid's modular visual language, palette definitions, bilingual writing system, evidence-led cover rules, examples, and supporting scripts were developed for this project, but the project should not be presented as unrelated to its Guizang foundation.
 
-This repository does not bundle upstream templates, prompts, scripts, or third-party logos, trademarks, portraits, product photographs, or interview images unless a future contribution identifies and preserves their original notices and license terms.
+This repository does not bundle upstream templates, prompts, or scripts. Its three README showcase composites contain limited third-party marks and photographs for editorial identification; their provenance and rights notes are recorded in `examples/showcase/SOURCES.md`. Those third-party elements are excluded from the AGPL grant.
 
 When the Skill is used to create an editorial project:
 

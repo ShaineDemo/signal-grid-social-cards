@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 — 2026-08-20
+
+- Added three sourced showcase carousels to both README editions.
+- Added honest platform presets for Xiaohongshu/RedNote, X, and LinkedIn.
+- Added 4:5 rendering support for X and LinkedIn instead of reusing 3:4 exports.
+- Added X media-count/thread-copy rules and LinkedIn PDF document assembly.
+- Added responsive contact-sheet sizing and showcase provenance records.
+
 ## 1.1.0 — 2026-08-20
 
 - Added complete English card and publish-copy support.

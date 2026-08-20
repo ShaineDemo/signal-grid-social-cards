@@ -15,7 +15,9 @@ def main():
     if not files:
         raise SystemExit("No PNG files found")
 
-    thumb_w, thumb_h = 360, 480
+    first = Image.open(files[0])
+    thumb_w = 360
+    thumb_h = round(thumb_w * first.height / first.width)
     gap, label_h, outer = 24, 40, 32
     rows = (len(files) + args.cols - 1) // args.cols
     width = outer * 2 + args.cols * thumb_w + (args.cols - 1) * gap

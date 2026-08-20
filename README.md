@@ -2,21 +2,40 @@
 
 [中文说明](README.zh-CN.md)
 
-An open-source Codex Skill for turning sourced topics into Chinese or English 3:4 Xiaohongshu/RedNote carousels, editable HTML/CSS, ordered PNGs, and publish-ready post copy.
+An open-source Codex Skill for turning sourced topics into Chinese or English social-card stories for Xiaohongshu/RedNote, X, and LinkedIn—with editable HTML/CSS, ordered PNGs, platform-ready copy, and optional LinkedIn PDF export.
 
 > Built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [op7418](https://github.com/op7418). Thank you for the excellent foundation. Signal Grid uses a distinct modular visual system while retaining upstream attribution and the AGPL-3.0 license.
 
-![Three built-in palettes](examples/palette-preview/contact-sheet.png)
+## Made with Signal Grid
+
+| Etched: valuation doubled | OpenAI: training and misalignment | Pony.ai: overseas Robotaxi plan |
+| --- | --- | --- |
+| ![Etched valuation carousel](examples/showcase/etched-valuation.png) | ![OpenAI training carousel](examples/showcase/openai-misalignment.png) | ![Pony.ai Robotaxi carousel](examples/showcase/pony-ai-robotaxi.png) |
+
+Each example turns one current topic into a sourced six-card argument: hook, evidence, meaning, and boundary. Showcase imagery is used for editorial identification; credits and rights notes are recorded in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md).
+
+## Platform support
+
+| Platform | Status | Native output |
+| --- | --- | --- |
+| Xiaohongshu / RedNote | Primary, native preset | 1080×1440 (3:4), normally 5–6 cards, publish-ready caption |
+| X | Reflowed platform preset | 1080×1350 (4:5), up to 4 images per post, thread-ready copy within ordinary post limits |
+| LinkedIn | Reflowed platform preset | 1080×1350 (4:5), multi-image post or one PDF document carousel |
+
+The same finished PNGs are not reused across all platforms. X and LinkedIn editions are reflowed from the shared fact ledger, with platform-specific card counts and copy. See [platform-system.md](references/platform-system.md).
 
 ## What it produces
 
-- A fact-checked 5–6 card narrative optimized for Xiaohongshu/RedNote, normally `1080×1440` per card.
+- A fact-checked 5–6 card narrative optimized for Xiaohongshu/RedNote, plus dedicated X and LinkedIn reflow presets.
 - Complete Simplified Chinese or editorial English output, including cards, titles, captions, hashtags, caveats, and alt text.
 - Editable, dependency-light HTML/CSS.
 - Ordered PNG exports and a contact sheet for review.
+- Optional PDF assembly for LinkedIn document carousels.
 - `POST_COPY.md` with a recommended title, alternatives, body copy, hashtags, and caveats.
 - `SOURCES.md` with claim and recognition-asset provenance.
 - Three built-in palettes: Signal Blue / Alert Orange, Violet / Moss, and Petrol / Raspberry.
+
+![Three built-in palettes](examples/palette-preview/contact-sheet.png)
 
 ## Install as a local Codex Skill
 
@@ -38,6 +57,12 @@ English output is explicit and complete:
 
 ```text
 Use $signal-grid-social-cards to make an English six-card Xiaohongshu carousel from this article.
+```
+
+Cross-platform output:
+
+```text
+Use $signal-grid-social-cards to create Chinese editions for Xiaohongshu, X, and LinkedIn, with platform-specific layouts and post copy.
 ```
 
 The Skill remains eligible for automatic discovery because no explicit-only invocation policy is set.
@@ -67,6 +92,7 @@ Render an HTML card set and build its review sheet:
 ```bash
 node scripts/render.cjs path/to/index.html path/to/png
 python3 scripts/make_contact_sheet.py path/to/png path/to/contact-sheet.png
+python3 scripts/pngs_to_pdf.py path/to/linkedin-png path/to/linkedin-carousel.pdf
 ```
 
 ## Validate before release
@@ -85,15 +111,15 @@ A ready-to-enable GitHub Actions definition is included at `docs/validate.workfl
 ```text
 SKILL.md                 Skill entrypoint
 agents/openai.yaml       Codex UI metadata
-assets/template.html     Editable 3:4 HTML starter
+assets/template.html     Editable 3:4 and 4:5 HTML starter
 references/              Narrative, visual, caption, evidence, and QA rules
 scripts/                 Rendering, validation, contact-sheet, and release tools
-examples/palette-preview Dependency-free editorial sample source
+examples/                Showcase images and dependency-free preview source
 ```
 
 ## Rights and source assets
 
-The repository intentionally contains no third-party logos, portraits, product photos, or screenshots. The Skill may source those assets for editorial identification while running, but every generated project must record provenance and respect the asset owner's license and trademark rights.
+The three showcase composites contain third-party logos and photographs for editorial identification. Their sources and status are documented in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md); those materials are not relicensed under AGPL. New generated projects must record provenance and respect the asset owner's license, publicity, and trademark rights.
 
 Generated outputs are not automatically covered by this repository's AGPL license when they contain third-party material. See [NOTICE.md](NOTICE.md).
 

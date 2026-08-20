@@ -29,6 +29,8 @@
     body { font-family:"Helvetica Neue",Arial,"PingFang SC","Hiragino Sans GB",sans-serif; }
     .sheet { display:grid; grid-template-columns:repeat(2,1080px); gap:48px; padding:48px; width:max-content; }
     .poster { position:relative; width:1080px; height:1440px; overflow:hidden; background:var(--paper); }
+    body[data-platform="x"] .poster,
+    body[data-platform="linkedin"] .poster { height:1350px; }
     .frame { height:100%; padding:var(--safe); display:flex; flex-direction:column; gap:var(--gap); }
     .blue { background:var(--blue); color:var(--white); }
     .orange { background:var(--orange); color:var(--white); }
@@ -80,7 +82,7 @@
     .spacer { flex:1; }
   </style>
 </head>
-<body>
+<body data-platform="xiaohongshu">
   <main class="sheet">
     <!-- Replace this placeholder with one .poster section per card. -->
     <section class="poster blue" id="card-01" data-filename="01-cover.png">
