@@ -1,0 +1,5 @@
+interface:
+  display_name: "Signal Grid Social Cards"
+  short_description: "Create bilingual Xiaohongshu cards and copy"
+  brand_color: "#315EEA"
+  default_prompt: "Use $signal-grid-social-cards to turn this topic into a Chinese or English Xiaohongshu carousel with a title, publish-ready post copy, and sourced cover imagery when useful."
