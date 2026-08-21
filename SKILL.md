@@ -29,7 +29,7 @@ This project is built on workflow and social-storytelling ideas from [Guizang So
 5. Create `POST_COPY.md` from the same fact ledger and story thesis. Include one recommended title, 2–3 alternatives, publish-ready body copy, suggested hashtags, and any necessary availability caveat.
 6. Decide whether the cover needs a recognition asset. Prefer official company/product logos for company news, an official product or UI image for product news, and a sourced photo of the person or interview scene for interviews. Record provenance before placing it.
 7. Copy `assets/template.html` into a task folder outside the skill directory. Replace the placeholder with the planned posters and add only task-scoped CSS when the existing primitives cannot express the page.
-8. Use words, numbers, and one recognition asset as the primary visual material. Favor matrices, bars, pills, split fields, giant numerals, and short statements. Do not invent statistics to make a page look designed.
+8. Use words, numbers, and one recognition asset as the primary visual material. Favor matrices, bars, pills, split fields, meaningful numeric units, and short statements. Every oversized number must stay in the same module as what it counts or measures plus one useful context cue. If it only repeats the title, ranking, or page count, replace it with a labeled sequence, relationship, category list, or action verb. Do not invent statistics to make a page look designed.
 9. Set `data-platform="xiaohongshu"`, `data-platform="x"`, or `data-platform="linkedin"` on `<body>`, then render with `scripts/render.cjs <index.html> <output-dir>`. The renderer checks the matching dimensions. If `playwright` is not locally resolvable, set `NODE_PATH` to the available workspace Node modules directory.
 10. Build a review image with `scripts/make_contact_sheet.py <output-dir> <contact-sheet.png>`.
 11. Inspect the contact sheet and at least the cover at full size. Correct overflow, weak hierarchy, repetitive layouts, factual ambiguity, accidental decoration, distorted brand assets, and misleading imagery before delivery.
@@ -56,6 +56,7 @@ This project is built on workflow and social-storytelling ideas from [Guizang So
 - Rounded geometry is structural: outer panels, circular matrix cells, and compact pills. Avoid generic nested SaaS cards.
 - No gradients, drop shadows, fake 3D, glassmorphism, decorative stock illustrations, emoji, or random blobs.
 - Vary the page grammar across the set. Do not repeat the same title-plus-four-box layout more than twice.
+- Treat a large number as information, never as filler. Pair it visibly with its unit or counted object and a consequence, comparison, time frame, stage label, or list that resolves the count.
 - Preserve at least 60 px outer safe margin and 24 px gaps. Keep body text at least 30 px at 1080-pixel width.
 - Logos and portraits are recognition evidence, not decoration. Keep them subordinate to the editorial headline, preserve their aspect ratio, and never redraw, recolor, or synthesize an official logo.
 - Do not generate a fake photo of a real person or a fabricated interview scene. Use a user-supplied image, the original interview/event image, an official press image, or a clearly licensed photograph.

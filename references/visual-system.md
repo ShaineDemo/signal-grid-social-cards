@@ -87,15 +87,41 @@ The default font stack is `Helvetica Neue`, `Arial`, `PingFang SC`, `Hiragino Sa
 
 Choose one dominant grammar per page:
 
-1. **Type field** — one giant word or number plus a small context line.
+1. **Type field** — one giant word or a complete numeric unit plus a context line.
 2. **Circle matrix** — 2×2 equal circles for four capabilities, conditions, or steps.
 3. **Split field** — a large colored block opposed by a pale information block.
 4. **Pill stack** — three or four horizontal bars showing routing, order, or availability.
-5. **Count stack** — one giant version/date/quantity with a short consequence beneath.
+5. **Count stack** — one giant version/date/quantity immediately coupled to its unit or counted object, with a short consequence beneath.
 6. **Contrast pair** — blue and orange halves for “before/after”, “can/cannot”, or “signal/noise”.
 7. **Closing statement** — a short thesis with one compact evidence strip.
 
 Do not place more than two dominant grammars on one page.
+
+## Numeric information units
+
+Oversized numerals are evidence, structure, or navigation—not decoration. A large number is valid only when the reader can understand it without searching another module for context.
+
+Keep these three parts together inside one visual module:
+
+1. **Value** — the sourced quantity, date, version, rank, or sequence number.
+2. **Object or unit** — what the value counts or measures, such as “个 Skills”, “亿美元”, “周”, “辆”, or “版本”.
+3. **Context** — a consequence, comparison, time frame, stage label, or compact list that explains why the value matters.
+
+Good patterns:
+
+- `1 次安装` + `Product Management Plugin`.
+- `5 条工作流` + `研究 / 思考 / 规格 / 取舍 / 复盘`.
+- `$21B 估值` + `不到一个月翻倍`.
+- `01 用户研究` as a labeled sequence marker.
+
+Avoid:
+
+- A large `5` whose only explanation is the distant cover title “Top 5”.
+- A split page containing only `1` and `5`, with descriptive labels pushed to the bottom.
+- Repeating the same number on the cover and next page only to fill colored panels.
+- Inventing a quantity because the composition appears empty.
+
+If the source does not provide a meaningful quantity, replace the numeral with a short verb, a labeled workflow, a category list, or a relationship diagram. In a narrow module, five small labeled rows communicate “five workflows” better than one unsupported giant `5`.
 
 ## Type scale at 1080×1440
 

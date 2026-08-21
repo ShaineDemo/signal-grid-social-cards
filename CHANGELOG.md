@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.2 — 2026-08-21
+
+- Added a numeric-information-unit rule: oversized numbers must include the counted object or unit plus useful context in the same module.
+- Added reusable metric primitives to the HTML template.
+- Added QA checks against isolated, repetitive, or decorative numerals.
+
 ## 1.3.1 — 2026-08-20
 
 - Added Grok Build / Grok CLI to the native Agent Skill compatibility table.

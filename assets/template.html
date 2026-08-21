@@ -64,7 +64,14 @@
     .pill.orange-fill { background:var(--orange); }
     .split { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:var(--gap); min-height:0; }
     .split > * { border-radius:var(--radius-lg); padding:36px; display:flex; flex-direction:column; }
-    .count { font-size:170px; line-height:.82; font-weight:300; letter-spacing:-.07em; }
+    /* Never use a large value alone. Keep value, unit/object, and context together in .metric. */
+    .metric { padding:34px; border-radius:var(--radius-lg); display:flex; flex-direction:column; gap:22px; background:var(--blue); color:var(--white); }
+    .metric-line { display:flex; align-items:flex-end; gap:18px; }
+    .metric-value { font-size:170px; line-height:.82; font-weight:300; letter-spacing:-.07em; }
+    .metric-unit { padding-bottom:10px; font-size:38px; line-height:1.05; font-weight:500; }
+    .metric-caption { font-size:30px; line-height:1.2; font-weight:500; }
+    .metric-list { display:flex; flex-direction:column; gap:10px; font-size:28px; line-height:1.12; font-weight:500; }
+    .metric-list span { padding-top:10px; border-top:1px solid currentColor; }
     .rule { height:2px; background:currentColor; opacity:.7; }
     .tag-row { display:flex; flex-wrap:wrap; gap:14px; }
     .tag { padding:14px 20px; border-radius:14px; background:var(--blue-soft); color:var(--white); font-size:25px; line-height:1; font-weight:500; }
@@ -84,6 +91,7 @@
 </head>
 <body data-platform="xiaohongshu">
   <main class="sheet">
+    <!-- Large numerals belong inside .metric with a visible unit/object and context. Never place .metric-value alone. -->
     <!-- Replace this placeholder with one .poster section per card. -->
     <section class="poster blue" id="card-01" data-filename="01-cover.png">
       <div class="frame">

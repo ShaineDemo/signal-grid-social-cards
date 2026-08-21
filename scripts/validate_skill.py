@@ -68,6 +68,9 @@ def validate(root: Path) -> None:
         'data-platform="x"',
         "palette-violet-moss",
         "palette-petrol-raspberry",
+        "metric-value",
+        "metric-unit",
+        "metric-caption",
     ):
         if marker not in template:
             fail(f"Template is missing invariant: {marker}")
