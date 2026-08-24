@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
+const { auditPage } = require('./audit.cjs');
 
 function loadPlaywright() {
   const candidates = ['playwright'];
@@ -18,6 +19,7 @@ function loadPlaywright() {
 async function main() {
   const input = process.argv[2];
   const outputDir = process.argv[3];
+  const skipContract = process.argv.includes('--skip-contract');
   if (!input || !outputDir) {
     throw new Error('Usage: render.cjs <index.html> <output-dir>');
   }
@@ -27,6 +29,17 @@ async function main() {
   const page = await browser.newPage({ viewport: { width: 2400, height: 1800 }, deviceScaleFactor: 1 });
   await page.goto(pathToFileURL(path.resolve(input)).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  if (!skipContract) {
+    const audit = await auditPage(page);
+    if (audit.warnings.length) process.stderr.write(`Audit warnings:\n${audit.warnings.map(x => `- ${x}`).join('\n')}\n`);
+    if (audit.issues.length) {
+      process.stderr.write(`Audit failed:\n${audit.issues.map(x => `- ${x}`).join('\n')}\n`);
+      await browser.close();
+      process.exitCode = 2;
+      return;
+    }
+    process.stdout.write(`audit passed: ${audit.summary.posters} cards, ${audit.summary.grammars} grammars, subject=${audit.summary.subject}\n`);
+  }
   const cards = page.locator('.poster');
   const count = await cards.count();
   if (!count) throw new Error('No .poster elements found.');

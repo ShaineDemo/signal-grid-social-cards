@@ -35,6 +35,7 @@ This repository uses the portable directory-form Agent Skill layout: `SKILL.md` 
 | Kimi Code CLI | Native | `~/.kimi-code/skills/signal-grid-social-cards/` or `~/.agents/skills/signal-grid-social-cards/` |
 | Grok Build / Grok CLI | Native | `~/.grok/skills/signal-grid-social-cards/` or `.grok/skills/signal-grid-social-cards/` |
 | DeepSeek Harness | Native, developer preview | `.dsh/skills/signal-grid-social-cards/` or `.agents/skills/signal-grid-social-cards/` |
+| WorkBuddy | GitHub Skill import verified; runtime behavior depends on host tools | Import this repository URL through WorkBuddy's Skill interface |
 | Other Agent Skills-compatible harnesses | Expected to work | Install the whole directory in that product's documented Skill root |
 
 Official references: [Claude Code Skills](https://code.claude.com/docs/en/skills), [Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md), [Grok Build Skills](https://docs.x.ai/build/features/skills-plugins-marketplaces), and [DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md).
@@ -42,6 +43,12 @@ Official references: [Claude Code Skills](https://code.claude.com/docs/en/skills
 Compatibility belongs to the **agent host**, not just the model name. Plain web chat or API calls can follow the writing instructions when the files are supplied, but cannot complete the full workflow unless the host can browse sources, read bundled resources, write files, and run Node.js/Python. DeepSeek Harness is currently a developer preview and may introduce breaking changes.
 
 `agents/openai.yaml` only adds Codex-facing UI metadata. Claude Code, Kimi Code CLI, Grok Build, and DeepSeek Harness can ignore it and use the shared `SKILL.md` workflow.
+
+### Cross-host consistency gate
+
+Different agent hosts can interpret visual instructions with different strictness. Signal Grid therefore includes a machine-checkable [portable output contract](references/portable-contract.md). Generated HTML declares the topic subject, cover hierarchy, recognition-asset provenance, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
+
+This catches failures such as reducing the named product to small metadata, substituting a generic terminal icon for an official product mark, squeezing an unrelated `Docs` wordmark into a compact tile, or displaying a large number without its object and context. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with the audit and visual-review result.
 
 ## What it produces
 
@@ -53,6 +60,7 @@ Compatibility belongs to the **agent host**, not just the model name. Plain web 
 - `POST_COPY.md` with a recommended title, alternatives, body copy, hashtags, and caveats.
 - `SOURCES.md` with claim and recognition-asset provenance.
 - Three built-in palettes: Signal Blue / Alert Orange, Violet / Moss, and Petrol / Raspberry.
+- A mandatory cross-host audit and `TEST_REPORT.md` so visual rules are verified rather than treated as suggestions.
 
 ![Three built-in palettes](examples/palette-preview/contact-sheet.png)
 
@@ -136,6 +144,7 @@ python3 -m pip install -r requirements.txt
 Render an HTML card set and build its review sheet:
 
 ```bash
+node scripts/audit.cjs path/to/index.html
 node scripts/render.cjs path/to/index.html path/to/png
 python3 scripts/make_contact_sheet.py path/to/png path/to/contact-sheet.png
 python3 scripts/pngs_to_pdf.py path/to/linkedin-png path/to/linkedin-carousel.pdf
@@ -145,6 +154,7 @@ python3 scripts/pngs_to_pdf.py path/to/linkedin-png path/to/linkedin-carousel.pd
 
 ```bash
 python3 scripts/validate_skill.py .
+npm run audit:self-test
 npm run render:example
 python3 scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png
 python3 scripts/build_release.py
@@ -159,7 +169,7 @@ SKILL.md                 Skill entrypoint
 agents/openai.yaml       Codex UI metadata
 assets/template.html     Editable 3:4 and 4:5 HTML starter
 references/              Narrative, visual, caption, evidence, and QA rules
-scripts/                 Rendering, validation, contact-sheet, and release tools
+scripts/                 Contract audit, rendering, validation, contact-sheet, and release tools
 examples/                Showcase images and dependency-free preview source
 ```
 

@@ -17,10 +17,12 @@ REQUIRED_FILES = {
     "references/caption-system.md",
     "references/cover-evidence.md",
     "references/narrative-system.md",
+    "references/portable-contract.md",
     "references/platform-system.md",
     "references/qa.md",
     "references/visual-system.md",
     "scripts/render.cjs",
+    "scripts/audit.cjs",
     "scripts/make_contact_sheet.py",
     "scripts/pngs_to_pdf.py",
 }
@@ -71,6 +73,10 @@ def validate(root: Path) -> None:
         "metric-value",
         "metric-unit",
         "metric-caption",
+        'data-role="recognition-anchor"',
+        'data-role="support-title"',
+        'data-page-grammar="cover-grid"',
+        'data-topic-subject="BRAND"',
     ):
         if marker not in template:
             fail(f"Template is missing invariant: {marker}")

@@ -20,6 +20,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: python scripts/validate_skill.py .
+      - run: npm run audit:self-test
       - run: npm run render:example
       - run: python scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png
       - run: python scripts/pngs_to_pdf.py examples/palette-preview/png examples/palette-preview/palette-preview.pdf

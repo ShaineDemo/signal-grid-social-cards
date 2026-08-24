@@ -1,12 +1,13 @@
 {
   "name": "signal-grid-social-cards",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "private": true,
   "description": "Portable Agent Skill for bilingual Xiaohongshu, X, and LinkedIn social cards",
   "license": "AGPL-3.0",
   "scripts": {
-    "render:example": "node scripts/render.cjs examples/palette-preview/index.html examples/palette-preview/png",
-    "validate": "python3 scripts/validate_skill.py .",
+    "render:example": "node scripts/render.cjs examples/palette-preview/index.html examples/palette-preview/png --skip-contract",
+    "audit:self-test": "node scripts/audit.cjs --self-test",
+    "validate": "python3 scripts/validate_skill.py . && node scripts/audit.cjs --self-test",
     "build": "python3 scripts/build_release.py",
     "pdf": "python3 scripts/pngs_to_pdf.py"
   },

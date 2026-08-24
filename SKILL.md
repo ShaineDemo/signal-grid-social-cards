@@ -18,6 +18,7 @@ This project is built on workflow and social-storytelling ideas from [Guizang So
 - Read [language-system.md](references/language-system.md) when choosing the output language or producing English cards.
 - Read [platform-system.md](references/platform-system.md) whenever the user requests X, LinkedIn, cross-platform output, or a non-default canvas.
 - Read [cover-evidence.md](references/cover-evidence.md) when the cover could benefit from a logo, product image, screenshot, person, or interview photo.
+- Read [portable-contract.md](references/portable-contract.md) before writing HTML. Its data attributes and audit gate are mandatory for every generated deliverable.
 - Read [qa.md](references/qa.md) before delivery.
 
 ## Workflow
@@ -28,11 +29,11 @@ This project is built on workflow and social-storytelling ideas from [Guizang So
 4. Use the default six-page arc when it fits: hook → what changed → what it can do → who gets it/how → why it matters → limits/takeaway. Merge weak pages instead of padding.
 5. Create `POST_COPY.md` from the same fact ledger and story thesis. Include one recommended title, 2–3 alternatives, publish-ready body copy, suggested hashtags, and any necessary availability caveat.
 6. Decide whether the cover needs a recognition asset. Prefer an official standalone symbol or app/product icon for compact logo tiles; reject a wide wordmark when it becomes unreadably small, and verify that the asset identifies the exact subject rather than an adjacent sub-brand such as Docs, Blog, Labs, or Community. Prefer official company/product marks for company news, an official product or UI image for product news, and a sourced photo of the person or interview scene for interviews. Record provenance before placing it.
-7. Copy `assets/template.html` into a task folder outside the skill directory. Replace the placeholder with the planned posters and add only task-scoped CSS when the existing primitives cannot express the page.
+7. Copy `assets/template.html` into a task folder outside the skill directory. Preserve the portable contract attributes while replacing the placeholder with the planned posters. Add only task-scoped CSS when the existing primitives cannot express the page.
 8. Use words, numbers, and one recognition asset as the primary visual material. Favor matrices, bars, pills, split fields, meaningful numeric units, and short statements. Every oversized number must stay in the same module as what it counts or measures plus one useful context cue. If it only repeats the title, ranking, or page count, replace it with a labeled sequence, relationship, category list, or action verb. Do not invent statistics to make a page look designed.
-9. Set `data-platform="xiaohongshu"`, `data-platform="x"`, or `data-platform="linkedin"` on `<body>`, then render with `scripts/render.cjs <index.html> <output-dir>`. The renderer checks the matching dimensions. If `playwright` is not locally resolvable, set `NODE_PATH` to the available workspace Node modules directory.
+9. Set the platform, topic subject, cover-asset decision, cover roles, page grammars, evidence roles, and metric roles required by `portable-contract.md`. Run `scripts/audit.cjs <index.html>` and fix every error before rendering. Then render with `scripts/render.cjs <index.html> <output-dir>`; the renderer repeats the audit and checks platform dimensions. Never use `--skip-contract` for generated deliverables. If `playwright` is not locally resolvable, set `NODE_PATH` to the available workspace Node modules directory.
 10. Build a review image with `scripts/make_contact_sheet.py <output-dir> <contact-sheet.png>`.
-11. Inspect the contact sheet and at least the cover at full size. Correct overflow, weak hierarchy, repetitive layouts, factual ambiguity, accidental decoration, distorted brand assets, and misleading imagery before delivery.
+11. Inspect the contact sheet and at least the cover at full size. Correct overflow, weak hierarchy, repetitive layouts, factual ambiguity, accidental decoration, distorted brand assets, misleading imagery, and every audit warning before delivery. Record the final audit result in `TEST_REPORT.md`.
 
 ## Content rules
 
@@ -72,3 +73,4 @@ Return:
 - `SOURCES.md` for current or evidence-based topics.
 - For LinkedIn document-carousel delivery, one PDF built with `scripts/pngs_to_pdf.py`; keep the PNG source pages too.
 - A concise note stating dimensions, verification performed, and any unresolved availability caveat.
+- `TEST_REPORT.md` containing the contract audit result, visual-review result, corrections made, and any unresolved warning. A package that only produced PNGs but did not pass the audit is not complete.

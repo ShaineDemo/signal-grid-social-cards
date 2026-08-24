@@ -35,6 +35,7 @@
 | Kimi Code CLI | 原生支持 | `~/.kimi-code/skills/signal-grid-social-cards/` 或 `~/.agents/skills/signal-grid-social-cards/` |
 | Grok Build / Grok CLI | 原生支持 | `~/.grok/skills/signal-grid-social-cards/` 或 `.grok/skills/signal-grid-social-cards/` |
 | DeepSeek Harness | 原生支持，开发者预览 | `.dsh/skills/signal-grid-social-cards/` 或 `.agents/skills/signal-grid-social-cards/` |
+| WorkBuddy | 已验证可从 GitHub 导入；执行一致性取决于宿主工具 | 通过 WorkBuddy 的 Skill 界面导入本仓库 URL |
 | 其他兼容 Agent Skills 的工具 | 预计兼容 | 将完整目录放入产品文档指定的 Skill 根目录 |
 
 官方说明：[Claude Code Skills](https://code.claude.com/docs/en/skills)、[Kimi Code Agent Skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md)、[Grok Build Skills](https://docs.x.ai/build/features/skills-plugins-marketplaces)、[DeepSeek Harness Skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md)。
@@ -42,6 +43,12 @@
 兼容性取决于 **Agent 宿主**，不只是模型名称。普通网页聊天或裸 API 在拿到文件后可以执行文案部分，但只有宿主具备联网检索、读取资源、写文件及运行 Node.js/Python 的能力，才能完成 HTML、PNG、总览图和 PDF 的完整生产流程。DeepSeek Harness 当前仍处于开发者预览阶段，后续可能出现破坏性改动。
 
 `agents/openai.yaml` 只提供 Codex 界面元数据；Claude Code、Kimi Code CLI、Grok Build 和 DeepSeek Harness 可以忽略它，共同使用同一份 `SKILL.md` 工作流。
+
+### 跨宿主一致性门禁
+
+不同 Agent 宿主对视觉规范的执行力度不同，因此 Signal Grid 现在提供可机器检查的[跨宿主输出契约](references/portable-contract.md)。生成的 HTML 必须声明选题主体、封面标题角色、识别素材来源、页面语法和完整数字信息单元。`scripts/render.cjs` 会先调用 `scripts/audit.cjs`，存在强制规则错误时不会继续出图。
+
+它会拦截这些问题：把选题中的知名产品缩成小型元数据、用通用终端图标冒充官方产品标识、把无关的 `Docs` 横向字标塞进紧凑模块，或让大数字脱离对象和语境。仅成功生成 PNG 不代表通过；完整交付还必须包含记录自动审计与人工视觉复查结果的 `TEST_REPORT.md`。
 
 ## 主要能力
 
@@ -52,6 +59,7 @@
 - 生成 `POST_COPY.md`：推荐标题、备选标题、发布正文、标签及必要提示。
 - 生成 `SOURCES.md`：记录新闻事实、Logo、人物照片及其他识别素材的来源。
 - 内置 Signal Blue / Alert Orange、Violet / Moss、Petrol / Raspberry 三套色板。
+- 内置跨宿主强制审计和 `TEST_REPORT.md`，让关键设计规则成为验收条件，而不是建议。
 
 ![三套内置色板](examples/palette-preview/contact-sheet.png)
 
@@ -119,6 +127,7 @@ npm install
 npx playwright install chromium
 python3 -m pip install -r requirements.txt
 python3 scripts/validate_skill.py .
+npm run audit:self-test
 npm run render:example
 python3 scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png
 python3 scripts/pngs_to_pdf.py path/to/linkedin-png path/to/linkedin-carousel.pdf

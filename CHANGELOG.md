@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.0 — 2026-08-24
+
+- Added a portable, machine-checkable output contract for cross-host consistency.
+- Added a mandatory Playwright audit for cover hierarchy, recognition assets, page grammar, and oversized numeric units.
+- Made the renderer block delivery when contract errors remain.
+- Added good/bad fixtures and a self-test that rejects small subject labels, generic substitute icons, and missing page grammar.
+- Added WorkBuddy guidance based on a real cross-host generation result.
+
 ## 1.3.2 — 2026-08-21
 
 - Added a numeric-information-unit rule: oversized numbers must include the counted object or unit plus useful context in the same module.
