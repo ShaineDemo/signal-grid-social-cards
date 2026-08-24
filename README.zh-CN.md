@@ -8,11 +8,11 @@
 
 ## 用 Signal Grid 制作
 
-| Etched 估值翻倍 | OpenAI 训练与失配 | 小马智行海外 Robotaxi |
+| Etched 估值翻倍 · Petrol/Raspberry | OpenAI 训练与失配 · Signal Blue/Orange | 小马智行海外 Robotaxi · Violet/Moss |
 | --- | --- | --- |
 | ![Etched 估值图文](examples/showcase/etched-valuation.png) | ![OpenAI 训练图文](examples/showcase/openai-misalignment.png) | ![小马智行 Robotaxi 图文](examples/showcase/pony-ai-robotaxi.png) |
 
-每个案例都把一个时效选题整理成六张有来源的视觉叙事：钩子、证据、意义和边界。展示图中的识别素材仅用于编辑性说明，来源和权利状态记录在 [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md)。
+每个案例都把一个时效选题整理成六张有来源的视觉叙事：钩子、证据、意义和边界。三个案例同时展示全部内置色板：商业与估值选题使用 Petrol/Raspberry，安全新闻使用 Signal Blue/Orange，前沿出行部署使用 Violet/Moss。展示图中的识别素材仅用于编辑性说明，来源和权利状态记录在 [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md)。
 
 ## 平台适配
 
