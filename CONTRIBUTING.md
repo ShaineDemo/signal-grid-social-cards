@@ -2,7 +2,7 @@
 
 Contributions are welcome when they improve factual discipline, accessibility, portability, or the quality of the reusable design system.
 
-This is an AGPL-3.0 project built on ideas from Guizang Social Card Skill. Contributions must remain compatible with AGPL-3.0 and retain upstream attribution.
+This is an AGPL-3.0 project built on ideas from Guizang Social Card Skill by 歸藏 (op7418). Contributions must remain compatible with AGPL-3.0 and retain upstream attribution.
 
 ## Before opening a pull request
 

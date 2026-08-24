@@ -8,7 +8,7 @@ license: AGPL-3.0
 
 Turn a topic or source into an accurate, swipeable visual argument. Xiaohongshu/RedNote is the primary platform; X and LinkedIn use explicit reflow and copy presets instead of reusing the 3:4 Xiaohongshu export unchanged. Support both Simplified Chinese and natural editorial English.
 
-This project is built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [op7418](https://github.com/op7418). Preserve that attribution and the AGPL-3.0 license. Signal Grid adds its own modular visual language, three palettes, bilingual copy system, evidence-led cover rules, and publish-copy workflow. Do not remove upstream attribution or copy additional upstream assets without preserving their notices and license obligations.
+This project is built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Preserve that attribution and the AGPL-3.0 license. Signal Grid adds its own modular visual language, three palettes, bilingual copy system, evidence-led cover rules, and publish-copy workflow. Do not remove upstream attribution or copy additional upstream assets without preserving their notices and license obligations.
 
 ## Required reading
 

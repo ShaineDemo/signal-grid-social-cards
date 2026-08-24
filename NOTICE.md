@@ -1,6 +1,6 @@
 # Notices, acknowledgements, and asset policy
 
-Signal Grid Social Cards is built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill), created by [op7418](https://github.com/op7418). We gratefully acknowledge that work and its contribution to the Xiaohongshu social-card community.
+Signal Grid Social Cards is built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill), created by [歸藏 (op7418)](https://github.com/op7418). We gratefully acknowledge that work and its contribution to the Xiaohongshu social-card community.
 
 The upstream project is licensed under GNU AGPL-3.0. This project therefore uses GNU AGPL-3.0 and retains the upstream attribution. Signal Grid's modular visual language, palette definitions, bilingual writing system, evidence-led cover rules, examples, and supporting scripts were developed for this project, but the project should not be presented as unrelated to its Guizang foundation.
 

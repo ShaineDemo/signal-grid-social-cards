@@ -4,7 +4,7 @@
 
 An open-source Codex Skill for turning sourced topics into Chinese or English social-card stories for Xiaohongshu/RedNote, X, and LinkedIn—with editable HTML/CSS, ordered PNGs, platform-ready copy, and optional LinkedIn PDF export.
 
-> Built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [op7418](https://github.com/op7418). Thank you for the excellent foundation. Signal Grid uses a distinct modular visual system while retaining upstream attribution and the AGPL-3.0 license.
+> Built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Thank you for the excellent foundation. Signal Grid uses a distinct modular visual system while retaining upstream attribution and the AGPL-3.0 license.
 
 ## Made with Signal Grid
 
@@ -184,7 +184,7 @@ Generated outputs are not automatically covered by this repository's AGPL licens
 
 ## Acknowledgements
 
-This project is based on ideas and practices from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill). We are grateful to [op7418](https://github.com/op7418) for open-sourcing the upstream project and advancing high-quality Xiaohongshu card workflows.
+This project is based on ideas and practices from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill). We are grateful to [歸藏 (op7418)](https://github.com/op7418) for open-sourcing the upstream project and advancing high-quality Xiaohongshu card workflows.
 
 ## License
 

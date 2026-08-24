@@ -4,7 +4,7 @@
 
 一个主要面向小红书 / RedNote，同时适配 X 和 LinkedIn 的开源 Codex Skill。它把有来源的选题制作成中文或英文社交卡片，并产出可编辑 HTML/CSS、有序 PNG、平台发布文案及可选的 LinkedIn PDF。
 
-> 本项目在 [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) 的工作流与社交叙事实践基础上开发。感谢 [op7418](https://github.com/op7418) 开源这一优秀项目。Signal Grid 采用不同的模块化视觉语言，并保留上游署名及 AGPL-3.0 许可。
+> 本项目在 [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) 的工作流与社交叙事实践基础上开发。感谢 [歸藏（op7418）](https://github.com/op7418) 开源这一优秀项目。Signal Grid 采用不同的模块化视觉语言，并保留上游署名及 AGPL-3.0 许可。
 
 ## 用 Signal Grid 制作
 
@@ -145,7 +145,7 @@ python3 scripts/build_release.py
 
 ## 致谢
 
-本项目基于 [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) 的工作流与社交叙事实践继续设计。再次感谢 [op7418](https://github.com/op7418) 的开源贡献。
+本项目基于 [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) 的工作流与社交叙事实践继续设计。再次感谢 [歸藏（op7418）](https://github.com/op7418) 的开源贡献。
 
 ## 许可证
 

@@ -47,7 +47,7 @@
 
 - Added complete English card and publish-copy support.
 - Made Xiaohongshu/RedNote the primary and default publishing context.
-- Added explicit attribution and thanks to Guizang Social Card Skill and op7418.
+- Added explicit attribution and thanks to Guizang Social Card Skill and 歸藏 (op7418).
 - Changed the project license from MIT to AGPL-3.0 to match the upstream basis.
 
 ## 1.0.0 — 2026-08-20
