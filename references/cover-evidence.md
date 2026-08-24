@@ -11,6 +11,14 @@ Use one relevant recognition asset when it makes the cover faster to understand.
 
 Do not force an image when the asset is low quality, legally unclear, or adds no recognition value.
 
+## Logo selection for compact tiles
+
+- Prefer an officially published standalone symbol, app icon, or product icon when the logo sits in a compact square or vertical tile. If the headline already names the brand, the icon-only mark is usually the stronger recognition asset.
+- Inspect the actual SVG or pixels before use. A filename, page title, or successful network load does not prove that the asset is suitable.
+- Match the asset's semantic scope to the story. A company story needs the company mark; a product story needs the product or parent-brand mark. Reject marks that add an unrelated suffix or neighboring brand such as `Docs`, `Blog`, `Labs`, `Community`, or a campaign name.
+- Reject a horizontal wordmark when fitting it into the assigned tile makes it too small to recognize at 360 px cover width. Use an official standalone icon, enlarge/recompose the asset module, or return to a text-led cover.
+- Do not crop a symbol out of a wordmark. Source the official standalone asset instead; if none exists, use the full mark at a legible size or omit it.
+
 ## Provenance and rights
 
 - Prefer official websites and official press kits; record the exact asset URL in `SOURCES.md`.
@@ -23,7 +31,7 @@ Do not force an image when the asset is low quality, legally unclear, or adds no
 
 - One cover normally uses one asset cluster: one logo, a two-logo relationship, one product image, or one person/photo.
 - Keep the headline dominant. The asset cluster should usually occupy 20–40% of the canvas, unless the user explicitly wants an image-led cover.
-- Place logos in simple solid tiles with enough clear space. Preserve transparent backgrounds and aspect ratio.
+- Place logos in simple solid tiles with enough clear space. Preserve transparent backgrounds and aspect ratio. Preview the asset at the actual cover size, not only at its natural dimensions.
 - For a two-company story, use equal visual weight unless the story clearly centers one party; use `×`, `+`, or an arrow only when it accurately describes the relationship.
 - For portraits, preserve the face and interview context; avoid decorative cutouts that change the journalistic meaning.
 
