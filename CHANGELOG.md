@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0 — 2026-08-24
+
+- Replaced the official-only asset assumption with a source-matched identity/evidence/context model.
+- Added machine-checkable asset origin, source-page, rights-note, verification, disclosure, and pixel-inspection metadata.
+- Added unique page questions, claim status, source IDs, and visible inference labels to the portable contract.
+- Added metric-purpose semantics, repeated-metric warnings, supporting-text minimums, and internal-density warnings.
+- Added narrative rules against padded pages and weakly related external market speculation.
+- Removed the undeclared PyYAML dependency from repository validation.
+- Added a full GPT-5.6 Sol price-change regression covering official identity assets, current/comparison/boundary/calculation metrics, and editorial action labeling.
+
 ## 1.4.0 — 2026-08-24
 
 - Added a portable, machine-checkable output contract for cross-host consistency.

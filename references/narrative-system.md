@@ -24,6 +24,23 @@ Reduce the source in this order:
 
 Use a different arc when the source does not support six meaningful ideas. Five strong cards are better than six padded ones.
 
+## Page novelty contract
+
+Before layout, write one reader question for every page. Questions must be unique and each page must add an answer unavailable on earlier pages. A change in color or grammar does not count as new information.
+
+Useful question progression:
+
+- What happened?
+- What is the current state?
+- What changed compared with before?
+- Who gets it, when, and under what conditions?
+- What does it cost or save in a realistic example?
+- What should the reader do, and what remains uncertain?
+
+For price-change stories, prefer this conditional arc when the source supports it: cover → current prices → before/after → complete price table or scope → example bill → boundaries/action. Do not force this arc onto non-price topics.
+
+The same dominant statistic may reappear only when its editorial function changes—for example, from current price to comparison to a calculated bill. If it merely repeats an earlier page, replace the page or remove it.
+
 ## Claim discipline
 
 Classify every material statement:
@@ -34,6 +51,8 @@ Classify every material statement:
 - **Unknown:** conflicting or unconfirmed; omit or name the uncertainty.
 
 Never place an inference inside a giant numeral or definitive cover headline.
+
+External competitor, market, valuation, or strategy context is not a required “why” page. Use it only when it materially changes the reader's interpretation or next action, cite it, and label it as reported context or inference. Never let a weakly related external claim displace a practical calculation, scope boundary, or access condition.
 
 ## Copy patterns
 

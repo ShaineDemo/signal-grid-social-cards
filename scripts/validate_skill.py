@@ -7,9 +7,6 @@ import re
 import sys
 from pathlib import Path
 
-import yaml
-
-
 REQUIRED_FILES = {
     "SKILL.md",
     "agents/openai.yaml",
@@ -44,9 +41,14 @@ def load_frontmatter(path: Path) -> dict:
     match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
     if not match:
         fail("SKILL.md must start with YAML frontmatter")
-    data = yaml.safe_load(match.group(1))
-    if not isinstance(data, dict):
-        fail("SKILL.md frontmatter must be a mapping")
+    data = {}
+    for line in match.group(1).splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        key, separator, value = line.partition(":")
+        if not separator or not key.strip():
+            fail(f"Unsupported frontmatter line: {line}")
+        data[key.strip()] = value.strip().strip('"\'')
     return data
 
 
@@ -76,10 +78,25 @@ def validate(root: Path) -> None:
         'data-role="recognition-anchor"',
         'data-role="support-title"',
         'data-page-grammar="cover-grid"',
+        'data-page-question=',
+        'data-claim-status="confirmed"',
+        'data-source-ids=',
         'data-topic-subject="BRAND"',
     ):
         if marker not in template:
             fail(f"Template is missing invariant: {marker}")
+
+    contract = (root / "references/portable-contract.md").read_text(encoding="utf-8")
+    for marker in (
+        'data-role="recognition-asset"',
+        'data-asset-role="identity"',
+        'data-asset-origin="official"',
+        'data-rights-note=',
+        'data-pixel-checked="true"',
+        'data-metric-purpose="comparison"',
+    ):
+        if marker not in contract:
+            fail(f"Portable contract is missing invariant: {marker}")
 
     for path in root.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in TEXT_EXTENSIONS:

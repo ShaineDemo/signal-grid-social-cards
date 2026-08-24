@@ -48,7 +48,9 @@
 
 不同 Agent 宿主对视觉规范的执行力度不同，因此 Signal Grid 现在提供可机器检查的[跨宿主输出契约](references/portable-contract.md)。生成的 HTML 必须声明选题主体、封面标题角色、识别素材来源、页面语法和完整数字信息单元。`scripts/render.cjs` 会先调用 `scripts/audit.cjs`，存在强制规则错误时不会继续出图。
 
-它会拦截这些问题：把选题中的知名产品缩成小型元数据、用通用终端图标冒充官方产品标识、把无关的 `Docs` 横向字标塞进紧凑模块，或让大数字脱离对象和语境。仅成功生成 PNG 不代表通过；完整交付还必须包含记录自动审计与人工视觉复查结果的 `TEST_REPORT.md`。
+它会拦截这些问题：把选题中的知名产品缩成小型元数据、用未经核验的通用图标冒充选题主体、把无关的 `Docs` 横向字标塞进紧凑模块、让大数字脱离对象和语境、用同一个大数字重复填充多页，或让大色块几乎没有内容。仅成功生成 PNG 不代表通过；完整交付还必须包含记录自动审计与人工视觉复查结果的 `TEST_REPORT.md`。
+
+识别素材采用**来源匹配制，而不是官方素材唯一制**。HTML 会声明每张图承担身份识别、事实证据还是情境说明，并记录它来自官方/一手来源、授权媒体、经核验的第三方或用户提供。情境图和生成图必须显著标注，不能冒充真实事件证据；Logo 不能用 AI 重绘。
 
 ## 主要能力
 
@@ -60,6 +62,7 @@
 - 生成 `SOURCES.md`：记录新闻事实、Logo、人物照片及其他识别素材的来源。
 - 内置 Signal Blue / Alert Orange、Violet / Moss、Petrol / Raspberry 三套色板。
 - 内置跨宿主强制审计和 `TEST_REPORT.md`，让关键设计规则成为验收条件，而不是建议。
+- 强制每页回答不同问题并绑定来源，标记数字用途，检查辅助字号和大模块内部信息密度。
 
 ![三套内置色板](examples/palette-preview/contact-sheet.png)
 
@@ -138,7 +141,7 @@ python3 scripts/build_release.py
 
 ## 素材与权利
 
-首页的三张案例合成图包含用于编辑性识别的第三方 Logo 与照片，其来源和权利状态记录在 [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md)，不随 AGPL 重新授权。Skill 在新任务中使用素材时，必须记录来源、尊重原始许可与商标权，并且不得暗示未经证实的合作或背书。详情见 [NOTICE.md](NOTICE.md)。
+首页的三张案例合成图包含用于编辑性识别的第三方 Logo 与照片，其来源和权利状态记录在 [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md)，不随 AGPL 重新授权。Skill 在新任务中使用素材时，必须记录素材角色、实际来源、核验/权利说明以及情境图披露。官方素材在它是最接近的一手来源时优先，但不是唯一许可来源；仍需尊重原始许可、肖像权与商标权，不得暗示未经证实的合作或背书。详情见 [NOTICE.md](NOTICE.md)。
 
 ## 致谢
 

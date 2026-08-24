@@ -48,7 +48,9 @@ Compatibility belongs to the **agent host**, not just the model name. Plain web 
 
 Different agent hosts can interpret visual instructions with different strictness. Signal Grid therefore includes a machine-checkable [portable output contract](references/portable-contract.md). Generated HTML declares the topic subject, cover hierarchy, recognition-asset provenance, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
 
-This catches failures such as reducing the named product to small metadata, substituting a generic terminal icon for an official product mark, squeezing an unrelated `Docs` wordmark into a compact tile, or displaying a large number without its object and context. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with the audit and visual-review result.
+This catches failures such as reducing the named product to small metadata, substituting an unverified generic icon for the actual subject, squeezing an unrelated `Docs` wordmark into a compact tile, displaying a large number without its object and context, repeating one dominant metric without adding information, or leaving a large module almost empty. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with the audit and visual-review result.
+
+Recognition assets are **source-matched, not official-only**. The HTML declares whether each asset provides identity, evidence, or context, and whether it comes from an official/primary source, licensed editorial source, verified third party, or the user. Contextual and generated imagery must be visibly disclosed and cannot be presented as evidence of a real event. Logos are never AI-redrawn.
 
 ## What it produces
 
@@ -61,6 +63,7 @@ This catches failures such as reducing the named product to small metadata, subs
 - `SOURCES.md` with claim and recognition-asset provenance.
 - Three built-in palettes: Signal Blue / Alert Orange, Violet / Moss, and Petrol / Raspberry.
 - A mandatory cross-host audit and `TEST_REPORT.md` so visual rules are verified rather than treated as suggestions.
+- Unique reader questions and source IDs per page, metric-purpose labels, minimum supporting-text sizes, and internal-density checks.
 
 ![Three built-in palettes](examples/palette-preview/contact-sheet.png)
 
@@ -175,7 +178,7 @@ examples/                Showcase images and dependency-free preview source
 
 ## Rights and source assets
 
-The three showcase composites contain third-party logos and photographs for editorial identification. Their sources and status are documented in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md); those materials are not relicensed under AGPL. New generated projects must record provenance and respect the asset owner's license, publicity, and trademark rights.
+The three showcase composites contain third-party logos and photographs for editorial identification. Their sources and status are documented in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md); those materials are not relicensed under AGPL. New generated projects must record each asset's editorial role, actual origin, source, verification/rights note, and disclosure when contextual. Official material is preferred when it is the closest reliable source, but it is not the only permitted source. Every project must still respect the asset owner's license, publicity, and trademark rights.
 
 Generated outputs are not automatically covered by this repository's AGPL license when they contain third-party material. See [NOTICE.md](NOTICE.md).
 

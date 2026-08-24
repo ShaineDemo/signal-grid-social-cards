@@ -2,14 +2,23 @@
 
 Use one relevant recognition asset when it makes the cover faster to understand.
 
-## Asset routing
+## Route by editorial role, then source
 
-- Company or partnership news: official company/product logo, preferably from the official website or press kit.
-- Product launch or update: official product render, interface screenshot, or application icon.
-- Interview or person-led story: user-supplied portrait, the original interview/event photograph, an official speaker portrait, or a clearly licensed editorial photo.
+Do not use an official-only rule. Decide first what the image is claiming:
+
+- **Identity** — identifies the company, product, model, or person. Allowed origins: `official`, `primary-source`, `verified-third-party`, or `user-provided`.
+- **Evidence** — shows the actual product, interface, document, interview, venue, or event being discussed. Allowed origins: `official`, `primary-source`, `licensed-editorial`, or `user-provided`.
+- **Context** — creates relevant atmosphere or explains a concept without proving the event happened. Allowed origins: `licensed-editorial`, `contextual`, or `user-provided`; a clear disclosure is mandatory.
+
+Typical routing:
+
+- Company or partnership news: a trustworthy company/product identity mark; official is preferred but a verified third-party copy is acceptable when checked against an official reference.
+- Product launch or update: a primary-source product render, actual interface screenshot, app icon, or licensed editorial photograph of the product.
+- Interview or person-led story: the original interview/event photograph, a user-supplied portrait, an official speaker portrait, or a reputable licensed editorial photo.
 - Data or policy story: the primary document, chart, interface, or institutional mark can be stronger than a generic photograph.
+- Concept story without direct imagery: use a disclosed contextual image or a text-led cover. Never present contextual imagery as a photograph of the reported event.
 
-Do not force an image when the asset is low quality, legally unclear, or adds no recognition value.
+Do not force an image when the asset is low quality, legally unclear, semantically adjacent rather than exact, or adds no recognition value.
 
 ## Logo selection for compact tiles
 
@@ -21,7 +30,10 @@ Do not force an image when the asset is low quality, legally unclear, or adds no
 
 ## Provenance and rights
 
-- Prefer official websites and official press kits; record the exact asset URL in `SOURCES.md`.
+- Prefer the closest available source: official/primary source for identity and evidence, then reputable licensed editorial sources, then verified third-party identity copies, then user-provided assets. Record every asset in `SOURCES.md`.
+- A `verified-third-party` identity asset must include both its actual source and an official page used to verify the mark's appearance and semantic scope.
+- A `user-provided` asset may record source page and source URL as `user-provided`, but still needs a rights note and visual inspection.
+- A contextual or generated asset needs a visible disclosure such as “示意图 / 非事件现场” or “Concept image / not event evidence.”
 - Read and respect stated media/press usage terms. If terms restrict cover, advertising, or commercial use, do not silently use the asset outside those terms.
 - Logos and names remain the owners' trademarks. Use them editorially to identify the subject, never to imply sponsorship, partnership, or endorsement beyond the sourced story.
 - Never synthesize, redraw, recolor, stretch, crop into, or decorate an official logo.
@@ -50,4 +62,6 @@ After choosing a grammar, check that the asset and headline form one composition
 ```markdown
 - `assets/company-logo.png` ← https://official.example/logo.png — official site logo, editorial identification
 - `assets/interview.jpg` ← https://publisher.example/interview — original interview photograph, credit: Name
+- `assets/product-photo.jpg` ← user-provided — supplied by user; rights status recorded by user
+- `assets/context-image.jpg` ← https://licensed.example/image — contextual illustration, not event evidence; visible disclosure added
 ```

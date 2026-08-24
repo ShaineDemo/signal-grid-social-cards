@@ -83,6 +83,26 @@ Keep the neutral ground paired with its palette. Test the cover against the reco
 
 The default font stack is `Helvetica Neue`, `Arial`, `PingFang SC`, `Hiragino Sans GB`, sans-serif. Large Latin numerals may use tighter tracking; Chinese display lines should not use strong negative tracking.
 
+## Semantic cover hierarchy
+
+Use exactly two title-size levels on the cover when the hook contains both a recognizable subject and a newsworthy change:
+
+1. **Emphasis level** — the strongest click-and-recognition anchor.
+2. **Support level** — the phrase that completes the event, change, consequence, or tension.
+
+Choose the emphasis by likely cover-scanning behavior, not only sentence grammar. For news about a well-known company, person, product, or model, that proper name is usually the stronger click anchor and should be the larger level; the event wording then explains why it matters. If the subject is unfamiliar and the change itself is more compelling, enlarge the change instead. The emphasis level should normally be about 1.5–1.9× the support level at the same canvas width. Keep both levels in the same title module and use weight consistently; create hierarchy with scale, not random bolding or extra colors. Do not split the title into three or more competing sizes.
+
+## Cover support modules
+
+Every non-title module on the cover must add a content reason to keep reading. Use it to preview one of these:
+
+- two or three concrete capabilities or use cases;
+- one sourced comparison, consequence, or decision-changing limit;
+- one concise “why it matters” statement;
+- an authentic recognition asset that makes the subject immediately identifiable.
+
+Do not spend prime cover space on generic taxonomy such as “multimodal experiment”, implementation strings such as model IDs, routine access metadata, or version labels unless that exact detail is the story's main hook. Move API routes, model names, compatibility, rollout caveats, and other technical metadata to the access or boundary page. Auxiliary cover modules must not merely repeat the headline; together they should answer “what can it do?” or “why should I care?”.
+
 ## Layout grammar
 
 Choose one dominant grammar per page:
@@ -132,6 +152,16 @@ If the source does not provide a meaningful quantity, replace the numeral with a
 - Giant numeral/Latin word: 180–260 px, 300–400.
 
 Large display text must have breathing space. Shorten copy before shrinking below the minimum.
+
+## Internal density and repeated emphasis
+
+Empty space is intentional only when it strengthens hierarchy. It is not permission to place one small label at the edge of a large colored module.
+
+- In a large rounded panel, visible text and graphic marks should normally occupy at least roughly one fifth of the panel's height. If they do not, shorten the panel, enlarge the meaningful content, add sourced detail, or choose a different grammar. Do not count the empty distance between one label at the top and one at the bottom as content.
+- Do not stretch a two-line fact into a full-height split column. Use a comparison table, compact metric, annotated bar, or calculation instead.
+- Supporting labels inside circles and mini modules should be at least 26 px; pills at least 28 px; substantive body copy at least 30 px.
+- When the same number appears on multiple pages, change the visual operation as well as the wording: current value → delta → calculation → boundary. Repeating a giant percentage in a closing card is not a conclusion.
+- A closing statement should synthesize an implication or action, not restate the largest number from the evidence pages.
 
 ## Page rhythm
 

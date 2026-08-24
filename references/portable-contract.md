@@ -33,19 +33,33 @@ Use this contract in every generated card set. It turns the most important edito
 
 ```html
 <img
-  data-role="brand-asset"
+  data-role="recognition-asset"
+  data-asset-role="identity"
+  data-asset-origin="official"
   data-asset-kind="icon"
   data-subject="Claude Code"
+  data-source-page="https://official.example/product"
   data-source-url="https://official.example/icon.svg"
+  data-rights-note="Editorial identification; trademark remains its owner's."
+  data-pixel-checked="true"
   src="https://official.example/icon.svg"
   alt="Claude Code official icon" />
 ```
 
+- Allowed editorial roles: `identity`, `evidence`, and `context`.
+- Allowed origins depend on the role:
+  - `identity`: `official`, `primary-source`, `verified-third-party`, `user-provided`.
+  - `evidence`: `official`, `primary-source`, `licensed-editorial`, `user-provided`.
+  - `context`: `licensed-editorial`, `contextual`, `user-provided`.
+- Every asset needs `data-source-page`, `data-source-url`, `data-rights-note`, and `data-pixel-checked="true"`. For user-provided assets, both source fields may be `user-provided`.
+- A `verified-third-party` identity asset additionally needs `data-verification-url` pointing to an HTTPS official reference used to verify the mark.
+- A context asset additionally needs `data-context-disclaimer` and a visible disclosure in the selected output language. It must not imply that a depicted person, place, product, or event is the actual reported scene.
 - Allowed kinds: `icon`, `symbol`, `app-icon`, `wordmark`, `product-image`, and `portrait`.
 - A compact icon/symbol/app-icon must render at least 96×96 px on the 1080 px canvas. A compact wordmark must remain at least 72 px high.
 - `data-subject` must match `data-topic-subject`. Do not substitute a generic terminal, document, chat, robot, or AI icon for a missing brand asset.
 - If the correct asset cannot be sourced, use `data-cover-asset="none"` and a text-led composition. Never quietly replace it with an adjacent mark such as Docs, Blog, Labs, or Community.
-- Every cover image must declare either `data-role="brand-asset"` or `data-role="evidence-asset"` with source metadata.
+- Every cover image must declare `data-role="recognition-asset"` with the full source-matched metadata above. Record it again in `SOURCES.md` for human review.
+- Never create or redraw a company/product logo with image generation. If no trustworthy identity mark is available, use a text-led cover. Generated or stock imagery may be used only as disclosed context, never as identity or evidence.
 
 ## Content previews
 
@@ -62,17 +76,29 @@ Allowed evidence types are `capability`, `consequence`, `limit`, `use-case`, and
 Every `.poster` declares one dominant grammar:
 
 ```html
-<section class="poster" data-page-grammar="split-field">...</section>
+<section
+  class="poster"
+  data-page-grammar="split-field"
+  data-page-question="What changed compared with before?"
+  data-claim-status="confirmed"
+  data-source-ids="official-release official-pricing">
+  ...
+</section>
 ```
 
 Allowed values: `cover-grid`, `type-field`, `circle-matrix`, `split-field`, `pill-stack`, `count-stack`, `contrast-pair`, `evidence-grid`, and `closing-statement`. A set of five or more cards must use at least four distinct grammars, and no grammar may appear more than twice.
+
+- `data-page-question` is required, must be meaningful, and must be unique across the carousel.
+- `data-claim-status` is one of `confirmed`, `reported`, `inference`, or `mixed`.
+- `data-source-ids` lists the IDs used in `SOURCES.md` for that page.
+- An `inference` or `mixed` page needs a visible element with `data-role="claim-label"`, such as “编辑判断” or “Editorial interpretation.”
 
 ## Numeric units
 
 For an oversized number, mark the complete information unit:
 
 ```html
-<div class="metric" data-role="metric">
+<div class="metric" data-role="metric" data-metric-purpose="comparison">
   <span class="metric-value" data-role="metric-value">32</span>
   <span class="metric-unit" data-role="metric-object">个会话</span>
   <p class="metric-caption" data-role="metric-context">默认并发容量，不代表每台电脑都适合跑满。</p>
@@ -80,6 +106,14 @@ For an oversized number, mark the complete information unit:
 ```
 
 Any standalone numeric leaf at 112 px or larger must be a metric value or a labeled sequence. The counted object and useful context must be in the same module.
+
+Allowed metric purposes are `current`, `comparison`, `calculation`, `boundary`, and `sequence`. The same dominant value should not lead multiple pages unless the later appearance uses a different purpose and visibly adds new information.
+
+## Readability and internal density
+
+- Substantive body copy is at least 30 px at 1080 px canvas width.
+- Labels inside `.circle` and `.mini` modules are at least 26 px; `.pill` text is at least 28 px.
+- A large rounded module must not contain only a small label surrounded by unused space. Its visible text/image marks should normally occupy at least roughly 18% of its height, unless `data-density-exempt="true"` and `data-density-reason` explain a deliberate image-, quote-, or whitespace-led composition.
 
 ## Good and bad cover decisions
 

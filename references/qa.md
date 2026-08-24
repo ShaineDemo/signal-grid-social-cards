@@ -14,6 +14,7 @@
 - Every auxiliary cover module previews a concrete capability, sourced consequence, useful limit, or recognition asset; it does not merely label the category or repeat the title.
 - Model IDs, API routes, versions, and routine availability metadata stay off the cover unless that exact detail is the central news hook.
 - Each page has one dominant takeaway.
+- Each page answers a unique declared reader question; no page exists only to restate a previous metric with a new color.
 - No title exceeds three lines.
 - No accidental orphan character on a line.
 - Product names and version strings are exact.
@@ -27,10 +28,12 @@
 - No visible element crosses the 64 px safe margin unless it is a deliberate full-bleed field.
 - No overflow or clipping.
 - Body copy is at least 30 px.
+- Circle and mini-module labels are at least 26 px; pill text is at least 28 px.
 - English headlines do not create single-word orphan lines or exceed the copy limits in `language-system.md`.
 - At least four distinct page grammars appear in a six-card set.
 - Circular cells contain short labels only; long paragraphs never go inside circles.
 - Every numeral set larger than section-heading size is understandable inside its own module: value + object/unit + context.
+- Large rounded modules do not leave most of their interior empty around a tiny fact; any intentional exemption has a documented reason.
 
 ## Style
 
@@ -39,6 +42,7 @@
 - Display type uses regular/medium weight.
 - Rounded geometry is structural, not scattered decoration.
 - No oversized number merely repeats the title, ranking, or page count, and no number is used only to occupy empty space.
+- A repeated dominant metric has a new declared purpose—comparison, calculation, boundary, or sequence—and visibly adds information.
 - Sequence numbers such as `01`–`05` sit directly beside the stage or item they identify.
 - No copied logos or trademarks used as decoration; brand names appear as text only when editorially needed.
 - Every logo or portrait has a recorded source, preserved aspect ratio, and enough clear space.
@@ -47,6 +51,10 @@
 - The mark identifies the exact company or product in the story and contains no irrelevant sub-brand suffix such as `Docs`, `Blog`, `Labs`, or `Community`.
 - Logo QA includes inspecting the visible asset itself; successful loading, natural dimensions, or a plausible filename are not sufficient evidence.
 - No real-person portrait or interview scene is fabricated with image generation.
+- Every visual asset declares its editorial role, origin, source page, direct source or user-provided status, rights note, and visual-inspection status.
+- Identity assets come from official, primary-source, verified third-party, or user-provided origins. A verified third-party identity asset has an official verification URL.
+- Evidence assets come from official, primary-source, licensed editorial, or user-provided origins. Contextual or generated imagery is visibly disclosed and never presented as evidence of a real event or person.
+- External competitive or market context is decision-relevant, sourced, and labeled as reported context or inference; otherwise it is omitted.
 
 ## Final inspection
 
