@@ -11,7 +11,7 @@ Reduce the source in this order:
 5. Boundary: what is not confirmed, not available, or still limited.
 6. Takeaway: what the reader should check, try, or remember.
 
-## Default six-card arc
+## Common six-card arc
 
 ```text
 01 Hook       — concrete event + emotional verb
@@ -22,7 +22,7 @@ Reduce the source in this order:
 06 Boundary   — limits, staged availability, and final takeaway
 ```
 
-Use a different arc when the source does not support six meaningful ideas. Five strong cards are better than six padded ones.
+This is a useful diagnostic, not a default template. Use a different arc and card count when the source supports a stronger argument. Four or five complete pages are better than six padded ones; a seventh page is justified only when it adds necessary evidence or a decision-changing boundary. Write the final reasoning in `STORY_PLAN.md`.
 
 ## Page novelty contract
 
@@ -37,7 +37,7 @@ Useful question progression:
 - What does it cost or save in a realistic example?
 - What should the reader do, and what remains uncertain?
 
-For price-change stories, prefer this conditional arc when the source supports it: cover → current prices → before/after → complete price table or scope → example bill → boundaries/action. Do not force this arc onto non-price topics.
+For price-change stories, prefer this conditional arc when the source supports it: cover hook + one decisive price relationship → current prices → before/after or complete scope → example bill → boundaries/action. Do not put the same percentage badges and full old/new table on the cover, and do not force this arc onto non-price topics.
 
 The same dominant statistic may reappear only when its editorial function changes—for example, from current price to comparison to a calculated bill. If it merely repeats an earlier page, replace the page or remove it.
 

@@ -10,7 +10,7 @@
       --blue:#315eea; --blue-mid:#5378ee; --blue-soft:#96aceb;
       --orange:#f24b24; --orange-mid:#f76743; --orange-soft:#f3a18a;
       --muted:#a7b5dc; --radius-lg:38px; --radius-md:24px;
-      --gap:24px; --safe:64px;
+      --gap:24px; --safe:64px; --text-gap:24px; --context-gap:30px;
     }
     body.palette-violet-moss {
       --ink:#18151f; --paper:#f1f0f6; --white:#fbfaf6;
@@ -36,18 +36,20 @@
     .orange { background:var(--orange); color:var(--white); }
     .warm { background:var(--white); }
     .topline, .foot { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; }
-    .topline { min-height:36px; font-size:26px; line-height:1; font-weight:500; }
+    .topline { min-height:36px; font-size:26px; line-height:1.2; font-weight:500; }
     .foot { margin-top:auto; padding-top:20px; border-top:2px solid currentColor; font-size:24px; line-height:1.2; font-weight:500; }
-    .kicker { margin:0; font-size:28px; line-height:1.1; font-weight:500; }
-    .display { margin:0; font-size:132px; line-height:.92; letter-spacing:-.055em; font-weight:400; }
+    .kicker { margin:0; font-size:28px; line-height:1.18; font-weight:500; }
+    .display { margin:0; font-size:132px; line-height:.94; letter-spacing:-.055em; font-weight:400; }
     .display-cn { margin:0; font-size:118px; line-height:1.02; font-weight:500; }
-    .cover-title { margin:0; display:flex; flex-direction:column; align-items:flex-start; }
-    .cover-title-emphasis { font-size:144px; line-height:.92; font-weight:500; }
-    .cover-title-support { margin-top:18px; font-size:76px; line-height:1.04; font-weight:500; }
-    .display-xl { font-size:210px; line-height:.82; font-weight:300; letter-spacing:-.07em; }
-    .headline { margin:0; font-size:76px; line-height:1.04; font-weight:500; }
-    .body { margin:0; font-size:38px; line-height:1.3; font-weight:400; }
-    .meta { font-size:26px; line-height:1.18; font-weight:500; }
+    .cover-title { margin:0; display:flex; flex-direction:column; align-items:flex-start; gap:18px; }
+    .cover-title-emphasis { font-size:144px; line-height:.96; font-weight:500; }
+    .cover-title-support { font-size:76px; line-height:1.04; font-weight:500; }
+    .display-xl { font-size:210px; line-height:.88; font-weight:300; letter-spacing:-.07em; }
+    .headline { margin:0; font-size:76px; line-height:1.05; font-weight:500; }
+    .body { margin:0; font-size:38px; line-height:1.34; font-weight:400; }
+    .meta { font-size:26px; line-height:1.22; font-weight:500; }
+    .text-stack { display:flex; flex-direction:column; align-items:flex-start; gap:var(--text-gap); }
+    .text-stack.contextual { gap:var(--context-gap); }
     .muted { color:var(--blue-soft); }
     .panel { padding:34px; border-radius:var(--radius-lg); background:var(--white); color:var(--ink); }
     .panel.blue-fill { background:var(--blue); color:var(--white); }
@@ -60,7 +62,7 @@
     .orange .circle { background:var(--orange-mid); }
     .orange .circle.alt { background:var(--orange-soft); }
     .circle strong { font-size:84px; line-height:.9; font-weight:400; letter-spacing:-.05em; }
-    .circle span { margin-top:18px; font-size:28px; line-height:1.12; font-weight:500; }
+    .circle span { margin-top:20px; font-size:28px; line-height:1.24; font-weight:500; }
     .pills { display:flex; flex-direction:column; gap:18px; }
     .pill { min-height:74px; padding:20px 28px; border-radius:18px; display:flex; align-items:center; justify-content:space-between; gap:20px; background:var(--blue); color:var(--white); font-size:32px; line-height:1; font-weight:500; }
     .pill.soft { background:var(--blue-soft); }
@@ -71,10 +73,10 @@
     .metric { padding:34px; border-radius:var(--radius-lg); display:flex; flex-direction:column; gap:22px; background:var(--blue); color:var(--white); }
     .metric-line { display:flex; align-items:flex-end; gap:18px; }
     .metric-value { font-size:170px; line-height:.82; font-weight:300; letter-spacing:-.07em; }
-    .metric-unit { padding-bottom:10px; font-size:38px; line-height:1.05; font-weight:500; }
-    .metric-caption { font-size:30px; line-height:1.2; font-weight:500; }
-    .metric-list { display:flex; flex-direction:column; gap:10px; font-size:28px; line-height:1.12; font-weight:500; }
-    .metric-list span { padding-top:10px; border-top:1px solid currentColor; }
+    .metric-unit { padding-bottom:10px; font-size:38px; line-height:1.2; font-weight:500; }
+    .metric-caption { margin:0; font-size:30px; line-height:1.32; font-weight:500; }
+    .metric-list { display:flex; flex-direction:column; gap:14px; font-size:28px; line-height:1.25; font-weight:500; }
+    .metric-list span { padding-top:14px; border-top:1px solid currentColor; }
     .rule { height:2px; background:currentColor; opacity:.7; }
     .tag-row { display:flex; flex-wrap:wrap; gap:14px; }
     .tag { padding:14px 20px; border-radius:14px; background:var(--blue-soft); color:var(--white); font-size:25px; line-height:1; font-weight:500; }
@@ -82,7 +84,7 @@
     .mini-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--gap); }
     .mini { min-height:180px; border-radius:var(--radius-md); padding:28px; background:var(--blue-soft); color:var(--white); display:flex; flex-direction:column; justify-content:space-between; }
     .mini strong { font-size:64px; line-height:1; font-weight:400; }
-    .mini span { font-size:27px; line-height:1.16; font-weight:500; }
+    .mini span { font-size:27px; line-height:1.26; font-weight:500; }
     .brand-lockup { display:flex; align-items:center; gap:22px; }
     .brand-tile { width:180px; height:180px; border-radius:var(--radius-lg); background:var(--white); display:flex; align-items:center; justify-content:center; padding:28px; }
     .brand-tile img { display:block; width:100%; height:100%; object-fit:contain; }
@@ -92,17 +94,19 @@
     .spacer { flex:1; }
   </style>
 </head>
-<body data-platform="xiaohongshu" data-topic-subject="BRAND" data-cover-asset="none">
+<body data-platform="xiaohongshu" data-topic-subject="BRAND" data-cover-asset="none" data-title-emphasis="recognition" data-title-emphasis-mode="scale">
   <main class="sheet">
+    <!-- This starter provides a canvas, tokens, and primitives. Do not copy its placeholder composition when the story calls for a different relationship. -->
     <!-- Large numerals belong inside .metric with a visible unit/object, context, and data-metric-purpose. Never place .metric-value alone. -->
     <!-- Every poster needs a unique reader question, claim status, and source IDs from SOURCES.md. -->
+    <!-- The cover declares the exact next question for page 2. Every cover proof/preview declares stable data-fact-ids; never repeat one fact across separate cover modules. -->
     <!-- Replace this placeholder with one .poster section per card. -->
-    <section class="poster blue" id="card-01" data-filename="01-cover.png" data-page-grammar="cover-grid" data-page-question="这个选题发生了什么变化？" data-claim-status="confirmed" data-source-ids="source-01">
+    <section class="poster blue" id="card-01" data-filename="01-cover.png" data-page-grammar="cover-grid" data-page-question="这个选题发生了什么变化？" data-cover-next-question="下一页将回答哪个具体问题？" data-claim-status="confirmed" data-source-ids="source-01">
       <div class="frame">
         <div class="topline"><span>BRIEFGRID</span><span>01 / 01</span></div>
         <div class="spacer"></div>
         <p class="kicker">TOPIC / DATE</p>
-        <h1 class="cover-title"><span class="cover-title-emphasis" data-role="recognition-anchor">BRAND</span><span class="cover-title-support" data-role="support-title">事件与变化说明</span></h1>
+        <h1 class="cover-title" data-role="text-stack"><span class="cover-title-emphasis" data-role="recognition-anchor">BRAND</span><span class="cover-title-support" data-role="support-title">事件与变化说明</span></h1>
         <div class="foot"><span>ONE CLEAR TAKEAWAY</span><span>→</span></div>
       </div>
     </section>

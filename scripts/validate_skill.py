@@ -13,10 +13,12 @@ REQUIRED_FILES = {
     "assets/template.html",
     "references/caption-system.md",
     "references/cover-evidence.md",
+    "references/creative-direction.md",
     "references/narrative-system.md",
     "references/portable-contract.md",
     "references/platform-system.md",
     "references/qa.md",
+    "references/story-direction.md",
     "references/visual-system.md",
     "scripts/render.cjs",
     "scripts/audit.cjs",
@@ -82,6 +84,9 @@ def validate(root: Path) -> None:
         'data-claim-status="confirmed"',
         'data-source-ids=',
         'data-topic-subject="BRAND"',
+        'data-title-emphasis="recognition"',
+        'data-title-emphasis-mode="scale"',
+        'data-cover-next-question=',
     ):
         if marker not in template:
             fail(f"Template is missing invariant: {marker}")
@@ -94,6 +99,12 @@ def validate(root: Path) -> None:
         'data-rights-note=',
         'data-pixel-checked="true"',
         'data-metric-purpose="comparison"',
+        'data-title-emphasis=',
+        'data-title-emphasis-mode',
+        'data-role="text-stack"',
+        'data-role="cover-proof"',
+        'data-fact-ids=',
+        'data-cover-next-question',
     ):
         if marker not in contract:
             fail(f"Portable contract is missing invariant: {marker}")

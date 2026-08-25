@@ -14,6 +14,8 @@ The source language is a modular modernist interface rather than a conventional 
 
 Translate these principles to 3:4 cards; do not reproduce the source image's exact 3×3 composition, wording, or proportions.
 
+Read `creative-direction.md` before composing. The tokens and components below are a vocabulary, not a catalog of finished layouts.
+
 ## Canvas routing
 
 - Xiaohongshu/RedNote: 1080×1440 (3:4), the native/default canvas.
@@ -85,12 +87,12 @@ The default font stack is `Helvetica Neue`, `Arial`, `PingFang SC`, `Hiragino Sa
 
 ## Semantic cover hierarchy
 
-Use exactly two title-size levels on the cover when the hook contains both a recognizable subject and a newsworthy change:
+Use exactly two semantic title roles on the cover when the hook contains both a recognizable subject and a newsworthy change:
 
 1. **Emphasis level** — the strongest click-and-recognition anchor.
 2. **Support level** — the phrase that completes the event, change, consequence, or tension.
 
-Choose the emphasis by likely cover-scanning behavior, not only sentence grammar. For news about a well-known company, person, product, or model, that proper name is usually the stronger click anchor and should be the larger level; the event wording then explains why it matters. If the subject is unfamiliar and the change itself is more compelling, enlarge the change instead. The emphasis level should normally be about 1.5–1.9× the support level at the same canvas width. Keep both levels in the same title module and use weight consistently; create hierarchy with scale, not random bolding or extra colors. Do not split the title into three or more competing sizes.
+Choose the emphasis by likely cover-scanning behavior, not only sentence grammar. For news about a well-known company, person, product, or model, that proper name is often the stronger click anchor. If the verified change, quote, or consequence is more compelling, let the support title lead while keeping the subject unmistakable. Declare the decision with `body[data-title-emphasis="recognition"]` or `body[data-title-emphasis="support"]`. The leading role should be clearly stronger. The two roles may share one title module or form a coordinated title-plus-brand lockup when a logo/product tile carries recognition more naturally. Do not create three competing headline roles.
 
 ## Cover support modules
 
@@ -101,11 +103,13 @@ Every non-title module on the cover must add a content reason to keep reading. U
 - one concise “why it matters” statement;
 - an authentic recognition asset that makes the subject immediately identifiable.
 
-Do not spend prime cover space on generic taxonomy such as “multimodal experiment”, implementation strings such as model IDs, routine access metadata, or version labels unless that exact detail is the story's main hook. Move API routes, model names, compatibility, rollout caveats, and other technical metadata to the access or boundary page. Auxiliary cover modules must not merely repeat the headline; together they should answer “what can it do?” or “why should I care?”.
+Normally let these modules form one proof relationship rather than a miniature dashboard. A before→after pair, two-product contrast, or small capability cluster may contain multiple marks while still answering one question. Do not repeat the same fact through a badge, chart, track, and callout; choose the treatment that reads fastest at 360 px and defer the complete breakdown to page 2.
+
+Do not spend prime cover space on generic taxonomy such as “multimodal experiment”, implementation strings such as model IDs, routine access metadata, or version labels unless that exact detail is the story's main hook. Move API routes, model names, compatibility, rollout caveats, full tables, and other technical metadata to the page that owns that question. Auxiliary cover modules must not merely repeat the headline; together they should answer “what can it do?” or “why should I care?” while leaving a meaningful next question to swipe into.
 
 ## Layout grammar
 
-Choose one dominant grammar per page:
+Choose one dominant grammar per page. The following are starter vocabularies, not a whitelist:
 
 1. **Type field** — one giant word or a complete numeric unit plus a context line.
 2. **Circle matrix** — 2×2 equal circles for four capabilities, conditions, or steps.
@@ -115,7 +119,7 @@ Choose one dominant grammar per page:
 6. **Contrast pair** — blue and orange halves for “before/after”, “can/cannot”, or “signal/noise”.
 7. **Closing statement** — a short thesis with one compact evidence strip.
 
-Do not place more than two dominant grammars on one page.
+Use a descriptive kebab-case grammar name when a custom relationship is clearer, such as `valuation-expansion`, `quote-interruption`, or `deployment-gates`. Do not place more than two dominant relationships on one page.
 
 ## Numeric information units
 
@@ -153,19 +157,40 @@ If the source does not provide a meaningful quantity, replace the numeral with a
 
 Large display text must have breathing space. Shorten copy before shrinking below the minimum.
 
+## Vertical rhythm and text grouping
+
+Readable spacing has two layers. `line-height` separates lines inside one phrase or paragraph; position, scale, color, `gap`, or margin separates different semantic groups. These controls work together, and none is a universal substitute for the others.
+
+Useful starting ranges—not pass/fail thresholds—are roughly `0.94–1.08` for multi-line Chinese display, `1.02–1.14` for headings, `1.25–1.50` for body copy, and `1.16–1.34` for compact wrapping labels. Short Latin numerals may be tighter. Depart from these ranges when the typeface, line length, language, or composition calls for it, then verify optically at 360 px and full size.
+
+Treat these as distinct groups even when they share one module:
+
+1. recognition anchor → support title;
+2. metric value → object or unit;
+3. object or unit → explanatory context;
+4. heading → supporting paragraph;
+5. one evidence item → the next evidence item.
+
+Closely related groups may sit near each other when size, weight, or color already separates them. Add more physical gap when those cues are weak or both groups wrap. Prefer explicit HTML groups over a single undifferentiated text node; use flex/grid only when it serves the relationship, not as a mandatory wrapper.
+
+Judge spacing optically, not only mathematically. Chinese glyphs have a large visual body, so lines can appear merged even when boxes do not overlap. At the 360 px contact-sheet view, each title line and each value/object/context group should remain separately scannable.
+
 ## Internal density and repeated emphasis
 
 Empty space is intentional only when it strengthens hierarchy. It is not permission to place one small label at the edge of a large colored module.
 
-- In a large rounded panel, visible text and graphic marks should normally occupy at least roughly one fifth of the panel's height. If they do not, shorten the panel, enlarge the meaningful content, add sourced detail, or choose a different grammar. Do not count the empty distance between one label at the top and one at the bottom as content.
-- Do not stretch a two-line fact into a full-height split column. Use a comparison table, compact metric, annotated bar, or calculation instead.
+- Start with the natural height of the information. Let a metric, note, or comparison card contract around its meaningful groups before distributing the remaining page space.
+- Stretch a module only when its height has a visible job: encoding magnitude or duration, carrying an image or quote, aligning a real comparison, placing related facts at meaningful endpoints, or creating deliberate editorial pause.
+- A tall panel with all meaningful marks crowded into its upper portion and an inert lower half should be shortened or recomposed. Do not use a full-height split column merely because two metrics exist.
+- Empty distance between a top label and a bottom label is not automatically evidence of a relationship. The viewer should be able to explain why those endpoints need the height.
 - Supporting labels inside circles and mini modules should be at least 26 px; pills at least 28 px; substantive body copy at least 30 px.
+- A text stack is not readable merely because it fits. If adjacent lines or semantic groups appear fused at thumbnail size, try line-height, width, font size, color, or grouping; do not assume larger gaps are always the best correction.
 - When the same number appears on multiple pages, change the visual operation as well as the wording: current value → delta → calculation → boundary. Repeating a giant percentage in a closing card is not a conclusion.
 - A closing statement should synthesize an implication or action, not restate the largest number from the evidence pages.
 
-## Page rhythm
+## Example page rhythm
 
-Across a six-card set, alternate energy:
+One possible six-card set alternates energy like this:
 
 - P1 high contrast / giant hook.
 - P2 pale ground / factual structure.
@@ -174,4 +199,4 @@ Across a six-card set, alternate energy:
 - P5 split contrast / interpretation.
 - P6 saturated or warm white / closing thesis.
 
-This is a rhythm guide, not a mandatory color sequence. In alternate palettes, “blue” means the palette's primary family and “orange” means its secondary family.
+This is an example, not a mandatory sequence. Derive the actual rhythm in `ART_DIRECTION.md`. In alternate palettes, “blue” means the palette's primary family and “orange” means its secondary family.

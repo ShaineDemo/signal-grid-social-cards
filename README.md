@@ -48,24 +48,27 @@ Compatibility belongs to the **agent host**, not just the model name. Plain web 
 
 ### Cross-host consistency gate
 
-Different agent hosts can interpret visual instructions with different strictness. BriefGrid therefore includes a machine-checkable [portable output contract](references/portable-contract.md). Generated HTML declares the topic subject, cover hierarchy, recognition-asset provenance, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
+Different agent hosts can interpret visual instructions with different strictness. BriefGrid therefore combines a machine-checkable [portable output contract](references/portable-contract.md) with a task-local story and art-direction preflight. Generated HTML declares the topic subject, selected title emphasis, the cover-to-page-2 handoff question, semantic fact IDs for cover evidence, recognition-asset provenance, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
 
-This catches failures such as reducing the named product to small metadata, substituting an unverified generic icon for the actual subject, squeezing an unrelated `Docs` wordmark into a compact tile, displaying a large number without its object and context, repeating one dominant metric without adding information, or leaving a large module almost empty. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with the audit and visual-review result.
+This catches failures such as ambiguous title emphasis, substituting an unverified generic icon for the actual subject, squeezing an unrelated `Docs` wordmark into a compact tile, displaying a large number without its object and context, repeating the same fact through separate cover components, repeating one dominant metric without adding information, or leaving a large module almost empty. Visual grammar is open rather than limited to a fixed template whitelist. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with separate contract, fact, cover-visual, full-set, and overall results.
 
 Recognition assets are **source-matched, not official-only**. The HTML declares whether each asset provides identity, evidence, or context, and whether it comes from an official/primary source, licensed editorial source, verified third party, or the user. Contextual and generated imagery must be visibly disclosed and cannot be presented as evidence of a real event. Logos are never AI-redrawn.
 
 ## What it produces
 
-- A fact-checked 5–6 card narrative optimized for Xiaohongshu/RedNote, plus dedicated X and LinkedIn reflow presets.
+- A fact-checked, evidence-determined 4–7 card narrative optimized for Xiaohongshu/RedNote, plus dedicated X and LinkedIn reflow presets.
 - Complete Simplified Chinese or editorial English output, including cards, titles, captions, hashtags, caveats, and alt text.
 - Editable, dependency-light HTML/CSS.
 - Ordered PNG exports and a contact sheet for review.
 - Optional PDF assembly for LinkedIn document carousels.
 - `POST_COPY.md` with a recommended title, alternatives, body copy, hashtags, and caveats.
+- `STORY_PLAN.md` with the fact model, thesis, page questions, answers, and information gain.
+- `ART_DIRECTION.md` with three cover concepts, the selected direction, asset decision, and carousel rhythm.
 - `SOURCES.md` with claim and recognition-asset provenance.
 - Three built-in palettes: Signal Blue / Alert Orange, Violet / Moss, and Petrol / Raspberry.
 - A mandatory cross-host audit and `TEST_REPORT.md` so visual rules are verified rather than treated as suggestions.
 - Unique reader questions and source IDs per page, metric-purpose labels, minimum supporting-text sizes, and internal-density checks.
+- A required thumbnail/full-size critique and correction cycle that evaluates the rendered result rather than treating technical export as visual approval.
 
 ![Three built-in palettes](examples/palette-preview/contact-sheet.png)
 

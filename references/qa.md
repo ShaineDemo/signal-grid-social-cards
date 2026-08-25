@@ -10,10 +10,16 @@
 ## Copy
 
 - Cover reads at 360 px width.
-- Cover titles use exactly two semantic size levels; the larger phrase is the strongest click-and-recognition anchor. For a well-known company, person, product, or model, verify that its name was considered before automatically enlarging the change sentence.
+- Cover titles use exactly two semantic roles; the role declared by `data-title-emphasis` leads through the scale or composition mode recorded in the HTML and `ART_DIRECTION.md`. The roles may share one title block or form a coordinated headline-and-brand system.
 - Every auxiliary cover module previews a concrete capability, sourced consequence, useful limit, or recognition asset; it does not merely label the category or repeat the title.
+- The cover has one dominant proof relationship rather than several independent explanations competing with the headline.
+- The cover declares an exact next question that page 2 answers with genuinely withheld information.
+- Every semantic cover evidence module has `data-fact-ids`; the same fact ID is not repeated across separate cover modules.
+- A complete table, category list, condition matrix, or implementation breakdown stays off the cover unless that complete structure is itself the news hook.
 - Model IDs, API routes, versions, and routine availability metadata stay off the cover unless that exact detail is the central news hook.
 - Each page has one dominant takeaway.
+- `STORY_PLAN.md` shows the question, answer, evidence status, new information, and visual relationship for every page.
+- `ART_DIRECTION.md` contains three genuinely different cover concepts and gives an evidence-based reason for the selected one.
 - Each page answers a unique declared reader question; no page exists only to restate a previous metric with a new color.
 - No title exceeds three lines.
 - No accidental orphan character on a line.
@@ -30,17 +36,23 @@
 - Body copy is at least 30 px.
 - Circle and mini-module labels are at least 26 px; pill text is at least 28 px.
 - English headlines do not create single-word orphan lines or exceed the copy limits in `language-system.md`.
-- At least four distinct page grammars appear in a six-card set.
+- Page grammars express the information relationships named in `STORY_PLAN.md`; repetition creates intentional rhythm rather than template sameness.
 - Circular cells contain short labels only; long paragraphs never go inside circles.
 - Every numeral set larger than section-heading size is understandable inside its own module: value + object/unit + context.
 - Large rounded modules do not leave most of their interior empty around a tiny fact; any intentional exemption has a documented reason.
+- Text and modules do not collide, merge into an accidental block, or cluster in one region while leaving the rest of the page unintentionally inert.
+- Wrapped text is optically separable at thumbnail and full size; no glyph collision, accidental merged line, or ambiguous grouping remains. Suggested line-height ranges are calibration aids, not automatic pass/fail gates.
+- Recognition/support titles and value/object/context groups are visually distinct through an intentional combination of scale, leading, position, color, and spacing. Flex/grid stacks are optional rather than mandatory.
+- Information-only modules normally fit their content. A tall module has a visible reason—scale, duration, sequence, comparison, image, quote, meaningful endpoints, or documented editorial whitespace—and does not leave an inert lower half beneath top-clustered text.
 
 ## Style
 
 - One dominant accent family per page.
+- One dominant visual idea is legible on each page at contact-sheet size.
 - Flat fills only: no gradients, shadows, glass effects, or fake depth.
 - Display type uses regular/medium weight.
 - Rounded geometry is structural, not scattered decoration.
+- Abstract bars, stripes, and shapes express a readable relationship or carry a label; none looks like clipping, leftover CSS, or an unexplained divider through a text module.
 - No oversized number merely repeats the title, ranking, or page count, and no number is used only to occupy empty space.
 - A repeated dominant metric has a new declared purpose—comparison, calculation, boundary, or sequence—and visibly adds information.
 - Sequence numbers such as `01`–`05` sit directly beside the stage or item they identify.
@@ -52,13 +64,16 @@
 - Logo QA includes inspecting the visible asset itself; successful loading, natural dimensions, or a plausible filename are not sufficient evidence.
 - No real-person portrait or interview scene is fabricated with image generation.
 - Every visual asset declares its editorial role, origin, source page, direct source or user-provided status, rights note, and visual-inspection status.
+- When two cover assets are used, they perform different jobs such as identity + evidence/context; they do not repeat the same recognition signal.
 - Identity assets come from official, primary-source, verified third-party, or user-provided origins. A verified third-party identity asset has an official verification URL.
 - Evidence assets come from official, primary-source, licensed editorial, or user-provided origins. Contextual or generated imagery is visibly disclosed and never presented as evidence of a real event or person.
 - External competitive or market context is decision-relevant, sourced, and labeled as reported context or inference; otherwise it is omitted.
 
 ## Final inspection
 
-Open the contact sheet, then inspect the cover and densest page at full size. Check line breaks, contrast, hierarchy, bottom balance, logo/portrait integrity, and whether the recognition asset genuinely helps. Re-render after any edit. Read `POST_COPY.md` once as a user and once against the source ledger.
+Review in two passes. First inspect the contact sheet at approximately 360 px card width: name what is seen first, whether subject and change are understandable within two seconds, whether the cover passes the one-sentence, deletion, handoff, and feed-size evidence tests, whether adjacent title lines remain visually separate, whether value/object/context groups can be scanned independently, whether any tall column looks empty or template-driven, and whether the pages feel related without repeating one safe composition. Then inspect the cover and densest page at full size: check line breaks, glyph collisions, grouping, contrast, hierarchy, spatial balance, logo/portrait integrity, module density, and the visible reason for every tall module. Record first-pass findings and corrections in `TEST_REPORT.md`, then re-render after any material edit. Read `POST_COPY.md` once as a user and once against the source ledger.
+
+Report `contract audit`, `fact audit`, `cover visual audit`, `full-set visual audit`, and `overall` as separate statuses. A clean technical audit cannot override a failed cover. If the cover is a dense detail page, duplicates facts, cannot be read at feed size, or gives page 2 nothing meaningful to reveal, set the overall result to `FAIL` until it is corrected.
 
 For X, verify no post contains more than four images and ordinary post copy stays within 280 characters. For LinkedIn, verify 4:5 output and open the generated PDF when document-carousel delivery was requested.
 
