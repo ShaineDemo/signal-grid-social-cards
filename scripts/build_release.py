@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
-OUTPUT = DIST / "signal-grid-social-cards.zip"
+OUTPUT = DIST / "brief-grid.zip"
 EXCLUDED_PARTS = {".git", ".github", "dist", "node_modules", "__pycache__", "png"}
 EXCLUDED_NAMES = {".DS_Store", "package-lock.json"}
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0 — 2026-08-25
+
+- Renamed Signal Grid Social Cards to BriefGrid.
+- Changed the Skill, package, repository, installation directory, invocation, and release ZIP slug from `signal-grid-social-cards` to `brief-grid`.
+- Updated the UI metadata, HTML template, palette preview, and bilingual documentation to use the new brand.
+- Added migration guidance for existing installations while retaining attribution to 歸藏 (op7418) and the AGPL-3.0 license.
+
 ## 1.5.0 — 2026-08-24
 
 - Replaced the official-only asset assumption with a source-matched identity/evidence/context model.

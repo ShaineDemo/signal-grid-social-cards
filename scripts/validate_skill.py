@@ -58,7 +58,7 @@ def validate(root: Path) -> None:
         fail("Missing required files: " + ", ".join(missing))
 
     frontmatter = load_frontmatter(root / "SKILL.md")
-    if frontmatter.get("name") != "signal-grid-social-cards":
+    if frontmatter.get("name") != "brief-grid":
         fail("Unexpected Skill name")
     if not isinstance(frontmatter.get("description"), str) or not frontmatter["description"].strip():
         fail("Skill description is required")

@@ -1,4 +1,4 @@
-# Signal Grid visual system
+# BriefGrid visual system
 
 ## Design reading
 

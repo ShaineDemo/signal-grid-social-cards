@@ -1,14 +1,14 @@
 ---
-name: signal-grid-social-cards
+name: brief-grid
 description: Create Chinese or English social-card carousels for Xiaohongshu/RedNote, X, and LinkedIn with platform-ready titles and post copy in a modular modernist “signal grid” style. Portable across Codex, Claude Code, Kimi Code CLI, Grok Build, and DeepSeek Harness. Use for explainers, product updates, launch summaries, trend cards, and visual news briefs that may benefit from sourced company logos, product images, or interview portraits; do not use for photo-led lifestyle posts or ornate editorial layouts.
 license: AGPL-3.0
 ---
 
-# Signal Grid Social Cards
+# BriefGrid
 
 Turn a topic or source into an accurate, swipeable visual argument. Xiaohongshu/RedNote is the primary platform; X and LinkedIn use explicit reflow and copy presets instead of reusing the 3:4 Xiaohongshu export unchanged. Support both Simplified Chinese and natural editorial English.
 
-This project is built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Preserve that attribution and the AGPL-3.0 license. Signal Grid adds its own modular visual language, three palettes, bilingual copy system, evidence-led cover rules, and publish-copy workflow. Do not remove upstream attribution or copy additional upstream assets without preserving their notices and license obligations.
+This project is built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Preserve that attribution and the AGPL-3.0 license. BriefGrid adds its own modular visual language, three palettes, bilingual copy system, evidence-led cover rules, and publish-copy workflow. Do not remove upstream attribution or copy additional upstream assets without preserving their notices and license obligations.
 
 ## Required reading
 

@@ -1,12 +1,14 @@
-# Signal Grid Social Cards
+# BriefGrid
 
 [English README](README.md)
 
 一个主要面向小红书 / RedNote，同时适配 X 和 LinkedIn 的开源 Codex Skill。它把有来源的选题制作成中文或英文社交卡片，并产出可编辑 HTML/CSS、有序 PNG、平台发布文案及可选的 LinkedIn PDF。
 
-> 本项目在 [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) 的工作流与社交叙事实践基础上开发。感谢 [歸藏（op7418）](https://github.com/op7418) 开源这一优秀项目。Signal Grid 采用不同的模块化视觉语言，并保留上游署名及 AGPL-3.0 许可。
+> 本项目在 [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) 的工作流与社交叙事实践基础上开发。感谢 [歸藏（op7418）](https://github.com/op7418) 开源这一优秀项目。BriefGrid 采用不同的模块化视觉语言，并保留上游署名及 AGPL-3.0 许可。
 
-## 用 Signal Grid 制作
+> **v2.0 更名说明：** Signal Grid Social Cards 已更名为 BriefGrid。已有安装需要把 Skill 目录改为 `brief-grid`，将 Git 远端更新为 `https://github.com/ShaineDemo/brief-grid.git`，重新加载 Agent，并改用 `$brief-grid` 调用。GitHub 会重定向旧仓库地址，但 WorkBuddy 等会缓存导入内容的宿主可能需要重新导入仓库。
+
+## 用 BriefGrid 制作
 
 | Etched 估值翻倍 · Petrol/Raspberry | OpenAI 训练与失配 · Signal Blue/Orange | 小马智行海外 Robotaxi · Violet/Moss |
 | --- | --- | --- |
@@ -30,11 +32,11 @@
 
 | Agent 产品 | 支持情况 | 个人或项目目录 |
 | --- | --- | --- |
-| OpenAI Codex | 原生支持 | `~/.codex/skills/signal-grid-social-cards/` |
-| Claude Code | 原生支持 | `~/.claude/skills/signal-grid-social-cards/` 或 `.claude/skills/signal-grid-social-cards/` |
-| Kimi Code CLI | 原生支持 | `~/.kimi-code/skills/signal-grid-social-cards/` 或 `~/.agents/skills/signal-grid-social-cards/` |
-| Grok Build / Grok CLI | 原生支持 | `~/.grok/skills/signal-grid-social-cards/` 或 `.grok/skills/signal-grid-social-cards/` |
-| DeepSeek Harness | 原生支持，开发者预览 | `.dsh/skills/signal-grid-social-cards/` 或 `.agents/skills/signal-grid-social-cards/` |
+| OpenAI Codex | 原生支持 | `~/.codex/skills/brief-grid/` |
+| Claude Code | 原生支持 | `~/.claude/skills/brief-grid/` 或 `.claude/skills/brief-grid/` |
+| Kimi Code CLI | 原生支持 | `~/.kimi-code/skills/brief-grid/` 或 `~/.agents/skills/brief-grid/` |
+| Grok Build / Grok CLI | 原生支持 | `~/.grok/skills/brief-grid/` 或 `.grok/skills/brief-grid/` |
+| DeepSeek Harness | 原生支持，开发者预览 | `.dsh/skills/brief-grid/` 或 `.agents/skills/brief-grid/` |
 | WorkBuddy | 已验证可从 GitHub 导入；执行一致性取决于宿主工具 | 通过 WorkBuddy 的 Skill 界面导入本仓库 URL |
 | 其他兼容 Agent Skills 的工具 | 预计兼容 | 将完整目录放入产品文档指定的 Skill 根目录 |
 
@@ -46,7 +48,7 @@
 
 ### 跨宿主一致性门禁
 
-不同 Agent 宿主对视觉规范的执行力度不同，因此 Signal Grid 现在提供可机器检查的[跨宿主输出契约](references/portable-contract.md)。生成的 HTML 必须声明选题主体、封面标题角色、识别素材来源、页面语法和完整数字信息单元。`scripts/render.cjs` 会先调用 `scripts/audit.cjs`，存在强制规则错误时不会继续出图。
+不同 Agent 宿主对视觉规范的执行力度不同，因此 BriefGrid 现在提供可机器检查的[跨宿主输出契约](references/portable-contract.md)。生成的 HTML 必须声明选题主体、封面标题角色、识别素材来源、页面语法和完整数字信息单元。`scripts/render.cjs` 会先调用 `scripts/audit.cjs`，存在强制规则错误时不会继续出图。
 
 它会拦截这些问题：把选题中的知名产品缩成小型元数据、用未经核验的通用图标冒充选题主体、把无关的 `Docs` 横向字标塞进紧凑模块、让大数字脱离对象和语境、用同一个大数字重复填充多页，或让大色块几乎没有内容。仅成功生成 PNG 不代表通过；完整交付还必须包含记录自动审计与人工视觉复查结果的 `TEST_REPORT.md`。
 
@@ -75,52 +77,52 @@
 Codex：
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.codex/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.codex/skills/brief-grid
 ```
 
 Claude Code：
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.claude/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.claude/skills/brief-grid
 ```
 
 Kimi Code CLI：
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.kimi-code/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.kimi-code/skills/brief-grid
 ```
 
 Grok Build / Grok CLI：
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.grok/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.grok/skills/brief-grid
 grok inspect
 ```
 
 DeepSeek Harness 项目级安装：
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git .dsh/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git .dsh/skills/brief-grid
 ```
 
 重新加载 Agent 后按宿主对应方式调用：
 
 ```text
-使用 $signal-grid-social-cards 把这个选题做成 6 张小红书图文，并一起生成发布标题和正文。
-/signal-grid-social-cards 把这个选题做成 6 张图文。
-/skill:signal-grid-social-cards 把这个选题做成 6 张图文。
+使用 $brief-grid 把这个选题做成 6 张小红书图文，并一起生成发布标题和正文。
+/brief-grid 把这个选题做成 6 张图文。
+/skill:brief-grid 把这个选题做成 6 张图文。
 ```
 
 英文版本：
 
 ```text
-Use $signal-grid-social-cards to make an English six-card Xiaohongshu carousel from this article.
+Use $brief-grid to make an English six-card Xiaohongshu carousel from this article.
 ```
 
 多平台版本：
 
 ```text
-使用 $signal-grid-social-cards 为这个选题分别制作小红书、X 和 LinkedIn 中文版本，版式和发布文案按平台适配。
+使用 $brief-grid 为这个选题分别制作小红书、X 和 LinkedIn 中文版本，版式和发布文案按平台适配。
 ```
 
 ## 本地渲染与校验

@@ -1,5 +1,5 @@
 interface:
-  display_name: "Signal Grid Social Cards"
+  display_name: "BriefGrid"
   short_description: "Create bilingual cards for Xiaohongshu, X, LinkedIn"
   brand_color: "#315EEA"
-  default_prompt: "Use $signal-grid-social-cards to turn this topic into Chinese or English social cards for Xiaohongshu, X, or LinkedIn with platform-specific layouts, publish-ready copy, and sourced cover imagery when useful."
+  default_prompt: "Use $brief-grid to turn this topic into Chinese or English social cards for Xiaohongshu, X, or LinkedIn with platform-specific layouts, publish-ready copy, and sourced cover imagery when useful."

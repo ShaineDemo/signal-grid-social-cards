@@ -1,12 +1,14 @@
-# Signal Grid Social Cards
+# BriefGrid
 
 [中文说明](README.zh-CN.md)
 
 An open-source Codex Skill for turning sourced topics into Chinese or English social-card stories for Xiaohongshu/RedNote, X, and LinkedIn—with editable HTML/CSS, ordered PNGs, platform-ready copy, and optional LinkedIn PDF export.
 
-> Built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Thank you for the excellent foundation. Signal Grid uses a distinct modular visual system while retaining upstream attribution and the AGPL-3.0 license.
+> Built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Thank you for the excellent foundation. BriefGrid uses a distinct modular visual system while retaining upstream attribution and the AGPL-3.0 license.
 
-## Made with Signal Grid
+> **Renamed in v2.0:** Signal Grid Social Cards is now BriefGrid. Existing installations should rename the Skill directory to `brief-grid`, update the Git remote to `https://github.com/ShaineDemo/brief-grid.git`, reload the agent host, and invoke `$brief-grid`. GitHub redirects the former repository URL, but a host that caches imported Skills may need the repository to be re-imported.
+
+## Made with BriefGrid
 
 | Etched: valuation doubled · Petrol/Raspberry | OpenAI: training and misalignment · Signal Blue/Orange | Pony.ai: overseas Robotaxi plan · Violet/Moss |
 | --- | --- | --- |
@@ -30,11 +32,11 @@ This repository uses the portable directory-form Agent Skill layout: `SKILL.md` 
 
 | Agent product | Support | Personal or project location |
 | --- | --- | --- |
-| OpenAI Codex | Native | `~/.codex/skills/signal-grid-social-cards/` |
-| Claude Code | Native | `~/.claude/skills/signal-grid-social-cards/` or `.claude/skills/signal-grid-social-cards/` |
-| Kimi Code CLI | Native | `~/.kimi-code/skills/signal-grid-social-cards/` or `~/.agents/skills/signal-grid-social-cards/` |
-| Grok Build / Grok CLI | Native | `~/.grok/skills/signal-grid-social-cards/` or `.grok/skills/signal-grid-social-cards/` |
-| DeepSeek Harness | Native, developer preview | `.dsh/skills/signal-grid-social-cards/` or `.agents/skills/signal-grid-social-cards/` |
+| OpenAI Codex | Native | `~/.codex/skills/brief-grid/` |
+| Claude Code | Native | `~/.claude/skills/brief-grid/` or `.claude/skills/brief-grid/` |
+| Kimi Code CLI | Native | `~/.kimi-code/skills/brief-grid/` or `~/.agents/skills/brief-grid/` |
+| Grok Build / Grok CLI | Native | `~/.grok/skills/brief-grid/` or `.grok/skills/brief-grid/` |
+| DeepSeek Harness | Native, developer preview | `.dsh/skills/brief-grid/` or `.agents/skills/brief-grid/` |
 | WorkBuddy | GitHub Skill import verified; runtime behavior depends on host tools | Import this repository URL through WorkBuddy's Skill interface |
 | Other Agent Skills-compatible harnesses | Expected to work | Install the whole directory in that product's documented Skill root |
 
@@ -46,7 +48,7 @@ Compatibility belongs to the **agent host**, not just the model name. Plain web 
 
 ### Cross-host consistency gate
 
-Different agent hosts can interpret visual instructions with different strictness. Signal Grid therefore includes a machine-checkable [portable output contract](references/portable-contract.md). Generated HTML declares the topic subject, cover hierarchy, recognition-asset provenance, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
+Different agent hosts can interpret visual instructions with different strictness. BriefGrid therefore includes a machine-checkable [portable output contract](references/portable-contract.md). Generated HTML declares the topic subject, cover hierarchy, recognition-asset provenance, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
 
 This catches failures such as reducing the named product to small metadata, substituting an unverified generic icon for the actual subject, squeezing an unrelated `Docs` wordmark into a compact tile, displaying a large number without its object and context, repeating one dominant metric without adding information, or leaving a large module almost empty. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with the audit and visual-review result.
 
@@ -74,55 +76,55 @@ Clone the complete directory into the Skill root for your agent. Do not copy onl
 Codex:
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.codex/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.codex/skills/brief-grid
 ```
 
 Claude Code:
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.claude/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.claude/skills/brief-grid
 ```
 
 Kimi Code CLI:
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.kimi-code/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.kimi-code/skills/brief-grid
 ```
 
 Grok Build / Grok CLI:
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git ~/.grok/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git ~/.grok/skills/brief-grid
 grok inspect
 ```
 
 DeepSeek Harness, project scope:
 
 ```bash
-git clone https://github.com/ShaineDemo/signal-grid-social-cards.git .dsh/skills/signal-grid-social-cards
+git clone https://github.com/ShaineDemo/brief-grid.git .dsh/skills/brief-grid
 ```
 
 Start or reload the agent, then invoke the Skill by name. Examples:
 
 ```text
-Use $signal-grid-social-cards to turn this topic into a six-card social carousel.
-/signal-grid-social-cards Turn this topic into a six-card carousel.
-/skill:signal-grid-social-cards Turn this topic into a six-card carousel.
+Use $brief-grid to turn this topic into a six-card social carousel.
+/brief-grid Turn this topic into a six-card carousel.
+/skill:brief-grid Turn this topic into a six-card carousel.
 ```
 
 English output is explicit and complete:
 
 ```text
-Use $signal-grid-social-cards to make an English six-card Xiaohongshu carousel from this article.
+Use $brief-grid to make an English six-card Xiaohongshu carousel from this article.
 ```
 
 Cross-platform output:
 
 ```text
-Use $signal-grid-social-cards to create Chinese editions for Xiaohongshu, X, and LinkedIn, with platform-specific layouts and post copy.
+Use $brief-grid to create Chinese editions for Xiaohongshu, X, and LinkedIn, with platform-specific layouts and post copy.
 ```
 
-Invocation syntax varies by host: Codex commonly uses `$signal-grid-social-cards`; Claude Code and Grok Build expose `/signal-grid-social-cards`; Kimi Code CLI supports `/skill:signal-grid-social-cards`; DeepSeek Harness can load it through its Skill catalog/tool. Automatic discovery remains enabled where the host supports it.
+Invocation syntax varies by host: Codex commonly uses `$brief-grid`; Claude Code and Grok Build expose `/brief-grid`; Kimi Code CLI supports `/skill:brief-grid`; DeepSeek Harness can load it through its Skill catalog/tool. Automatic discovery remains enabled where the host supports it.
 
 ## Upload through the OpenAI Skills API
 
@@ -132,7 +134,7 @@ Run the release builder:
 python3 scripts/build_release.py
 ```
 
-It creates `dist/signal-grid-social-cards.zip` with `SKILL.md` at the ZIP root. The OpenAI Skills API accepts either a directory upload or a single ZIP file. Follow the current [official OpenAI Skills API documentation](https://developers.openai.com/api/reference/python/resources/skills/methods/create) when uploading or creating versions.
+It creates `dist/brief-grid.zip` with `SKILL.md` at the ZIP root. The OpenAI Skills API accepts either a directory upload or a single ZIP file. Follow the current [official OpenAI Skills API documentation](https://developers.openai.com/api/reference/python/resources/skills/methods/create) when uploading or creating versions.
 
 ## Optional standalone rendering setup
 
