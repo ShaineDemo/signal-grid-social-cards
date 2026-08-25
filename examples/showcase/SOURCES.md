@@ -9,14 +9,14 @@ The three composite images in this directory demonstrate editorial output from t
 - Etched mark: official-site asset, editorial identification — https://www.etched.com/apple-icon-276.png
 - Etched system image: official-site product image, editorial identification — https://cdn.sanity.io/images/rwbees58/production/ecfe2c98b278a716b87fcd2c529792bda7ea2e86-4288x2041.png
 
-## PrimeBOT Q1 / T1 preorder
+## Mac mini × Mac Studio buying guide
 
-- Preorder announcement reported from the verified PrimeBOT account: 每日经济新闻, 2026-08-23 — https://www.nbd.com.cn/articles/2026-08-23/4551454.html
-- Product specifications and retail-price boundary: 新京报贝壳财经, 2026-08-23 — https://www.bjnews.com.cn/detail/1787453894129782.html
-- Preorder benefits: 财闻 via 新浪财经, 2026-08-23 — https://finance.sina.com.cn/jjxw/2026-08-23/doc-iniphhce3878327.shtml
-- Offline preorder cities: 新浪科技, 2026-08-24 — https://finance.sina.com.cn/tech/shenji/2026-08-24/doc-inipkvru2003961.shtml
-- Q1 / T1 product image: 新京报 report image, editorial identification; rights remain with 新京报 and the original rights holder — https://media.bjnews.com.cn/image/2026/08/23/5755548135577430546.png
-- T1 quadruped-form image: 央视网 report image, editorial identification; rights remain with CCTV and the original rights holder — https://business.cctv.com/2026/07/15/ARTIUR9K9M8BOMdeWXXU1BGA260715.shtml
+- Mac mini release, prices, availability, and product positioning: Apple 中国大陆 Newsroom, 2026-08-25 — https://www.apple.com.cn/newsroom/2026/08/apple-unveils-powerful-mac-mini-with-m6-and-m5-pro/
+- Mac Studio release, prices, availability, and product positioning: Apple 中国大陆 Newsroom, 2026-08-25 — https://www.apple.com.cn/newsroom/2026/08/apple-introduces-mac-studio-with-m5-max-and-m5-ultra/
+- Mac mini memory, display, connectivity, and package specifications: Apple 中国大陆 — https://www.apple.com.cn/mac-mini/specs/
+- Mac Studio memory, display, connectivity, and package specifications: Apple 中国大陆 — https://www.apple.com.cn/mac-studio/specs/
+- Mac mini product image: Apple Newsroom official product image, editorial identification; trademark and image rights remain with Apple — https://www.apple.com.cn/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-hero-260825_big.jpg.large_2x.jpg
+- Mac Studio product image: Apple Newsroom official product image, editorial identification; trademark and image rights remain with Apple — https://www.apple.com.cn/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-hero-260825_big.jpg.large_2x.jpg
 
 ## Pony.ai overseas Robotaxi plan
 

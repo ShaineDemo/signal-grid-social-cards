@@ -10,11 +10,11 @@ An open-source Codex Skill for turning sourced topics into Chinese or English so
 
 ## Made with BriefGrid
 
-| Etched: valuation doubled · Petrol/Raspberry | PrimeBOT Q1 / T1 preorder · Signal Blue/Orange | Pony.ai: overseas Robotaxi plan · Violet/Moss |
+| Etched: valuation doubled · Petrol/Raspberry | Mac mini × Mac Studio buying guide · Signal Blue/Orange | Pony.ai: overseas Robotaxi plan · Violet/Moss |
 | --- | --- | --- |
-| ![Etched valuation carousel](examples/showcase/etched-valuation.png) | ![PrimeBOT Q1 and T1 preorder carousel](examples/showcase/qiyuan-q1-t1-preorder.png) | ![Pony.ai Robotaxi carousel](examples/showcase/pony-ai-robotaxi.png) |
+| ![Etched valuation carousel](examples/showcase/etched-valuation.png) | ![Mac mini and Mac Studio buying-guide carousel](examples/showcase/apple-desktop-buying-guide.png) | ![Pony.ai Robotaxi carousel](examples/showcase/pony-ai-robotaxi.png) |
 
-Each example turns one current topic into a sourced six-card argument: hook, evidence, meaning, and boundary. Together they also demonstrate all three built-in palettes: Petrol/Raspberry for the business/valuation story, Signal Blue/Orange for the hardware-preorder story, and Violet/Moss for the frontier-mobility deployment story. Showcase imagery is used for editorial identification; credits and rights notes are recorded in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md).
+Each example turns one current topic into a sourced visual argument: hook, evidence, meaning, and boundary. Together they also demonstrate all three built-in palettes: Petrol/Raspberry for the business/valuation story, Signal Blue/Orange for the product-comparison story, and Violet/Moss for the frontier-mobility deployment story. Showcase imagery is used for editorial identification; credits and rights notes are recorded in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md).
 
 ## Platform support
 
