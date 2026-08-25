@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { auditPage } = require('./audit.cjs');
+const { auditPage, auditProjectFiles } = require('./audit.cjs');
 
 function loadPlaywright() {
   const candidates = ['playwright'];
@@ -30,7 +30,7 @@ async function main() {
   await page.goto(pathToFileURL(path.resolve(input)).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   if (!skipContract) {
-    const audit = await auditPage(page);
+    const audit = auditProjectFiles(input, await auditPage(page));
     if (audit.warnings.length) process.stderr.write(`Audit warnings:\n${audit.warnings.map(x => `- ${x}`).join('\n')}\n`);
     if (audit.issues.length) {
       process.stderr.write(`Audit failed:\n${audit.issues.map(x => `- ${x}`).join('\n')}\n`);

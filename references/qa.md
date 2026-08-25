@@ -24,6 +24,8 @@
 - No title exceeds three lines.
 - No accidental orphan character on a line.
 - Product names and version strings are exact.
+- Every product comparison names each SKU and one shared comparison basis. Price comparisons use one explicit, consistent price type; starting, configured, education, and promotional prices are never mixed in a single relationship.
+- Every performance multiplier names the test subject, baseline, metric, and workload/configuration context. Multiples from unlike workloads are not presented as one comparable ranking.
 - The language is consistent across cards, alt text, and `POST_COPY.md`; English reads naturally and is not a literal Chinese calque.
 - `POST_COPY.md` includes one recommended title, distinct alternatives, publish-ready body copy, hashtags, and any required availability caveat.
 - The post copy and cards use the same fact ledger and do not contradict each other.
@@ -31,6 +33,7 @@
 ## Layout
 
 - Every Xiaohongshu poster is exactly 1080×1440; every X or LinkedIn poster is exactly 1080×1350.
+- `body[data-card-count]` matches the number of `.poster` elements. Every poster has one unique `data-page-index`, one unique filename, exactly one page header, one page number, one page footer, and one source footer; no page number repeats across the set.
 - No visible element crosses the 64 px safe margin unless it is a deliberate full-bleed field.
 - No overflow or clipping.
 - Body copy is at least 30 px.
@@ -39,7 +42,7 @@
 - Page grammars express the information relationships named in `STORY_PLAN.md`; repetition creates intentional rhythm rather than template sameness.
 - Circular cells contain short labels only; long paragraphs never go inside circles.
 - Every numeral set larger than section-heading size is understandable inside its own module: value + object/unit + context.
-- Large rounded modules do not leave most of their interior empty around a tiny fact; any intentional exemption has a documented reason.
+- Large rounded modules do not leave most of their interior empty around a tiny fact; this is a blocking audit error. Any intentional exemption has a concrete `data-density-reason` explaining what the space communicates.
 - Text and modules do not collide, merge into an accidental block, or cluster in one region while leaving the rest of the page unintentionally inert.
 - Wrapped text is optically separable at thumbnail and full size; no glyph collision, accidental merged line, or ambiguous grouping remains. Suggested line-height ranges are calibration aids, not automatic pass/fail gates.
 - Recognition/support titles and value/object/context groups are visually distinct through an intentional combination of scale, leading, position, color, and spacing. Flex/grid stacks are optional rather than mandatory.
@@ -65,6 +68,7 @@
 - No real-person portrait or interview scene is fabricated with image generation.
 - Every visual asset declares its editorial role, origin, source page, direct source or user-provided status, rights note, and visual-inspection status.
 - When two cover assets are used, they perform different jobs such as identity + evidence/context; they do not repeat the same recognition signal.
+- `ART_DIRECTION.md` records cover asset availability, decision, and reason using the portable contract's exact fields. If usable subject material exists but the cover is text-led, the reason explains the editorial advantage rather than treating image use as mandatory or decorative.
 - Identity assets come from official, primary-source, verified third-party, or user-provided origins. A verified third-party identity asset has an official verification URL.
 - Evidence assets come from official, primary-source, licensed editorial, or user-provided origins. Contextual or generated imagery is visibly disclosed and never presented as evidence of a real event or person.
 - External competitive or market context is decision-relevant, sourced, and labeled as reported context or inference; otherwise it is omitted.

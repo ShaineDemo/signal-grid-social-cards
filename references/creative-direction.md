@@ -30,6 +30,16 @@ Before writing HTML, create a task-local `ART_DIRECTION.md` with:
 8. **Selected concept and reason** — choose one using recognition, relevance, thumbnail clarity, evidence support, handoff strength, and distinctiveness. Briefly state why the other two are weaker.
 9. **Carousel rhythm** — describe how energy and information density change across the set without assigning a mandatory template to each page.
 
+Record the selected asset decision in an exact machine-readable block:
+
+```text
+Cover asset availability: available|unavailable|not-needed
+Cover asset decision: required|none
+Cover asset reason: one concrete editorial reason
+```
+
+If an authentic product, company, or person asset is available but the selected cover is text-led, the reason must explain why the non-image concept creates a clearer hook, proof relationship, or thumbnail hierarchy. “Cleaner” or “looks better” is not enough. Keep the same values in the HTML body attributes defined by `portable-contract.md`.
+
 Concept sentences describe intent, not coordinates. Good: “A narrow valuation mark expands into a full-height capital scale.” Weak: “Blue title on the left with an orange rounded box on the right.”
 
 ## Cover decision principles
@@ -50,7 +60,7 @@ Concept sentences describe intent, not coordinates. Good: “A narrow valuation 
 Review the repository showcase before designing, but extract principles rather than copying geometry:
 
 - `examples/showcase/etched-valuation.png` demonstrates how a business story can combine recognition, a valuation jump, and a clear boundary without using a lonely number as decoration.
-- `examples/showcase/openai-misalignment.png` demonstrates editorial tension, quote treatment, and the separation of reported fact from interpretation.
+- `examples/showcase/apple-desktop-buying-guide.png` demonstrates how a product-comparison story can separate the hook, comparable price relationships, technical evidence, and a buying boundary without compressing the full table onto the cover.
 - `examples/showcase/pony-ai-robotaxi.png` demonstrates plan-versus-deployment boundaries and a palette matched to frontier mobility.
 
 Across all three, notice the shared judgment rather than their exact geometry: information modules usually fit their contents; tall fields either carry a visual asset, distribute meaningful endpoints, or express a real contrast; page grammars change with the reader question; and whitespace separates ideas instead of accumulating below a top-aligned fact.

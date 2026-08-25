@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
@@ -17,14 +18,72 @@ async function auditPage(page) {
     const issues = [];
     const warnings = [];
     const normalized = value => (value || '').replace(/\s+/g, '').toLowerCase();
+    const body = document.body;
     const posters = [...document.querySelectorAll('.poster')];
     const grammarPattern = /^[a-z][a-z0-9-]{2,}$/;
+    const slugPattern = /^[a-z0-9][a-z0-9-]*$/;
     const allowedClaimStatuses = new Set(['confirmed', 'reported', 'inference', 'mixed']);
     const grammarCounts = new Map();
     const pageQuestions = new Map();
+    const pageIndices = new Map();
+    const pageNumberKeys = new Map();
+    const filenames = new Map();
+
+    const cardCountRaw = (body.dataset.cardCount || '').trim();
+    const cardCount = /^\d+$/.test(cardCountRaw) ? Number(cardCountRaw) : NaN;
+    if (!Number.isInteger(cardCount) || cardCount < 1) issues.push('body[data-card-count] must be a positive integer.');
+    else if (posters.length !== cardCount) issues.push(`body[data-card-count] declares ${cardCount} cards but found ${posters.length} .poster elements.`);
 
     if (!posters.length) issues.push('No .poster elements found.');
     posters.forEach((poster, index) => {
+      const humanPage = index + 1;
+      const pageIndexRaw = (poster.dataset.pageIndex || '').trim();
+      const pageIndex = /^\d+$/.test(pageIndexRaw) ? Number(pageIndexRaw) : NaN;
+      if (!Number.isInteger(pageIndex) || pageIndex < 1) issues.push(`Page ${humanPage}: data-page-index must be a positive integer.`);
+      else {
+        if (pageIndices.has(pageIndex)) issues.push(`Page ${humanPage}: data-page-index ${pageIndex} duplicates page ${pageIndices.get(pageIndex)}.`);
+        else pageIndices.set(pageIndex, humanPage);
+        if (pageIndex !== humanPage) issues.push(`Page ${humanPage}: data-page-index is ${pageIndex}; it must match DOM order ${humanPage}.`);
+      }
+      const filename = (poster.dataset.filename || '').trim();
+      if (!filename) issues.push(`Page ${humanPage}: data-filename is required.`);
+      else if (filenames.has(filename)) issues.push(`Page ${humanPage}: data-filename "${filename}" duplicates page ${filenames.get(filename)}.`);
+      else filenames.set(filename, humanPage);
+
+      const pageHeaders = [...new Set([...poster.querySelectorAll('[data-role="page-header"], .topline')])];
+      const pageFooters = [...new Set([...poster.querySelectorAll('[data-role="page-footer"], .foot')])];
+      const pageNumbers = [...poster.querySelectorAll('[data-role="page-number"]')];
+      const sourceFooters = [...poster.querySelectorAll('[data-role="source-footer"]')];
+      if (pageHeaders.length !== 1) issues.push(`Page ${humanPage}: requires exactly one page header; found ${pageHeaders.length}.`);
+      if (pageFooters.length !== 1) issues.push(`Page ${humanPage}: requires exactly one page footer; found ${pageFooters.length}.`);
+      if (pageNumbers.length !== 1) issues.push(`Page ${humanPage}: requires exactly one page-number element; found ${pageNumbers.length}.`);
+      if (sourceFooters.length !== 1) issues.push(`Page ${humanPage}: requires exactly one source-footer element; found ${sourceFooters.length}.`);
+      if (pageNumbers.length === 1) {
+        const number = pageNumbers[0];
+        const currentRaw = (number.dataset.pageCurrent || '').trim();
+        const totalRaw = (number.dataset.pageTotal || '').trim();
+        const current = /^\d+$/.test(currentRaw) ? Number(currentRaw) : NaN;
+        const total = /^\d+$/.test(totalRaw) ? Number(totalRaw) : NaN;
+        if (!Number.isInteger(current) || !Number.isInteger(total)) issues.push(`Page ${humanPage}: page-number requires integer data-page-current and data-page-total.`);
+        else {
+          const key = `${current}/${total}`;
+          if (pageNumberKeys.has(key)) issues.push(`Page ${humanPage}: visible page number ${key} duplicates page ${pageNumberKeys.get(key)}.`);
+          else pageNumberKeys.set(key, humanPage);
+          if (current !== pageIndex) issues.push(`Page ${humanPage}: page-number current ${current} does not match data-page-index ${pageIndexRaw || 'missing'}.`);
+          if (Number.isInteger(cardCount) && total !== cardCount) issues.push(`Page ${humanPage}: page-number total ${total} does not match data-card-count ${cardCount}.`);
+          const visibleNumber = (number.textContent || '').replace(/\s+/g, '');
+          if (visibleNumber !== `${String(current).padStart(2, '0')}/${String(total).padStart(2, '0')}` && visibleNumber !== `${current}/${total}`) {
+            issues.push(`Page ${humanPage}: visible page number "${number.textContent.trim()}" does not match ${current}/${total}.`);
+          }
+        }
+        if (pageHeaders.length === 1 && !pageHeaders[0].contains(number)) issues.push(`Page ${humanPage}: page-number must sit inside the single page header.`);
+      }
+      if (sourceFooters.length === 1 && pageFooters.length === 1 && !pageFooters[0].contains(sourceFooters[0])) issues.push(`Page ${humanPage}: source-footer must sit inside the single page footer.`);
+
+      const counterLeaves = [...poster.querySelectorAll('*')].filter(element => !element.children.length && /^\s*\d{1,2}\s*\/\s*\d{1,2}\s*$/.test(element.textContent || ''));
+      if (counterLeaves.length > 1) issues.push(`Page ${humanPage}: contains ${counterLeaves.length} independent visible page counters; one poster may represent only one logical card.`);
+      if (counterLeaves.length === 1 && pageNumbers.length === 1 && counterLeaves[0] !== pageNumbers[0]) issues.push(`Page ${humanPage}: contains an unmarked page counter outside data-role="page-number".`);
+
       const grammar = poster.dataset.pageGrammar || '';
       if (!grammarPattern.test(grammar)) issues.push(`Page ${index + 1}: data-page-grammar must be a descriptive kebab-case name.`);
       else grammarCounts.set(grammar, (grammarCounts.get(grammar) || 0) + 1);
@@ -57,13 +116,17 @@ async function auditPage(page) {
     if (posters.length >= 5 && grammarCounts.size < 3) warnings.push(`Carousel uses ${grammarCounts.size} page grammars across ${posters.length} cards; verify that repetition creates deliberate rhythm rather than template sameness.`);
     for (const [grammar, count] of grammarCounts) if (count > 2) warnings.push(`Page grammar "${grammar}" is repeated ${count} times; verify that every repetition adds a new information relationship.`);
 
-    const body = document.body;
     const subject = (body.dataset.topicSubject || '').trim();
     const assetPolicy = body.dataset.coverAsset || '';
+    const assetAvailability = (body.dataset.coverAssetAvailability || '').trim();
+    const assetReason = (body.dataset.coverAssetReason || '').trim();
     const titleEmphasis = body.dataset.titleEmphasis || '';
     const titleEmphasisMode = body.dataset.titleEmphasisMode || 'scale';
     if (!subject) issues.push('body[data-topic-subject] is required.');
     if (!['required', 'none'].includes(assetPolicy)) issues.push('body[data-cover-asset] must be "required" or "none".');
+    if (!['available', 'unavailable', 'not-needed'].includes(assetAvailability)) issues.push('body[data-cover-asset-availability] must be "available", "unavailable", or "not-needed".');
+    if (assetPolicy === 'required' && assetAvailability !== 'available') issues.push('A required cover asset must declare data-cover-asset-availability="available".');
+    if (assetPolicy === 'none' && assetReason.replace(/\s+/g, '').length < 12) issues.push('A text-led cover requires a specific data-cover-asset-reason of at least 12 non-space characters.');
     if (!['recognition', 'support'].includes(titleEmphasis)) issues.push('body[data-title-emphasis] must be "recognition" or "support".');
     if (!['scale', 'composition'].includes(titleEmphasisMode)) issues.push('body[data-title-emphasis-mode] must be "scale" or "composition".');
 
@@ -236,6 +299,61 @@ async function auditPage(page) {
       if (/^\d+(?:[.,]\d+)?$/.test(text) && size >= 112 && !['metric-value', 'sequence'].includes(element.dataset.role || '')) issues.push(`Oversized number "${text}" at ${size}px lacks metric or sequence semantics.`);
     });
 
+    const productComparisons = [...document.querySelectorAll('[data-role="product-comparison"]')];
+    productComparisons.forEach((comparison, index) => {
+      const label = `Product comparison ${index + 1}`;
+      const kind = (comparison.dataset.comparisonKind || '').trim();
+      if (!['price', 'specification'].includes(kind)) issues.push(`${label}: data-comparison-kind must be "price" or "specification".`);
+      const items = [...comparison.querySelectorAll('[data-role="comparison-item"]')].filter(item => item.closest('[data-role="product-comparison"]') === comparison);
+      if (items.length < 2) issues.push(`${label}: requires at least two direct comparison-item modules.`);
+      const priceTypes = new Set();
+      const bases = new Set();
+      items.forEach((item, itemIndex) => {
+        const sku = (item.dataset.sku || '').trim();
+        const priceType = (item.dataset.priceType || '').trim();
+        const basis = (item.dataset.comparisonBasis || '').trim();
+        if (!slugPattern.test(sku)) issues.push(`${label}, item ${itemIndex + 1}: data-sku must be a lowercase kebab-case identifier.`);
+        if (!slugPattern.test(basis)) issues.push(`${label}, item ${itemIndex + 1}: data-comparison-basis must be a lowercase kebab-case identifier.`);
+        if (kind === 'price') {
+          if (!slugPattern.test(priceType)) issues.push(`${label}, item ${itemIndex + 1}: price comparisons require lowercase kebab-case data-price-type.`);
+          else priceTypes.add(priceType);
+          if (!/[$¥€£]\s*[\d,.]+|(?:rmb|usd|eur|gbp)\s*[\d,.]+/i.test(item.textContent || '')) issues.push(`${label}, item ${itemIndex + 1}: price comparison item has no visible currency value.`);
+        }
+        if (basis) bases.add(basis);
+      });
+      if (kind === 'price' && priceTypes.size > 1) issues.push(`${label}: mixes ${priceTypes.size} price types. Compare official starting, configured, education, or promotional prices in separate relationships.`);
+      if (bases.size > 1) issues.push(`${label}: mixes ${bases.size} comparison bases. All items in one relationship must use the same market, tier, and time basis.`);
+    });
+
+    posters.forEach((poster, index) => {
+      const text = poster.textContent || '';
+      const currencyCount = (text.match(/[$¥€£]\s*[\d,.]+|(?:rmb|usd|eur|gbp)\s*[\d,.]+/gi) || []).length;
+      const priceCue = /(?:→|->|\bvs\.?\b|对比|相比|涨|降|差额|比上一档)/i.test(text) || /price/.test(poster.dataset.pageGrammar || '');
+      if (currencyCount >= 2 && priceCue && !poster.querySelector('[data-role="product-comparison"]')) issues.push(`Page ${index + 1}: contains a multi-price comparison but has no data-role="product-comparison" with SKU, price type, and comparison basis.`);
+
+      const performanceCue = /(?:性能|速度|吞吐|延迟|实测|跑分|benchmark|performance|faster|throughput|latency)/i.test(text);
+      const multiplierLeaves = [...poster.querySelectorAll('*')].filter(element => !element.children.length && /(?:\d+(?:\.\d+)?\s*[×xX]|提升\s*\d+(?:\.\d+)?\s*倍)/.test(element.textContent || ''));
+      if (performanceCue && multiplierLeaves.length) {
+        const claims = [...poster.querySelectorAll('[data-role="performance-claim"]')];
+        if (!claims.length) issues.push(`Page ${index + 1}: contains performance multipliers but no data-role="performance-claim".`);
+        multiplierLeaves.filter(element => !element.closest('[data-role="performance-claim"]')).forEach(element => issues.push(`Page ${index + 1}: performance multiplier "${element.textContent.trim()}" sits outside a performance-claim module.`));
+      }
+    });
+
+    [...document.querySelectorAll('[data-role="performance-claim"]')].forEach((claim, index) => {
+      const label = `Performance claim ${index + 1}`;
+      const subjectValue = (claim.dataset.testSubject || '').trim();
+      const baseline = (claim.dataset.testBaseline || '').trim();
+      const metric = (claim.dataset.testMetric || '').trim();
+      const context = (claim.dataset.testContext || '').trim();
+      if (subjectValue.replace(/\s+/g, '').length < 3) issues.push(`${label}: data-test-subject is required.`);
+      if (baseline.replace(/\s+/g, '').length < 3) issues.push(`${label}: data-test-baseline is required.`);
+      if (normalized(subjectValue) && normalized(subjectValue) === normalized(baseline)) issues.push(`${label}: test subject and baseline must differ.`);
+      if (metric.replace(/\s+/g, '').length < 4) issues.push(`${label}: data-test-metric must name the measured quantity.`);
+      if (context.replace(/\s+/g, '').length < 12) issues.push(`${label}: data-test-context must state the workload, configuration, or test conditions.`);
+      if (!/(?:\d+(?:\.\d+)?\s*[×xX]|提升\s*\d+(?:\.\d+)?\s*倍)/.test(claim.textContent || '')) issues.push(`${label}: no visible performance multiplier was found.`);
+    });
+
     posters.slice(1).forEach((poster, index) => {
       if (poster.dataset.pageGrammar === 'closing-statement') return;
       const frame = poster.querySelector('.frame');
@@ -272,7 +390,7 @@ async function auditPage(page) {
       const rect = element.getBoundingClientRect();
       if (rect.width < 280 || rect.height < 260 || rect.width * rect.height < 100000 || parseFloat(style.borderRadius) < 16) return;
       if (element.dataset.densityExempt === 'true') {
-        if (!(element.dataset.densityReason || '').trim()) issues.push('A data-density-exempt module is missing data-density-reason.');
+        if ((element.dataset.densityReason || '').replace(/\s+/g, '').length < 12) issues.push('A data-density-exempt module needs a specific data-density-reason of at least 12 non-space characters.');
         return;
       }
       const leaves = [...element.querySelectorAll('*')].filter(child => {
@@ -293,15 +411,36 @@ async function auditPage(page) {
       const occupiedHeight = merged.reduce((sum, [top, bottom]) => sum + bottom - top, 0);
       const descriptor = element.id ? `#${element.id}` : `.${[...element.classList].join('.')}`;
       if (occupiedHeight / rect.height < 0.18) {
-        warnings.push(`Large rounded module ${descriptor} on page ${posters.indexOf(element.closest('.poster')) + 1} has only ${Math.round(occupiedHeight / rect.height * 100)}% vertical content occupancy; review internal density.`);
+        issues.push(`Large rounded module ${descriptor} on page ${posters.indexOf(element.closest('.poster')) + 1} has only ${Math.round(occupiedHeight / rect.height * 100)}% vertical content occupancy; contract it or document a valid density exemption.`);
       }
       const contentBottom = Math.max(...intervals.map(([, bottom]) => bottom));
       const bottomReach = (contentBottom - rect.top) / rect.height;
-      if (rect.height >= 480 && bottomReach < 0.52) warnings.push(`Tall module ${descriptor} on page ${posters.indexOf(element.closest('.poster')) + 1} is top-clustered: meaningful content ends at ${Math.round(bottomReach * 100)}% of its height. Contract the module or document what the remaining height communicates.`);
+      if (rect.height >= 480 && bottomReach < 0.52) issues.push(`Tall module ${descriptor} on page ${posters.indexOf(element.closest('.poster')) + 1} is top-clustered: meaningful content ends at ${Math.round(bottomReach * 100)}% of its height. Contract the module or document what the remaining height communicates.`);
     });
 
-    return { issues, warnings, summary: { posters: posters.length, grammars: grammarCounts.size, subject, assetPolicy, titleEmphasis, titleEmphasisMode, coverFacts: coverFactCount, coverProofs: coverProofCount, coverNextQuestion } };
+    return { issues, warnings, summary: { posters: posters.length, cardCount: Number.isInteger(cardCount) ? cardCount : null, grammars: grammarCounts.size, subject, assetPolicy, assetAvailability, assetReason, titleEmphasis, titleEmphasisMode, coverFacts: coverFactCount, coverProofs: coverProofCount, coverNextQuestion, productComparisons: productComparisons.length, performanceClaims: document.querySelectorAll('[data-role="performance-claim"]').length } };
   });
+}
+
+function auditArtDirectionText(text, result) {
+  if (result.summary.assetPolicy !== 'none') return result;
+  const availability = (text.match(/^\s*(?:[-*]\s*)?Cover asset availability:\s*(available|unavailable|not-needed)\s*$/im) || [])[1] || '';
+  const decision = (text.match(/^\s*(?:[-*]\s*)?Cover asset decision:\s*(required|none)\s*$/im) || [])[1] || '';
+  const reason = (text.match(/^\s*(?:[-*]\s*)?Cover asset reason:\s*(.+)\s*$/im) || [])[1] || '';
+  if (!availability) result.issues.push('ART_DIRECTION.md must declare "Cover asset availability: available|unavailable|not-needed" for a text-led cover.');
+  else if (availability !== result.summary.assetAvailability) result.issues.push(`ART_DIRECTION.md cover asset availability "${availability}" does not match HTML "${result.summary.assetAvailability}".`);
+  if (decision !== 'none') result.issues.push('ART_DIRECTION.md must declare "Cover asset decision: none" for a text-led cover.');
+  if (reason.replace(/\s+/g, '').length < 12) result.issues.push('ART_DIRECTION.md must give a specific "Cover asset reason" of at least 12 non-space characters.');
+  return result;
+}
+
+function auditProjectFiles(input, result) {
+  const artPath = path.join(path.dirname(path.resolve(input)), 'ART_DIRECTION.md');
+  if (!fs.existsSync(artPath)) {
+    result.issues.push('ART_DIRECTION.md is required beside index.html.');
+    return result;
+  }
+  return auditArtDirectionText(fs.readFileSync(artPath, 'utf8'), result);
 }
 
 async function runFile(input) {
@@ -310,7 +449,7 @@ async function runFile(input) {
   const page = await browser.newPage({ viewport: { width: 2400, height: 1800 }, deviceScaleFactor: 1 });
   await page.goto(pathToFileURL(path.resolve(input)).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
-  const result = await auditPage(page);
+  const result = auditProjectFiles(input, await auditPage(page));
   await browser.close();
   return result;
 }
@@ -320,23 +459,51 @@ async function selfTest() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1200, height: 1600 } });
   const pixel = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="120" height="120"%3E%3Crect width="120" height="120" fill="%23d97757"/%3E%3C/svg%3E';
-  await page.setContent(`<body data-topic-subject="Claude Code" data-cover-asset="required" data-title-emphasis="recognition"><section class="poster" id="card-01" data-page-grammar="cover-grid" data-page-question="What changed for local sessions?" data-cover-next-question="What are the exact access conditions?" data-claim-status="reported" data-source-ids="primary-report" style="width:1080px;height:1440px;overflow:hidden"><div class="frame"><h1><span data-role="recognition-anchor" style="font-size:144px">Claude Code</span><span data-role="support-title" style="font-size:76px">手机可发起本地会话</span></h1><img data-role="recognition-asset" data-asset-role="evidence" data-asset-origin="primary-source" data-asset-kind="product-image" data-subject="Claude Code Remote Control" data-source-page="https://publisher.example/report" data-source-url="https://publisher.example/image.svg" data-rights-note="Primary-source editorial evidence" data-pixel-checked="true" src='${pixel}' alt="Claude Code Remote Control product image" style="width:120px;height:120px"></div></section></body>`);
+  const shell = ({ subject, asset = 'none', availability = 'unavailable', reason = '没有可验证的识别素材，采用信息主导封面。', emphasis = 'recognition', inner, question = 'What changed in this topic?', next = 'What evidence explains the change?', claim = 'confirmed', source = 'source-01' }) => `<body data-card-count="1" data-topic-subject="${subject}" data-cover-asset="${asset}" data-cover-asset-availability="${availability}" data-cover-asset-reason="${reason}" data-title-emphasis="${emphasis}" data-title-emphasis-mode="scale"><section class="poster" id="card-01" data-page-index="1" data-filename="01-cover.png" data-page-grammar="cover-grid" data-page-question="${question}" data-cover-next-question="${next}" data-claim-status="${claim}" data-source-ids="${source}" style="width:1080px;height:1440px;overflow:hidden"><div class="frame"><div class="topline" data-role="page-header"><span>BRIEFGRID</span><span data-role="page-number" data-page-current="1" data-page-total="1">01 / 01</span></div>${inner}<div class="foot" data-role="page-footer"><span data-role="source-footer">SOURCE / ${source}</span><span>END</span></div></div></section></body>`;
+
+  await page.setContent(shell({
+    subject: 'Claude Code', asset: 'required', availability: 'available', reason: '官方产品界面可用，封面采用产品证据图。', claim: 'reported', source: 'primary-report',
+    question: 'What changed for local sessions?', next: 'What are the exact access conditions?',
+    inner: `<h1><span data-role="recognition-anchor" style="font-size:144px">Claude Code</span><span data-role="support-title" style="font-size:76px">手机可发起本地会话</span></h1><img data-role="recognition-asset" data-asset-role="evidence" data-asset-origin="primary-source" data-asset-kind="product-image" data-subject="Claude Code Remote Control" data-source-page="https://publisher.example/report" data-source-url="https://publisher.example/image.svg" data-rights-note="Primary-source editorial evidence" data-pixel-checked="true" src='${pixel}' alt="Claude Code Remote Control product image" style="width:120px;height:120px">`
+  }));
   const good = await auditPage(page);
-  await page.setContent(`<body data-topic-subject="OpenAI" data-cover-asset="required" data-title-emphasis="support"><section class="poster" id="card-01" data-page-grammar="quote-interruption" data-page-question="Why did the training pace change?" data-cover-next-question="What evidence supports the pause?" data-claim-status="mixed" data-source-ids="interview" style="width:1080px;height:1440px;overflow:hidden"><div class="frame"><span data-role="claim-label">Paraphrased quote</span><h1><span data-role="recognition-anchor" style="font-size:72px">OpenAI</span><span data-role="support-title" style="font-size:120px">先过安全线，再继续跑</span></h1><img data-role="recognition-asset" data-asset-role="identity" data-asset-origin="official" data-asset-kind="icon" data-subject="OpenAI" data-source-page="https://openai.com" data-source-url="https://openai.com/icon.svg" data-rights-note="Editorial identification" data-pixel-checked="true" src='${pixel}' alt="OpenAI icon" style="width:120px;height:120px"></div></section></body>`);
+  await page.setContent(shell({
+    subject: 'OpenAI', asset: 'required', availability: 'available', reason: '官方品牌图标可用，封面采用紧凑识别图标。', emphasis: 'support', claim: 'mixed', source: 'interview',
+    question: 'Why did the training pace change?', next: 'What evidence supports the pause?',
+    inner: `<span data-role="claim-label">Paraphrased quote</span><h1><span data-role="recognition-anchor" style="font-size:72px">OpenAI</span><span data-role="support-title" style="font-size:120px">先过安全线，再继续跑</span></h1><img data-role="recognition-asset" data-asset-role="identity" data-asset-origin="official" data-asset-kind="icon" data-subject="OpenAI" data-source-page="https://openai.com" data-source-url="https://openai.com/icon.svg" data-rights-note="Editorial identification" data-pixel-checked="true" src='${pixel}' alt="OpenAI icon" style="width:120px;height:120px">`
+  }));
   const creative = await auditPage(page);
   await page.setContent('<body data-topic-subject="Claude Code" data-cover-asset="required"><section class="poster" id="card-01" style="width:1080px;height:1440px"><h1><span data-role="recognition-anchor" style="font-size:72px">手机变成遥控器</span><span data-role="support-title" style="font-size:60px">本地会话</span></h1><img alt="generic terminal"></section></body>');
   const bad = await auditPage(page);
-  await page.setContent(`<body data-topic-subject="Etched" data-cover-asset="none" data-title-emphasis="recognition"><section class="poster" id="card-01" data-page-grammar="valuation-expansion" data-page-question="Why did the valuation double within one month?" data-cover-next-question="What changed between the two rounds?" data-claim-status="confirmed" data-source-ids="deal-report" style="width:1080px;height:1440px;overflow:hidden"><h1 style="display:flex;flex-direction:column;gap:18px"><span data-role="recognition-anchor" style="font-size:144px">Etched</span><span data-role="support-title" style="font-size:76px">一个月估值翻倍</span></h1><div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="valuation-doubled"><div class="metric" data-role="metric" data-metric-purpose="comparison" style="width:420px;height:820px;border-radius:38px;padding:34px;display:flex;flex-direction:column;gap:18px;background:#315eea;color:white"><span class="metric-value" data-role="metric-value" style="font-size:150px">21</span><span class="metric-unit" data-role="metric-object" style="font-size:38px">亿美元估值</span><p class="metric-caption" data-role="metric-context" style="font-size:30px;margin:0">不到一个月翻倍</p></div></div></section></body>`);
+  await page.setContent(shell({ subject: 'Etched', question: 'Why did the valuation double within one month?', next: 'What changed between the two rounds?', source: 'deal-report', inner: `<h1 style="display:flex;flex-direction:column;gap:18px"><span data-role="recognition-anchor" style="font-size:144px">Etched</span><span data-role="support-title" style="font-size:76px">一个月估值翻倍</span></h1><div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="valuation-doubled"><div class="metric" data-role="metric" data-metric-purpose="comparison" style="width:420px;height:820px;border-radius:38px;padding:34px;display:flex;flex-direction:column;gap:18px;background:#315eea;color:white"><span class="metric-value" data-role="metric-value" style="font-size:150px">21</span><span class="metric-unit" data-role="metric-object" style="font-size:38px">亿美元估值</span><p class="metric-caption" data-role="metric-context" style="font-size:30px;margin:0">不到一个月翻倍</p></div></div>` }));
   const compositionBad = await auditPage(page);
-  await page.setContent(`<body data-topic-subject="GPT-5.6 Sol" data-cover-asset="none" data-title-emphasis="recognition"><section class="poster" id="card-01" data-page-grammar="price-summary" data-page-question="What changed in pricing?" data-cover-next-question="What are the three current rates?" data-claim-status="confirmed" data-source-ids="pricing" style="width:1080px;height:1440px;overflow:hidden"><h1><span data-role="recognition-anchor" style="font-size:144px">GPT-5.6 Sol</span><span data-role="support-title" style="font-size:76px">API 限时降价</span></h1><div data-role="content-preview" data-evidence="consequence" data-fact-ids="output-price-drop">输出约降 33%</div><div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="output-price-drop">$30 → $20</div></section></body>`);
+  await page.setContent(shell({ subject: 'GPT-5.6 Sol', question: 'What changed in pricing?', next: 'What are the three current rates?', source: 'pricing', inner: `<h1><span data-role="recognition-anchor" style="font-size:144px">GPT-5.6 Sol</span><span data-role="support-title" style="font-size:76px">API 限时降价</span></h1><div data-role="content-preview" data-evidence="consequence" data-fact-ids="output-price-drop">输出约降 33%</div><div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="output-price-drop">$30 → $20</div>` }));
   const duplicateCover = await auditPage(page);
+
+  await page.setContent(`<body data-card-count="3" data-topic-subject="Apple" data-cover-asset="none" data-cover-asset-availability="unavailable" data-cover-asset-reason="没有可验证素材，测试页码结构审计。" data-title-emphasis="recognition" data-title-emphasis-mode="scale"><main><section class="poster" id="card-01" data-page-index="1" data-filename="01.png" data-page-grammar="cover-grid" data-page-question="What changed in the lineup?" data-cover-next-question="How do the models compare?" data-claim-status="confirmed" data-source-ids="apple" style="width:1080px;height:1440px;overflow:hidden"><div data-role="page-header"><span data-role="page-number" data-page-current="1" data-page-total="2">01 / 02</span></div><h1><span data-role="recognition-anchor" style="font-size:144px">Apple</span><span data-role="support-title" style="font-size:76px">桌面产品更新</span></h1><div data-role="page-footer"><span data-role="source-footer">SOURCE / apple</span></div></section><section class="poster" data-page-index="2" data-filename="02.png" data-page-grammar="comparison-grid" data-page-question="How do the models compare?" data-claim-status="confirmed" data-source-ids="apple" style="width:1080px;height:1440px;overflow:hidden"><div data-role="page-header"><span data-role="page-number" data-page-current="1" data-page-total="2">01 / 02</span></div><div data-role="page-header"><span>SECOND HEADER</span></div><div data-role="page-footer"><span data-role="source-footer">SOURCE / apple</span></div><div data-role="page-footer"><span data-role="source-footer">SOURCE / duplicate</span></div></section></main></body>`);
+  const structureBad = await auditPage(page);
+
+  await page.setContent(shell({ subject: 'Mac mini', question: 'How did the prices change?', next: 'Which configuration is comparable?', source: 'apple-pricing', inner: `<h1><span data-role="recognition-anchor" style="font-size:144px">Mac mini</span><span data-role="support-title" style="font-size:76px">价格怎么比</span></h1><div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="price-comparison"><div data-role="product-comparison" data-comparison-kind="price"><div data-role="comparison-item" data-sku="mac-mini-m6" data-price-type="official-starting" data-comparison-basis="cn-base-current">¥6999</div><div data-role="comparison-item" data-sku="mac-studio-m5-max" data-price-type="education" data-comparison-basis="cn-education-current">¥19999</div></div></div>` }));
+  const comparisonBad = await auditPage(page);
+
+  await page.setContent(shell({ subject: 'Mac mini', question: 'How much faster is the new model?', next: 'What workload produced the multiplier?', source: 'apple-performance', inner: `<h1><span data-role="recognition-anchor" style="font-size:144px">Mac mini</span><span data-role="support-title" style="font-size:76px">性能提升多少</span></h1><div data-role="cover-proof" data-proof-purpose="evidence" data-fact-ids="performance-multiplier"><div data-role="performance-claim" data-test-subject="Mac mini M6" data-test-baseline="Mac mini M4" data-test-metric="render speed" data-test-context="短"><strong>4.8×</strong><span>性能速度</span></div></div>` }));
+  const performanceBad = await auditPage(page);
+
+  const artMissing = auditArtDirectionText('Cover asset decision: none\n', { issues: [], warnings: [], summary: { assetPolicy: 'none', assetAvailability: 'available' } });
+  const artGood = auditArtDirectionText('Cover asset availability: available\nCover asset decision: none\nCover asset reason: 官方产品素材可用，但截图已作为证据页使用；封面以型号选择问题建立更清晰的认知入口。\n', { issues: [], warnings: [], summary: { assetPolicy: 'none', assetAvailability: 'available' } });
   await browser.close();
   if (good.issues.length) throw new Error(`Good fixture failed:\n${good.issues.join('\n')}`);
   if (creative.issues.length) throw new Error(`Creative fixture failed:\n${creative.issues.join('\n')}`);
   if (bad.issues.length < 5) throw new Error(`Bad fixture was not rejected strongly enough:\n${bad.issues.join('\n')}`);
-  if (!compositionBad.warnings.some(warning => /top-clustered/.test(warning))) throw new Error(`Composition fixture did not trigger top-cluster detection:\n${compositionBad.warnings.join('\n')}`);
+  if (!compositionBad.issues.some(issue => /top-clustered|vertical content occupancy/.test(issue))) throw new Error(`Composition fixture did not trigger fatal low-density detection:\n${compositionBad.issues.join('\n')}`);
   if (!duplicateCover.issues.some(issue => /repeated across separate evidence modules/.test(issue))) throw new Error(`Duplicate cover facts were not rejected:\n${duplicateCover.issues.join('\n')}`);
-  console.log(`Audit self-test passed: conventional=0 issues, creative=0 issues, bad=${bad.issues.length} issues, composition=${compositionBad.warnings.length} warnings, duplicate-cover rejected.`);
+  if (!structureBad.issues.some(issue => /duplicates page 1|duplicates page/.test(issue))) throw new Error(`Duplicate page number was not rejected:\n${structureBad.issues.join('\n')}`);
+  if (!structureBad.issues.some(issue => /declares 3 cards but found 2/.test(issue))) throw new Error(`Card-count mismatch was not rejected:\n${structureBad.issues.join('\n')}`);
+  if (!structureBad.issues.some(issue => /exactly one page header; found 2/.test(issue)) || !structureBad.issues.some(issue => /exactly one source-footer element; found 2/.test(issue))) throw new Error(`Split page shell was not rejected:\n${structureBad.issues.join('\n')}`);
+  if (!comparisonBad.issues.some(issue => /mixes 2 price types/.test(issue)) || !comparisonBad.issues.some(issue => /mixes 2 comparison bases/.test(issue))) throw new Error(`Mixed comparison basis was not rejected:\n${comparisonBad.issues.join('\n')}`);
+  if (!performanceBad.issues.some(issue => /data-test-context/.test(issue))) throw new Error(`Incomplete performance context was not rejected:\n${performanceBad.issues.join('\n')}`);
+  if (artMissing.issues.length < 2 || artGood.issues.length) throw new Error(`ART_DIRECTION asset-decision audit failed. missing=${artMissing.issues.join(' | ')} good=${artGood.issues.join(' | ')}`);
+  console.log(`Audit self-test passed: valid fixtures=2; malformed base=${bad.issues.length} issues; card-count mismatch, split page shell, duplicate page numbers, low density, duplicate facts, mixed price bases, incomplete performance context, and missing text-cover rationale all rejected.`);
 }
 
 async function main() {
@@ -348,5 +515,5 @@ async function main() {
   if (result.issues.length) process.exitCode = 2;
 }
 
-module.exports = { auditPage, runFile };
+module.exports = { auditPage, auditProjectFiles, auditArtDirectionText, runFile };
 if (require.main === module) main().catch(error => { console.error(error.stack || error); process.exit(1); });

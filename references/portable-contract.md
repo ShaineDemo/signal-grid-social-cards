@@ -7,17 +7,64 @@ Use this contract in every generated card set. It turns the most important edito
 ```html
 <body
   data-platform="xiaohongshu"
+  data-card-count="6"
   data-topic-subject="Claude Code"
   data-cover-asset="required"
+  data-cover-asset-availability="available"
+  data-cover-asset-reason="官方产品界面可用，封面采用产品证据图。"
   data-title-emphasis="recognition"
   data-title-emphasis-mode="scale">
 ```
 
 - `data-topic-subject` is the exact company, person, product, or model that should drive cover recognition.
-- `data-cover-asset` is `required` for company-, product-, model-, or person-led news when an authentic official/editorial asset is available. Use `none` only for a deliberately text-led cover, and explain the missing or unnecessary asset in `SOURCES.md`.
+- `data-card-count` is the exact number of `.poster` elements in the file.
+- `data-cover-asset-availability` is `available`, `unavailable`, or `not-needed` after the asset search.
+- `data-cover-asset` is `required` when the selected cover uses an authentic recognition asset and `none` for a deliberately text-led cover. Availability does not force the decision: an available product image may still be declined when the chosen hook is clearer without it, but the reason must be explicit.
+- `data-cover-asset-reason` records the decision in one concrete sentence. A text-led cover requires at least 12 non-space characters and a matching entry in `ART_DIRECTION.md`.
 - `data-title-emphasis` is `recognition` when the named subject leads or `support` when the verified change, quote, or consequence leads. The choice must match `ART_DIRECTION.md`.
 - `data-title-emphasis-mode` is `scale` when size carries the hierarchy or `composition` when position, color, asset proximity, or reading order carries it. Use `composition` only when `ART_DIRECTION.md` explains the cue.
 - Do not use `optional`; make the editorial decision before layout.
+
+The task-local `ART_DIRECTION.md` must include this exact block so the renderer can verify a text-led decision:
+
+```text
+Cover asset availability: available
+Cover asset decision: none
+Cover asset reason: 官方产品图可用，但封面以“如何选择”作为主钩子；产品图留给证据页可保持更清楚的阅读交接。
+```
+
+The values must match the HTML. If an asset is available but `decision` is `none`, explain the stronger editorial relationship created by the text-led cover. A generic preference such as “cleaner” is insufficient.
+
+## Card count and one-card page shell
+
+Every `.poster` represents exactly one logical card:
+
+```html
+<section
+  class="poster"
+  data-page-index="2"
+  data-filename="02-price-ladder.png"
+  data-page-grammar="price-ladder"
+  data-page-question="Which official starting prices are comparable?"
+  data-claim-status="confirmed"
+  data-source-ids="apple-store">
+  <div class="topline" data-role="page-header">
+    <span>PRICE LADDER</span>
+    <span data-role="page-number" data-page-current="2" data-page-total="6">02 / 06</span>
+  </div>
+  <!-- one card's content -->
+  <div class="foot" data-role="page-footer">
+    <span data-role="source-footer">SOURCE / APPLE STORE</span>
+    <span>→</span>
+  </div>
+</section>
+```
+
+- `data-page-index` is a positive integer, follows DOM order, and is unique.
+- `data-filename` is required and unique.
+- Each poster has exactly one page header, one page number, one page footer, and one source footer. The page number sits inside the header; the source footer sits inside the footer.
+- `data-page-current` matches `data-page-index`; `data-page-total` matches `body[data-card-count]`; the visible number matches those attributes.
+- A poster may not contain another independent page header, counter, or source-footer system. Combining two logical cards inside one `.poster` fails the audit even if the exported PNG dimensions are correct.
 
 ## Required cover roles
 
@@ -150,13 +197,63 @@ Any standalone numeric leaf at 112 px or larger must be a metric value or a labe
 
 Allowed metric purposes are `current`, `comparison`, `calculation`, `boundary`, and `sequence`. The same dominant value should not lead multiple pages unless the later appearance uses a different purpose and visibly adds new information.
 
+## Product comparisons
+
+Every product relationship declares what is being compared. A price relationship additionally declares which kind of price and keeps one common basis:
+
+```html
+<div data-role="product-comparison" data-comparison-kind="price">
+  <div
+    data-role="comparison-item"
+    data-sku="mac-mini-m6"
+    data-price-type="official-starting"
+    data-comparison-basis="cn-store-current-base">
+    Mac mini M6 · ¥6,999 起
+  </div>
+  <div
+    data-role="comparison-item"
+    data-sku="mac-studio-m5-max"
+    data-price-type="official-starting"
+    data-comparison-basis="cn-store-current-base">
+    Mac Studio M5 Max · ¥19,999 起
+  </div>
+</div>
+```
+
+- `data-comparison-kind` is `price` or `specification`.
+- Every item has a lowercase kebab-case `data-sku` and `data-comparison-basis`.
+- Price items also have lowercase kebab-case `data-price-type` and a visible currency value.
+- One relationship cannot mix official starting, configured, education, previous-generation, or promotional prices. It also cannot mix market, tier, or time bases. Separate such values into distinct relationships and label the difference visibly.
+- A page with multiple currency values and a visible comparison cue fails if this structure is missing.
+
+## Performance multipliers
+
+A performance multiple is incomplete without the test relationship:
+
+```html
+<div
+  data-role="performance-claim"
+  data-test-subject="Mac mini with M6"
+  data-test-baseline="Mac mini with M4"
+  data-test-metric="ML inference throughput"
+  data-test-context="Same application, model, precision, batch size, and memory class described by source apple-test-01">
+  <strong>4.8×</strong>
+  <span>机器学习推理吞吐提升</span>
+</div>
+```
+
+- `data-test-subject`, `data-test-baseline`, `data-test-metric`, and `data-test-context` are mandatory. The subject and baseline must differ.
+- `data-test-context` names enough workload, configuration, or source-test conditions to interpret the number; a label such as “官方测试” is not enough.
+- A visible `×`, `x`, or “提升 N 倍” on a performance page must sit inside a `performance-claim` module.
+- Multipliers from different workloads are separate claims. Never imply they are comparable rankings unless their metric and test conditions are actually aligned.
+
 ## Readability and internal density
 
 - Substantive body copy is at least 30 px at 1080 px canvas width.
 - Labels inside `.circle` and `.mini` modules are at least 26 px; `.pill` text is at least 28 px.
 - Use the vertical-rhythm ranges in `visual-system.md` as starting points. Delivery is blocked by collisions, clipping, or unreadable grouping—not by a single universal line-height value.
 - `data-role="text-stack"` is available when a vertical group benefits from explicit structure, but is not required when another composition communicates the relationship more clearly.
-- A large rounded module must not contain only a small label surrounded by unused space. Its visible text/image marks should normally occupy at least roughly 18% of its height, unless `data-density-exempt="true"` and `data-density-reason` explain a deliberate image-, quote-, or whitespace-led composition.
+- A large rounded module must not contain only a small label surrounded by unused space. Visible text/image marks below roughly 18% vertical occupancy are a blocking audit error, not a warning, unless `data-density-exempt="true"` and a specific `data-density-reason` explain a deliberate image-, quote-, scale-, endpoint-, or whitespace-led composition.
 - A module taller than its information needs should either distribute meaningful content through its height or declare `data-density-exempt="true"` with a concrete reason such as scale, duration, image, quote, endpoints, or deliberate editorial whitespace. The declaration documents intent; visual review still decides whether the composition works.
 
 Example:
@@ -180,7 +277,7 @@ Good:
 - `Claude Code` leads when product recognition is the strongest hook; `手机可发起本地会话` explains the news.
 - A decisive verified change may lead when `data-title-emphasis="support"`, while `Claude Code` remains unmistakable.
 - The official standalone Spark icon identifies Claude Code, while capability previews explain mobile start, local execution, and multiple sessions.
-- If the official icon cannot be verified, the cover becomes text-led and `SOURCES.md` explains the omission.
+- If the official icon cannot be verified, the cover becomes text-led and `ART_DIRECTION.md` records the asset availability, decision, and reason.
 - `GPT-5.6 Sol` + `API 限时降价` uses one output-price comparison as proof and hands the complete three-rate table to page 2.
 
 Bad:
