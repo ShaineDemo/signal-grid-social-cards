@@ -1,5 +1,12 @@
 # BriefGrid
 
+![GitHub stars](https://img.shields.io/github/stars/ShaineDemo/brief-grid?style=flat-square)
+![License](https://img.shields.io/github/license/ShaineDemo/brief-grid?style=flat-square)
+![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
+![Social Cards](https://img.shields.io/badge/Social-Cards-FF4D6D?style=flat-square)
+![Codex](https://img.shields.io/badge/Codex-Supported-222222?style=flat-square)
+![Claude Code](https://img.shields.io/badge/Claude%20Code-Supported-6B5B95?style=flat-square)
+
 [English README](README.md)
 
 一个主要面向小红书 / RedNote，同时适配 X 和 LinkedIn 的开源 Codex Skill。它把有来源的选题制作成中文或英文社交卡片，并产出可编辑 HTML/CSS、有序 PNG、平台发布文案及可选的 LinkedIn PDF。

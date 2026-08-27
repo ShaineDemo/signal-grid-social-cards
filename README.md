@@ -1,5 +1,12 @@
 # BriefGrid
 
+![GitHub stars](https://img.shields.io/github/stars/ShaineDemo/brief-grid?style=flat-square)
+![License](https://img.shields.io/github/license/ShaineDemo/brief-grid?style=flat-square)
+![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
+![Social Cards](https://img.shields.io/badge/Social-Cards-FF4D6D?style=flat-square)
+![Codex](https://img.shields.io/badge/Codex-Supported-222222?style=flat-square)
+![Claude Code](https://img.shields.io/badge/Claude%20Code-Supported-6B5B95?style=flat-square)
+
 [中文说明](README.zh-CN.md)
 
 An open-source Codex Skill for turning sourced topics into Chinese or English social-card stories for Xiaohongshu/RedNote, X, and LinkedIn—with editable HTML/CSS, ordered PNGs, platform-ready copy, and optional LinkedIn PDF export.
