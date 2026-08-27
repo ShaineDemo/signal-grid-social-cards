@@ -1,6 +1,5 @@
 # BriefGrid
 
-![GitHub stars](https://img.shields.io/github/stars/ShaineDemo/brief-grid?style=flat-square)
 ![License](https://img.shields.io/github/license/ShaineDemo/brief-grid?style=flat-square)
 ![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
 ![Social Cards](https://img.shields.io/badge/Social-Cards-FF4D6D?style=flat-square)
