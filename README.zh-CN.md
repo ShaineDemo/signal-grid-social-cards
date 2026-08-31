@@ -22,11 +22,19 @@
 
 每个案例都把一个时效选题整理成有来源的视觉叙事：钩子、证据、意义和边界。三个案例同时展示全部内置色板：商业与估值选题使用 Petrol/Raspberry，产品对比选题使用 Signal Blue/Orange，前沿出行部署使用 Violet/Moss。展示图中的识别素材仅用于编辑性说明，来源和权利状态记录在 [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md)。
 
+## 英文暗调示例
+
+三个 2026 年 8 月历史案例，分别用原色板暗调制作完整英文版。本轮检验语言、版式与导出，不代表重新核实新闻或产品信息。
+
+| Petrol / Raspberry | Signal Blue / Orange | Violet / Moss |
+| --- | --- | --- |
+| ![Etched English dark edition](examples/showcase/etched-valuation-en-dark.png) | ![Mac desktop English dark edition](examples/showcase/apple-desktop-buying-guide-en-dark.png) | ![Pony.ai English dark edition](examples/showcase/pony-ai-robotaxi-en-dark.png) |
+
 ## 平台适配
 
 | 平台 | 状态 | 原生输出 |
 | --- | --- | --- |
-| 小红书 / RedNote | 首要平台、原生预设 | 1080×1440（3:4），通常 5–6 张，附完整发布文案 |
+| 小红书 / RedNote | 首要平台、原生预设 | 1080×1440（3:4），页数由证据和读者问题决定，附完整发布文案 |
 | X | 专用重排预设 | 1080×1350（4:5），单帖不超过 4 张，提供符合普通帖限制的线程文案 |
 | LinkedIn | 专用重排预设 | 1080×1350（4:5），多图帖子或单个 PDF 文档轮播 |
 
@@ -54,7 +62,7 @@
 
 ### 跨宿主一致性门禁
 
-不同 Agent 宿主对视觉规范的执行力度不同，因此 BriefGrid 把可机器检查的[跨宿主输出契约](references/portable-contract.md)与任务级故事、艺术指导预案结合起来。生成的 HTML 必须声明准确卡片数和唯一页面结构、选题主体、标题强调角色、封面到第 2 页的交接问题、封面证据事实 ID、识别素材来源、可比较的产品价格口径、性能测试语境、页面语法和完整数字信息单元。`scripts/render.cjs` 会先调用 `scripts/audit.cjs`，存在强制规则错误时不会继续出图。
+不同 Agent 宿主对视觉规范的执行力度不同，因此 BriefGrid 把可机器检查的[跨宿主输出契约](references/portable-contract.md)与任务级故事、艺术指导预案结合起来。生成的 HTML 必须声明语言、色板、明暗模式、准确卡片数和唯一页面结构、选题主体、标题强调角色、封面到第 2 页的交接问题、封面证据事实 ID、识别素材来源、可比较的产品价格口径、性能测试语境、页面语法和完整数字信息单元。`scripts/render.cjs` 会先调用 `scripts/audit.cjs`，存在强制规则错误时不会继续出图。
 
 它会拦截这些问题：标题强调角色含混、用未经核验的通用图标冒充选题主体、把无关的 `Docs` 横向字标塞进紧凑模块、让大数字脱离对象和语境、在封面用不同组件重复同一事实、用同一个大数字重复填充多页，或让大色块几乎没有内容。页面语法保持开放，不再被固定模板白名单限制。仅成功生成 PNG 不代表通过；完整交付还必须包含分别记录合同、事实、封面视觉、整组视觉与总体结论的 `TEST_REPORT.md`。
 
@@ -62,7 +70,7 @@
 
 ## 主要能力
 
-- 根据证据量生成 4–7 张 `1080×1440` 小红书图文卡片，并支持 X、LinkedIn 专用 4:5 重排。
+- 根据证据和读者问题决定小红书图文页数，不设固定六页上限，并支持 X、LinkedIn 专用 4:5 重排。
 - 支持完整简体中文或英文版本，不是只翻译标题。
 - 同时生成可编辑 HTML/CSS、PNG 和总览拼图。
 - 可把 LinkedIn 卡片组合成一个 PDF 文档轮播。
@@ -70,14 +78,28 @@
 - 生成 `STORY_PLAN.md`：事实模型、故事判断、逐页问题、答案与信息增量。
 - 生成 `ART_DIRECTION.md`：三个封面概念、最终选择、素材决策与整套节奏。
 - 生成 `SOURCES.md`：记录新闻事实、Logo、人物照片及其他识别素材的来源。
-- 内置 Signal Blue / Alert Orange、Violet / Moss、Petrol / Raspberry 三套色板。
+- 内置 Signal Blue / Alert Orange、Violet / Moss、Petrol / Raspberry 三套色板，每套都支持浅色与暗色；语言、色板和明暗模式独立选择。
 - 内置跨宿主强制审计和 `TEST_REPORT.md`，让关键设计规则成为验收条件，而不是建议。
 - 强制每页回答不同问题并绑定来源，标记数字用途，检查辅助字号和大模块内部信息密度。
 - 强制进行缩略图与全尺寸两轮视觉批评，记录问题并修正，不能把成功出图等同于设计通过。
 
 ![三套内置色板](examples/palette-preview/contact-sheet.png)
 
-未指定语言时默认使用简体中文；明确要求英文时，卡片文字、发布文案、标签、提示和替代文本均使用自然英文，并根据英文长度重新排版。
+## 语言与明暗模式
+
+未指定时默认使用简体中文、浅色。明确要求英文时，卡片标题与正文、发布文案、标签、提示、替代文本和素材披露均用自然英文改写，并按英文长度重新排版。语言切换不改变事实、数字、币种、市场或比较口径；英文版不会自动切成美国市场或美元。
+
+蓝橙色板的实底和中间色统一使用白字或近白字，所有字号都至少达到 4.5:1；浅调里的中性底和真正浅色底保留深字。即使深字通过普通大字对比度检查，蓝橙实底也会被白字规则拦下。
+
+三套色板都支持两种语言和两种明暗模式。暗色版仍沿用原色板的蓝／橙、紫／苔绿或深青／莓红关系，通过调整底色与文字角色保证对比，不增加无关的第四套色板，也不对整页或 Logo 做反色滤镜。
+
+| 维度 | 可选值 |
+| --- | --- |
+| 语言 | 简体中文（`zh-CN`）、英文（`en`） |
+| 色板 | Signal Blue / Alert Orange、Violet / Moss、Petrol / Raspberry |
+| 明暗 | 浅色（默认）、暗色 |
+
+新生成 HTML 必须在 `body` 显式声明 `data-language="zh-CN|en"`、`data-palette="signal-blue-orange|violet-moss|petrol-raspberry"`、`data-tone="light|dark"`，并使 `<html lang>` 与语言一致。缺少这些声明的旧输出仍兼容，但审计会提示补全；新输出不能依赖这个兼容分支。只交付用户需要的版本，不会默认把 12 种组合全部生成。详细规则见 [language-system.md](references/language-system.md) 和 [visual-system.md](references/visual-system.md)。
 
 ## 安装
 
@@ -117,15 +139,27 @@ git clone https://github.com/ShaineDemo/brief-grid.git .dsh/skills/brief-grid
 重新加载 Agent 后按宿主对应方式调用：
 
 ```text
-使用 $brief-grid 把这个选题做成 6 张小红书图文，并一起生成发布标题和正文。
-/brief-grid 把这个选题做成 6 张图文。
-/skill:brief-grid 把这个选题做成 6 张图文。
+使用 $brief-grid 把这个选题做成小红书图文，让内容决定页数，并一起生成发布标题和正文。
+/brief-grid 把这个选题做成图文，页数由证据和读者问题决定。
+/skill:brief-grid 把这个选题做成图文，不预设六张上限。
 ```
 
 英文版本：
 
 ```text
-Use $brief-grid to make an English six-card Xiaohongshu carousel from this article.
+Use $brief-grid to make an English Xiaohongshu carousel from this article and let the evidence determine the card count.
+```
+
+英文暗色版本，沿用原有色板：
+
+```text
+使用 $brief-grid 把 Etched 项目示例做成英文暗色版，沿用 Petrol / Raspberry 色板。保持原始事实、估值币种和口径，按自然英文重排卡片，并生成英文发布文案及经过检查的总览图。
+```
+
+中文暗色也可以单独选择：
+
+```text
+使用 $brief-grid 将小马智行示例做成中文暗色版，保留 Violet / Moss 色板、原始事实和口径，并检查正文、脚注与图片底板的对比度。
 ```
 
 多平台版本：
@@ -143,7 +177,7 @@ python3 -m pip install -r requirements.txt
 python3 scripts/validate_skill.py .
 npm run audit:self-test
 npm run render:example
-python3 scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png
+python3 scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png --cols 2
 python3 scripts/pngs_to_pdf.py path/to/linkedin-png path/to/linkedin-carousel.pdf
 python3 scripts/build_release.py
 ```

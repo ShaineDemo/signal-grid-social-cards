@@ -8,7 +8,7 @@
 
 [中文说明](README.zh-CN.md)
 
-An open-source Codex Skill for turning sourced topics into Chinese or English social-card stories for Xiaohongshu/RedNote, X, and LinkedIn—with editable HTML/CSS, ordered PNGs, platform-ready copy, and optional LinkedIn PDF export.
+An open-source Codex Skill for turning sourced topics into Chinese or English social-card stories for Xiaohongshu/RedNote, X, and LinkedIn—with light or dark versions of three built-in palettes, editable HTML/CSS, ordered PNGs, platform-ready copy, and optional LinkedIn PDF export.
 
 > Built on workflow and social-storytelling ideas from [Guizang Social Card Skill](https://github.com/op7418/guizang-social-card-skill) by [歸藏 (op7418)](https://github.com/op7418). Thank you for the excellent foundation. BriefGrid uses a distinct modular visual system while retaining upstream attribution and the AGPL-3.0 license.
 
@@ -22,11 +22,19 @@ An open-source Codex Skill for turning sourced topics into Chinese or English so
 
 Each example turns one current topic into a sourced visual argument: hook, evidence, meaning, and boundary. Together they also demonstrate all three built-in palettes: Petrol/Raspberry for the business/valuation story, Signal Blue/Orange for the product-comparison story, and Violet/Moss for the frontier-mobility deployment story. Showcase imagery is used for editorial identification; credits and rights notes are recorded in [examples/showcase/SOURCES.md](examples/showcase/SOURCES.md).
 
+## English dark editions
+
+The same three historical August 2026 cases, rewritten in English using the dark tone of each original palette. These are language and rendering regressions, not a new verification of the underlying news or product details.
+
+| Petrol / Raspberry | Signal Blue / Orange | Violet / Moss |
+| --- | --- | --- |
+| ![Etched English dark edition](examples/showcase/etched-valuation-en-dark.png) | ![Mac desktop English dark edition](examples/showcase/apple-desktop-buying-guide-en-dark.png) | ![Pony.ai English dark edition](examples/showcase/pony-ai-robotaxi-en-dark.png) |
+
 ## Platform support
 
 | Platform | Status | Native output |
 | --- | --- | --- |
-| Xiaohongshu / RedNote | Primary, native preset | 1080×1440 (3:4), normally 5–6 cards, publish-ready caption |
+| Xiaohongshu / RedNote | Primary, native preset | 1080×1440 (3:4), evidence-determined card count, publish-ready caption |
 | X | Reflowed platform preset | 1080×1350 (4:5), up to 4 images per post, thread-ready copy within ordinary post limits |
 | LinkedIn | Reflowed platform preset | 1080×1350 (4:5), multi-image post or one PDF document carousel |
 
@@ -54,7 +62,7 @@ Compatibility belongs to the **agent host**, not just the model name. Plain web 
 
 ### Cross-host consistency gate
 
-Different agent hosts can interpret visual instructions with different strictness. BriefGrid therefore combines a machine-checkable [portable output contract](references/portable-contract.md) with a task-local story and art-direction preflight. Generated HTML declares the exact card count and unique page shell, topic subject, selected title emphasis, cover-to-page-2 handoff, semantic cover facts, recognition-asset provenance, comparable product-price bases, performance-test context, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
+Different agent hosts can interpret visual instructions with different strictness. BriefGrid therefore combines a machine-checkable [portable output contract](references/portable-contract.md) with a task-local story and art-direction preflight. Generated HTML declares language, palette, tone, the exact card count and unique page shell, topic subject, selected title emphasis, cover-to-page-2 handoff, semantic cover facts, recognition-asset provenance, comparable product-price bases, performance-test context, page grammars, and complete numeric units. `scripts/render.cjs` runs `scripts/audit.cjs` before producing PNGs and blocks rendering when a mandatory rule fails.
 
 This catches failures such as ambiguous title emphasis, substituting an unverified generic icon for the actual subject, squeezing an unrelated `Docs` wordmark into a compact tile, displaying a large number without its object and context, repeating the same fact through separate cover components, repeating one dominant metric without adding information, or leaving a large module almost empty. Visual grammar is open rather than limited to a fixed template whitelist. PNG generation alone is not a passing result; a complete package also includes `TEST_REPORT.md` with separate contract, fact, cover-visual, full-set, and overall results.
 
@@ -62,7 +70,7 @@ Recognition assets are **source-matched, not official-only**. The HTML declares 
 
 ## What it produces
 
-- A fact-checked, evidence-determined 4–7 card narrative optimized for Xiaohongshu/RedNote, plus dedicated X and LinkedIn reflow presets.
+- A fact-checked narrative whose card count follows the evidence and reader questions rather than a fixed six-card ceiling, plus dedicated X and LinkedIn reflow presets.
 - Complete Simplified Chinese or editorial English output, including cards, titles, captions, hashtags, caveats, and alt text.
 - Editable, dependency-light HTML/CSS.
 - Ordered PNG exports and a contact sheet for review.
@@ -71,12 +79,28 @@ Recognition assets are **source-matched, not official-only**. The HTML declares 
 - `STORY_PLAN.md` with the fact model, thesis, page questions, answers, and information gain.
 - `ART_DIRECTION.md` with three cover concepts, the selected direction, asset decision, and carousel rhythm.
 - `SOURCES.md` with claim and recognition-asset provenance.
-- Three built-in palettes: Signal Blue / Alert Orange, Violet / Moss, and Petrol / Raspberry.
+- Three built-in palettes—Signal Blue / Alert Orange, Violet / Moss, and Petrol / Raspberry—each with light and dark tones. Language, tone, and palette are independent choices.
 - A mandatory cross-host audit and `TEST_REPORT.md` so visual rules are verified rather than treated as suggestions.
 - Unique reader questions and source IDs per page, metric-purpose labels, minimum supporting-text sizes, and internal-density checks.
 - A required thumbnail/full-size critique and correction cycle that evaluates the rendered result rather than treating technical export as visual approval.
 
 ![Three built-in palettes](examples/palette-preview/contact-sheet.png)
+
+## Language and tone
+
+Default output is Simplified Chinese with light tone. Requesting English produces a complete English edition with naturally rewritten cards, titles, post copy, labels, hashtags, alt text, and disclosures. Layouts reflow for English; the source facts, numbers, currencies, market, and comparison basis stay unchanged. English does not imply US pricing or USD.
+
+Signal Blue / Alert Orange solid and mid-tone fields use white or off-white text with at least 4.5:1 contrast at every size; light-mode neutral and genuinely pale fields retain dark text. The audit rejects dark text on those colored fields even if a generic large-text contrast check would pass.
+
+Each palette supports both languages and both tones. Dark tone preserves the selected palette’s blue/orange, violet/moss, or petrol/raspberry identity while adapting surfaces and text for contrast. It does not invert the page or recolor logos. New HTML explicitly declares `data-language="zh-CN|en"`, `data-palette="signal-blue-orange|violet-moss|petrol-raspberry"`, and `data-tone="light|dark"` on `body`, with a matching `<html lang>` value. Older outputs without these declarations remain compatible with audit warnings.
+
+| Choice | Values |
+| --- | --- |
+| Language | Simplified Chinese (`zh-CN`), English (`en`) |
+| Palette | Signal Blue / Alert Orange, Violet / Moss, Petrol / Raspberry |
+| Tone | Light (default), dark |
+
+Only requested editions are generated. See [language-system.md](references/language-system.md) and [visual-system.md](references/visual-system.md) for copy, layout, and contrast rules.
 
 ## Install as a local Agent Skill
 
@@ -116,15 +140,27 @@ git clone https://github.com/ShaineDemo/brief-grid.git .dsh/skills/brief-grid
 Start or reload the agent, then invoke the Skill by name. Examples:
 
 ```text
-Use $brief-grid to turn this topic into a six-card social carousel.
-/brief-grid Turn this topic into a six-card carousel.
-/skill:brief-grid Turn this topic into a six-card carousel.
+Use $brief-grid to turn this topic into an evidence-led social carousel; choose the card count from the story.
+/brief-grid Turn this topic into a social carousel and let the content determine the card count.
+/skill:brief-grid Turn this topic into a social carousel with no fixed six-card limit.
 ```
 
 English output is explicit and complete:
 
 ```text
-Use $brief-grid to make an English six-card Xiaohongshu carousel from this article.
+Use $brief-grid to make an English Xiaohongshu carousel from this article and let the evidence determine the card count.
+```
+
+English with a dark version of an existing palette:
+
+```text
+Use $brief-grid to remake the Etched example in English with the Petrol / Raspberry dark tone. Keep the source facts and valuation currency unchanged, reflow the cards for natural English, and include English post copy and a reviewed contact sheet.
+```
+
+Chinese dark output is equally supported:
+
+```text
+Use $brief-grid to make a Chinese dark edition of the Pony.ai example in Violet / Moss. Preserve its facts and comparison basis, and check body text, footnotes, and image plates for contrast.
 ```
 
 Cross-platform output:
@@ -170,7 +206,7 @@ python3 scripts/pngs_to_pdf.py path/to/linkedin-png path/to/linkedin-carousel.pd
 python3 scripts/validate_skill.py .
 npm run audit:self-test
 npm run render:example
-python3 scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png
+python3 scripts/make_contact_sheet.py examples/palette-preview/png examples/palette-preview/contact-sheet.png --cols 2
 python3 scripts/build_release.py
 ```
 

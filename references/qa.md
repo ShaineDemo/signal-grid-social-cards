@@ -26,7 +26,9 @@
 - Product names and version strings are exact.
 - Every product comparison names each SKU and one shared comparison basis. Price comparisons use one explicit, consistent price type; starting, configured, education, and promotional prices are never mixed in a single relationship.
 - Every performance multiplier names the test subject, baseline, metric, and workload/configuration context. Multiples from unlike workloads are not presented as one comparable ranking.
-- The language is consistent across cards, alt text, and `POST_COPY.md`; English reads naturally and is not a literal Chinese calque.
+- `body[data-language]` and `<html lang>` agree. The selected language is consistent across card titles/body, section and source labels, hashtags, alt text, disclosures, and `POST_COPY.md`; English reads naturally and is not a literal Chinese calque. Any retained Chinese official name or quotation in an English edition has `lang="zh-CN"` and a clear editorial reason.
+- Language editions preserve numbers, currencies, units, market, reporting period, SKUs, price types, and comparison/test bases. English copy does not silently switch China prices to US pricing or USD; Chinese large-number units are expanded accurately.
+- English rollout, reported facts, targets, and interpretation labels preserve the same certainty as the source and Chinese edition.
 - `POST_COPY.md` includes one recommended title, distinct alternatives, publish-ready body copy, hashtags, and any required availability caveat.
 - The post copy and cards use the same fact ledger and do not contradict each other.
 
@@ -50,7 +52,12 @@
 
 ## Style
 
-- One dominant accent family per page.
+- For Signal Blue / Alert Orange, inspect every solid and mid-tone blue/orange module at feed size: all foreground text is white/off-white and at least 4.5:1. In light mode, only genuinely pale or neutral nested fields use dark text. Check labels, separators with opacity, and inherited overrides; a numerically passing dark foreground on a saturated field still fails this palette rule.
+
+- Every new output declares one supported `data-palette` and `data-tone`; language, palette, and tone match `ART_DIRECTION.md`. Missing mode attributes in a legacy output are recorded as compatibility warnings, not used as a shortcut for new generation.
+- One dominant accent family per page. A dark edition retains the chosen Signal Blue / Alert Orange, Violet / Moss, or Petrol / Raspberry lineage; it does not introduce an unrelated fourth palette.
+- Review every rendered page’s foreground/background pairs in the chosen tone: body text, muted labels, footer/source text, rules, accent panels, nested modules, and light plates inside dark pages. The semantic text color must follow the actual surface, not a page-wide inherited assumption. Complex image backgrounds and transparent/overlapping regions require manual inspection even when the automatic audit passes.
+- No page-wide inversion/brightness filter is used to make a dark edition. Logos and photographs retain their original appearance; use a suitable authentic asset or contrasting plate where needed.
 - One dominant visual idea is legible on each page at contact-sheet size.
 - Flat fills only: no gradients, shadows, glass effects, or fake depth.
 - Display type uses regular/medium weight.
@@ -77,7 +84,7 @@
 
 Review in two passes. First inspect the contact sheet at approximately 360 px card width: name what is seen first, whether subject and change are understandable within two seconds, whether the cover passes the one-sentence, deletion, handoff, and feed-size evidence tests, whether adjacent title lines remain visually separate, whether value/object/context groups can be scanned independently, whether any tall column looks empty or template-driven, and whether the pages feel related without repeating one safe composition. Then inspect the cover and densest page at full size: check line breaks, glyph collisions, grouping, contrast, hierarchy, spatial balance, logo/portrait integrity, module density, and the visible reason for every tall module. Record first-pass findings and corrections in `TEST_REPORT.md`, then re-render after any material edit. Read `POST_COPY.md` once as a user and once against the source ledger.
 
-Report `contract audit`, `fact audit`, `cover visual audit`, `full-set visual audit`, and `overall` as separate statuses. A clean technical audit cannot override a failed cover. If the cover is a dense detail page, duplicates facts, cannot be read at feed size, or gives page 2 nothing meaningful to reveal, set the overall result to `FAIL` until it is corrected.
+Record language, palette, and tone, then report `contract audit`, `fact audit`, `cover visual audit`, `full-set visual audit`, and `overall` as separate statuses. Include language consistency and tone/contrast findings, with any legacy-metadata warning, under those results. A clean technical audit cannot override a failed cover. If the cover is a dense detail page, duplicates facts, cannot be read at feed size, or gives page 2 nothing meaningful to reveal, set the overall result to `FAIL` until it is corrected.
 
 For X, verify no post contains more than four images and ordinary post copy stays within 280 characters. For LinkedIn, verify 4:5 output and open the generated PDF when document-carousel delivery was requested.
 
@@ -93,5 +100,7 @@ The regression test must:
 4. verify canvas dimensions, run a DOM overflow/clipping check, manually check inherited text colors on every light/dark state for readable contrast, and inspect every cover asset for semantic match, icon/wordmark suitability, and recognition at actual display size;
 5. record pass/fail results in `TEST_REPORT.md`, including the tested rule, observable evidence, any failure found, and the correction made;
 6. show the resulting test artifact and summarized test result to the user.
+
+For changes to language or tone support, cover both languages and both tones across the three palettes in the regression scope, and state exactly which combinations received a full render and visual inspection versus metadata/contrast-only checks. When the user names existing projects, rerun those projects with their original palette and unchanged fact ledger; an English dark edition is a useful combined regression, with the existing Chinese light edition retained as a comparison. Verify defaults and legacy compatibility separately. Do not claim all 12 combinations were visually validated if only a subset was rendered.
 
 If the test exposes a material weakness, fix the skill and regenerate the test before delivery. If a limitation cannot be fixed safely in scope, mark the test failed and report it explicitly.

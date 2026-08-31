@@ -26,3 +26,7 @@ The three composite images in this directory demonstrate editorial output from t
 - Robotaxi photograph: official Pony.ai blog image, editorial identification — https://blog.pony.ai/from-china-to-europe-scaling-pony-ais-gen-7-through-a-proven-capital-efficient-model/
 
 No sponsorship, partnership, or endorsement by the named companies or people is implied.
+
+## English dark regression editions
+
+The `*-en-dark.png` composites reuse these same historical case assets and source ledgers. Only language, layout, contrast and palette tone were revised for the September 2026 regression; the underlying news and product facts were not freshly verified. Original photographs and marks remain unchanged and retain their original rights.

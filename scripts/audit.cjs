@@ -29,6 +29,180 @@ async function auditPage(page) {
     const pageNumberKeys = new Map();
     const filenames = new Map();
 
+    const modes = { language: 'zh-CN', palette: 'signal-blue-orange', tone: 'light' };
+    const allowedModes = {
+      language: ['zh-CN', 'en'],
+      palette: ['signal-blue-orange', 'violet-moss', 'petrol-raspberry'],
+      tone: ['light', 'dark']
+    };
+    const legacyPalettes = allowedModes.palette.filter(palette => body.classList.contains(`palette-${palette}`));
+    if (!body.hasAttribute('data-palette') && legacyPalettes.length === 1) modes.palette = legacyPalettes[0];
+    for (const [name, values] of Object.entries(allowedModes)) {
+      if (!body.hasAttribute(`data-${name}`)) warnings.push(`body[data-${name}] is missing; using legacy default "${modes[name]}". Declare the mode explicitly in new projects.`);
+      else {
+        const value = body.dataset[name];
+        if (!values.includes(value)) issues.push(`body[data-${name}] must be ${values.map(item => `"${item}"`).join(' or ')}.`);
+        else modes[name] = value;
+      }
+    }
+    if (legacyPalettes.length > 1) issues.push(`body has conflicting legacy palette classes: ${legacyPalettes.map(palette => `"palette-${palette}"`).join(', ')}. Keep one palette selection.`);
+    if (body.hasAttribute('data-palette') && allowedModes.palette.includes(body.dataset.palette)) {
+      legacyPalettes.filter(palette => palette !== body.dataset.palette).forEach(palette => issues.push(`Legacy class "palette-${palette}" conflicts with body[data-palette] "${body.dataset.palette}"; remove the legacy class or make the selections match.`));
+    }
+    const documentLanguage = (document.documentElement.getAttribute('lang') || '').trim();
+    if (!documentLanguage && !body.hasAttribute('data-language')) warnings.push('html[lang] is missing in this legacy project; declare "zh-CN" for the default edition.');
+    else if (documentLanguage.toLowerCase() !== modes.language.toLowerCase()) issues.push(`html[lang] "${documentLanguage || 'missing'}" must match body[data-language] "${modes.language}".`);
+
+    // Only judge rendered text on backgrounds whose pixels can be derived from
+    // flat inherited fills. Images, effects and intersecting paint need visual QA.
+    const meaningfulText = value => (value || '').replace(/[\s\u200B-\u200D\u2060\uFEFF]/g, '');
+    const describe = element => element.id ? `#${element.id}` : element.classList.length ? `.${[...element.classList].join('.')}` : element.tagName.toLowerCase();
+    const rgba = value => {
+      value = value.trim().toLowerCase();
+      if (value === 'transparent') return [0, 0, 0, 0];
+      if (/^#[\da-f]{3,4}$|^#[\da-f]{6}(?:[\da-f]{2})?$/.test(value)) {
+        const hex = value.length < 6 ? [...value.slice(1)].map(character => character.repeat(2)).join('') : value.slice(1);
+        return [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)).concat(hex.length === 8 ? parseInt(hex.slice(6), 16) / 255 : 1);
+      }
+      const match = /^rgba?\(([^)]+)\)$/.exec(value);
+      if (!match) return null;
+      const parts = match[1].split(/[\s,/]+/).filter(Boolean);
+      if (parts.length < 3 || parts.length > 4) return null;
+      const color = parts.slice(0, 3).map(part => parseFloat(part) * (part.endsWith('%') ? 2.55 : 1));
+      color.push(parts[3] === undefined ? 1 : parseFloat(parts[3]) / (parts[3].endsWith('%') ? 100 : 1));
+      return color.every(Number.isFinite) ? color : null;
+    };
+    const over = (front, back) => {
+      const alpha = front[3] + back[3] * (1 - front[3]);
+      return alpha ? [0, 1, 2].map(i => (front[i] * front[3] + back[i] * back[3] * (1 - front[3])) / alpha).concat(alpha) : [0, 0, 0, 0];
+    };
+    const luminance = color => color.slice(0, 3).map(channel => {
+      const s = channel / 255;
+      return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    }).reduce((sum, channel, i) => sum + channel * [0.2126, 0.7152, 0.0722][i], 0);
+    const intersects = (a, b) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5;
+    const isHidden = element => {
+      // Unlike display/opacity, visibility may be restored by a descendant.
+      if (getComputedStyle(element).visibility !== 'visible') return true;
+      for (let current = element; current; current = current.parentElement) {
+        const style = getComputedStyle(current);
+        if (style.display === 'none' || Number(style.opacity) === 0 || style.contentVisibility === 'hidden' || /^rect\(0px,? 0px,? 0px,? 0px\)$/.test(style.clip) || style.clipPath === 'inset(50%)') return true;
+      }
+      return false;
+    };
+    const textRects = (node, poster) => {
+      const element = node.parentElement;
+      if (!element || isHidden(element) || parseFloat(getComputedStyle(element).fontSize) <= 0) return [];
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      let rects = [...range.getClientRects()].filter(rect => rect.width > 0.5 && rect.height > 0.5).map(rect => ({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom }));
+      for (let current = element; current; current = current.parentElement) {
+        const style = getComputedStyle(current);
+        const clipX = current === poster || /hidden|clip|auto|scroll/.test(style.overflowX);
+        const clipY = current === poster || /hidden|clip|auto|scroll/.test(style.overflowY);
+        if (clipX || clipY) {
+          const box = current.getBoundingClientRect();
+          rects = rects.map(rect => ({ left: clipX ? Math.max(rect.left, box.left) : rect.left, right: clipX ? Math.min(rect.right, box.right) : rect.right, top: clipY ? Math.max(rect.top, box.top) : rect.top, bottom: clipY ? Math.min(rect.bottom, box.bottom) : rect.bottom })).filter(rect => rect.right - rect.left > 0.5 && rect.bottom - rect.top > 0.5);
+        }
+      }
+      return rects;
+    };
+    const chineseException = element => /^zh(?:-cn)?$/i.test(element.closest('[lang]')?.getAttribute('lang') || '');
+    const hanPattern = /\p{Script=Han}/u;
+    const bodyStyle = getComputedStyle(body);
+    const signalFills = modes.palette === 'signal-blue-orange' ? ['--blue', '--blue-mid', '--orange', '--orange-mid'].map(token => ({ token, color: rgba(bodyStyle.getPropertyValue(token)) })).filter(({ color }) => color && color[3] >= 0.999) : [];
+    let contrastChecked = 0;
+    let contrastManual = 0;
+    let whiteOnColorChecked = 0;
+    posters.forEach((poster, index) => {
+      const manualReasons = new Set();
+      let chineseExemptions = 0;
+      const paints = [...poster.querySelectorAll('*')].filter(element => {
+        if (isHidden(element)) return false;
+        const style = getComputedStyle(element);
+        const background = rgba(style.backgroundColor);
+        return element.matches('img, svg, canvas, video, iframe') || style.backgroundImage !== 'none' || !background || background[3] > 0;
+      });
+      const walker = document.createTreeWalker(poster, NodeFilter.SHOW_TEXT);
+      const checkedElements = new Set();
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        const element = node.parentElement;
+        if (!meaningfulText(node.textContent) || element.closest('script, style, template')) continue;
+        const rects = textRects(node, poster);
+        if (!rects.length) continue;
+        const style = getComputedStyle(element);
+        const fill = rgba(style.webkitTextFillColor || style.color);
+        const textClippedFill = style.backgroundClip === 'text' || style.webkitBackgroundClip === 'text';
+        if (fill && fill[3] === 0 && style.textShadow === 'none' && parseFloat(style.webkitTextStrokeWidth || '0') === 0 && !textClippedFill) continue;
+        if (modes.language === 'en' && hanPattern.test(node.textContent)) {
+          if (chineseException(element)) chineseExemptions++;
+          else issues.push(`Page ${index + 1}: English edition contains visible Chinese text in ${describe(element)}: "${node.textContent.trim().slice(0, 70)}". Translate it, or mark an authoritative name/quotation with lang="zh-CN".`);
+        }
+        if (checkedElements.has(element)) continue;
+        checkedElements.add(element);
+        const directRects = [...element.childNodes].filter(child => child.nodeType === Node.TEXT_NODE && meaningfulText(child.textContent)).flatMap(child => textRects(child, poster));
+        let reason = !fill ? 'unsupported text color' : '';
+        if (textClippedFill) reason = 'text-clipped background';
+        if (style.textShadow !== 'none' || parseFloat(style.webkitTextStrokeWidth || '0') > 0) reason = 'text shadow or stroke';
+        if (paints.some(paint => paint !== element && !paint.contains(element) && !element.contains(paint) && directRects.some(rect => intersects(rect, paint.getBoundingClientRect())))) reason = 'intersecting image or non-ancestor fill';
+        let background = [0, 0, 0, 0];
+        let foreground = fill || [0, 0, 0, 0];
+        for (let current = element; current; current = current.parentElement) {
+          const layer = getComputedStyle(current);
+          const color = rgba(layer.backgroundColor);
+          if (background[3] < 0.999 && layer.backgroundImage !== 'none') reason = 'image or gradient background';
+          if (!color) reason = 'unsupported background color';
+          if (layer.mixBlendMode !== 'normal' || layer.filter !== 'none' || layer.backdropFilter && layer.backdropFilter !== 'none' || layer.maskImage && layer.maskImage !== 'none') reason = 'blend, filter or mask';
+          for (const pseudo of ['::before', '::after']) {
+            const generated = getComputedStyle(current, pseudo);
+            if (generated.content !== 'none' && generated.content !== 'normal' && generated.display !== 'none' && Number(generated.opacity) > 0) reason = 'generated pseudo-element paint';
+          }
+          background = over(background, color || [0, 0, 0, 0]);
+          foreground = over(foreground, color || [0, 0, 0, 0]);
+          background[3] *= Number(layer.opacity);
+          foreground[3] *= Number(layer.opacity);
+        }
+        if (reason) {
+          contrastManual++;
+          manualReasons.add(reason);
+          continue;
+        }
+        // The browser's default canvas is white where no author fill is painted.
+        background = over(background, [255, 255, 255, 1]);
+        foreground = over(foreground, [255, 255, 255, 1]);
+        const lum = [luminance(background), luminance(foreground)].sort((a, b) => b - a);
+        const ratio = (lum[0] + 0.05) / (lum[1] + 0.05);
+        // Match the composed local background, so an inner soft/neutral panel
+        // does not inherit the outer colored surface's white-text requirement.
+        const signalFill = signalFills.find(({ color }) => color.slice(0, 3).every((channel, i) => Math.abs(channel - background[i]) <= 0.5));
+        if (signalFill) {
+          whiteOnColorChecked++;
+          if (foreground.slice(0, 3).some(channel => channel < 230)) issues.push(`Page ${index + 1}: white-on-color rule in ${describe(element)} requires near-white text on Signal ${signalFill.token}; dark or faded text is not allowed even when its contrast ratio passes.`);
+        }
+        const minimum = signalFill || parseFloat(style.fontSize) < 24 ? 4.5 : 3;
+        contrastChecked++;
+        if (ratio + 0.005 < minimum) issues.push(`Page ${index + 1}: text contrast ${ratio.toFixed(2)}:1 in ${describe(element)} is below ${minimum}:1 (${style.fontSize}); adjust the text or its effective background.`);
+      }
+      if (modes.language === 'en') {
+        [...poster.querySelectorAll('img[alt]')].forEach(img => {
+          if (!hanPattern.test(img.alt)) return;
+          if (chineseException(img)) chineseExemptions++;
+          else issues.push(`Page ${index + 1}: English edition contains Chinese alt text in ${describe(img)}; translate it or explicitly mark an authoritative name/quotation with lang="zh-CN".`);
+        });
+        [...poster.querySelectorAll('*')].filter(element => !isHidden(element)).forEach(element => {
+          for (const pseudo of ['::before', '::after']) {
+            const style = getComputedStyle(element, pseudo);
+            if (style.display === 'none' || style.visibility !== 'visible' || Number(style.opacity) === 0 || parseFloat(style.fontSize) <= 0 || !hanPattern.test(style.content.replace(/url\([^)]*\)/gi, ''))) continue;
+            if (chineseException(element)) chineseExemptions++;
+            else issues.push(`Page ${index + 1}: English edition contains Chinese generated text in ${describe(element)}${pseudo}.`);
+          }
+        });
+      }
+      if (chineseExemptions) warnings.push(`Page ${index + 1}: ${chineseExemptions} Chinese text/alt segment(s) are explicitly language-marked; verify they are authoritative names or original quotations.`);
+      if (manualReasons.size) warnings.push(`Page ${index + 1}: contrast needs visual review for ${[...manualReasons].join(', ')}; those text runs were not assigned a pass or failure.`);
+    });
+
     const cardCountRaw = (body.dataset.cardCount || '').trim();
     const cardCount = /^\d+$/.test(cardCountRaw) ? Number(cardCountRaw) : NaN;
     if (!Number.isInteger(cardCount) || cardCount < 1) issues.push('body[data-card-count] must be a positive integer.');
@@ -327,7 +501,11 @@ async function auditPage(page) {
 
     posters.forEach((poster, index) => {
       const text = poster.textContent || '';
-      const currencyCount = (text.match(/[$¥€£]\s*[\d,.]+|(?:rmb|usd|eur|gbp)\s*[\d,.]+/gi) || []).length;
+      // Valuation and funding amounts are financial metrics, not product SKUs.
+      // Exclude only explicitly typed metric modules; untyped prices still fail.
+      const priceContent = poster.cloneNode(true);
+      priceContent.querySelectorAll('[data-role="metric"][data-financial-kind="valuation"], [data-role="metric"][data-financial-kind="funding"]').forEach(metric => metric.remove());
+      const currencyCount = ((priceContent.textContent || '').match(/[$¥€£]\s*[\d,.]+|(?:rmb|usd|eur|gbp)\s*[\d,.]+/gi) || []).length;
       const priceCue = /(?:→|->|\bvs\.?\b|对比|相比|涨|降|差额|比上一档)/i.test(text) || /price/.test(poster.dataset.pageGrammar || '');
       if (currencyCount >= 2 && priceCue && !poster.querySelector('[data-role="product-comparison"]')) issues.push(`Page ${index + 1}: contains a multi-price comparison but has no data-role="product-comparison" with SKU, price type, and comparison basis.`);
 
@@ -418,7 +596,7 @@ async function auditPage(page) {
       if (rect.height >= 480 && bottomReach < 0.52) issues.push(`Tall module ${descriptor} on page ${posters.indexOf(element.closest('.poster')) + 1} is top-clustered: meaningful content ends at ${Math.round(bottomReach * 100)}% of its height. Contract the module or document what the remaining height communicates.`);
     });
 
-    return { issues, warnings, summary: { posters: posters.length, cardCount: Number.isInteger(cardCount) ? cardCount : null, grammars: grammarCounts.size, subject, assetPolicy, assetAvailability, assetReason, titleEmphasis, titleEmphasisMode, coverFacts: coverFactCount, coverProofs: coverProofCount, coverNextQuestion, productComparisons: productComparisons.length, performanceClaims: document.querySelectorAll('[data-role="performance-claim"]').length } };
+    return { issues, warnings, summary: { ...modes, contrastChecked, contrastManual, whiteOnColorChecked, posters: posters.length, cardCount: Number.isInteger(cardCount) ? cardCount : null, grammars: grammarCounts.size, subject, assetPolicy, assetAvailability, assetReason, titleEmphasis, titleEmphasisMode, coverFacts: coverFactCount, coverProofs: coverProofCount, coverNextQuestion, productComparisons: productComparisons.length, performanceClaims: document.querySelectorAll('[data-role="performance-claim"]').length } };
   });
 }
 
@@ -491,6 +669,75 @@ async function selfTest() {
 
   const artMissing = auditArtDirectionText('Cover asset decision: none\n', { issues: [], warnings: [], summary: { assetPolicy: 'none', assetAvailability: 'available' } });
   const artGood = auditArtDirectionText('Cover asset availability: available\nCover asset decision: none\nCover asset reason: 官方产品素材可用，但截图已作为证据页使用；封面以型号选择问题建立更清晰的认知入口。\n', { issues: [], warnings: [], summary: { assetPolicy: 'none', assetAvailability: 'available' } });
+
+  const modeFixture = ({ language = 'en', palette = 'signal-blue-orange', tone = 'light', htmlLang = language, extra = '', css = '', attributes = '' } = {}) => `<!doctype html><html lang="${htmlLang}"><head><style>body{margin:0;background:#fff;color:#111}h1 span{display:block} ${css}</style></head>${shell({ subject: 'BriefGrid', inner: `<h1><span data-role="recognition-anchor" style="font-size:120px">BriefGrid</span><span data-role="support-title" style="font-size:76px">One clear story</span></h1>${extra}` }).replace('<body ', `<body data-language="${language}" data-palette="${palette}" data-tone="${tone}" ${attributes} `)}</html>`;
+  const runMode = async options => { await page.setContent(modeFixture(options)); return auditPage(page); };
+  const validModes = [];
+  for (const language of ['zh-CN', 'en']) for (const palette of ['signal-blue-orange', 'violet-moss', 'petrol-raspberry']) for (const tone of ['light', 'dark']) {
+    validModes.push(await runMode({ language, palette, tone, css: tone === 'dark' ? '.poster{background:#111;color:#fff}' : '' }));
+  }
+  const invalidModes = await runMode({ language: 'english', palette: 'neon', tone: 'black' });
+  const paletteConflict = await runMode({ palette: 'petrol-raspberry', attributes: 'class="palette-violet-moss"' });
+  const matchingLegacyPalette = await runMode({ palette: 'violet-moss', attributes: 'class="palette-violet-moss"' });
+  const multipleLegacyPalettes = await runMode({ attributes: 'class="palette-violet-moss palette-petrol-raspberry"' });
+  const undeclaredLegacyPalettes = [];
+  for (const palette of ['violet-moss', 'petrol-raspberry']) {
+    await page.setContent(modeFixture({ attributes: `class="palette-${palette}"` }).replace(' data-palette="signal-blue-orange"', ''));
+    undeclaredLegacyPalettes.push({ palette, result: await auditPage(page) });
+  }
+  const languageMismatch = await runMode({ htmlLang: 'zh-CN' });
+  const languageMissing = await runMode({ htmlLang: '' });
+  const chineseLeftover = await runMode({ extra: '<p>English edition with 残留中文.</p>' });
+  const chineseAlt = await runMode({ extra: `<img alt="中文说明" src='${pixel}' style="width:1px;height:1px">` });
+  const chineseMarked = await runMode({ extra: '<p>Official name: <span lang="zh-CN">中文名称</span>.</p><blockquote lang="zh">原文引述</blockquote>' });
+  const hiddenText = await runMode({ extra: '<span hidden>隐藏</span><span style="visibility:hidden">隐藏</span><span style="opacity:0;color:#fff">隐藏</span><span style="font-size:0">隐藏</span><span style="color:transparent">隐藏</span><span style="display:block;width:0;height:0;overflow:hidden">隐藏</span><span style="color:#fff">\u200B</span>' });
+  const restoredVisibility = await runMode({ extra: '<div style="visibility:hidden"><span style="visibility:visible">可见中文</span></div>' });
+  const contrastBad = await runMode({ extra: '<p id="small" style="font-size:20px;color:#777">Normal text needs 4.5.</p><p id="large" style="font-size:24px;color:#999">Large text needs 3.</p>' });
+  const contrastLargeGood = await runMode({ extra: '<p style="font-size:24px;color:#777">This large text exceeds three to one.</p>' });
+  const signalCSS = 'body{--blue:#315eea;--blue-mid:rgb(73,105,209);--orange:#f24b24;--orange-mid:#bb4e33;--blue-soft:#d9e2fa}';
+  const signalDarkText = await runMode({ css: signalCSS, extra: '<p id="signal-dark-text" style="font-size:60px;background:var(--orange);color:#111">Dark text has enough numeric contrast but violates the white-text rule.</p>' });
+  const signalLowContrast = await runMode({ css: signalCSS, extra: '<p id="signal-low-contrast" style="font-size:60px;background:var(--orange);color:#fbfaf6">Large white text still needs four point five to one.</p>' });
+  const signalWhiteFills = await runMode({ css: signalCSS + 'body{--orange:#ca3f1e}', extra: ['--blue', '--blue-mid', '--orange', '--orange-mid'].map(token => `<p style="font-size:30px;background:var(${token});color:#fbfaf6">White text on ${token}</p>`).join('') });
+  const signalNestedSoft = await runMode({ css: signalCSS, extra: '<div style="background:var(--blue);color:#fbfaf6"><p style="font-size:30px">Outer solid fill uses white.</p><div style="background:var(--blue-soft);color:#171717"><p style="font-size:30px">The inner soft fill uses dark text.</p></div><div style="background:#fbfaf6;color:#171717"><p style="font-size:30px">The inner neutral fill also uses dark text.</p></div></div>' });
+  const signalDarkFill = await runMode({ tone: 'dark', css: signalCSS + 'body{--blue:#243e8a}', extra: '<p style="font-size:30px;background:var(--blue);color:#edf1ff">The dark blue fill uses near-white text.</p>' });
+  const signalFadedText = await runMode({ css: signalCSS, extra: '<div style="background:var(--blue)"><p id="signal-faded-text" style="font-size:60px;color:#fbfaf6;opacity:.4">Opacity reduces effective text contrast.</p></div>' });
+  const nonSignalFills = await runMode({ palette: 'violet-moss', css: signalCSS, extra: '<p style="font-size:60px;background:var(--orange);color:#111">Other palettes retain their existing contrast rules.</p>' });
+  const alphaContrast = await runMode({ extra: '<div style="background:#000"><div style="background:rgba(255,255,255,.5)"><p id="alpha-background" style="font-size:20px;color:#fff">Translucent background</p></div></div><p id="alpha-text" style="font-size:24px;color:rgba(0,0,0,.4)">Translucent text</p><div style="background:#000"><p id="group-opacity" style="font-size:24px;color:white;opacity:.3">Group opacity</p></div>' });
+  const gradientContrast = await runMode({ extra: '<p style="font-size:20px;color:#aaa;background:linear-gradient(#fff,#ddd)">Gradient requires visual inspection.</p>' });
+  const opaqueOverGradient = await runMode({ extra: '<div style="background:linear-gradient(#fff,#ddd)"><p style="font-size:20px;color:#fff;background:#000">Opaque local fill is measurable.</p></div>' });
+  const overlappingImage = await runMode({ extra: `<div style="position:relative;height:110px"><img src='${pixel}' alt="test paint" style="position:absolute;inset:0;width:500px;height:80px"><p style="position:relative;font-size:20px;color:#ccc">Text over an image needs visual review.</p></div>` });
+  const financialMetrics = '<div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="valuation-change"><div data-role="metric" data-metric-purpose="comparison" data-financial-kind="valuation"><span data-role="metric-value">$10.3B</span><span data-role="metric-object">Earlier valuation</span><p data-role="metric-context">Previous reported financing round.</p></div><div data-role="metric" data-metric-purpose="comparison" data-financial-kind="valuation"><span data-role="metric-value">$21B</span><span data-role="metric-object">Latest valuation</span><p data-role="metric-context">Reported valuation vs the earlier round.</p></div></div>';
+  const financialComparison = await runMode({ extra: financialMetrics });
+  const financialWithUntypedPrices = await runMode({ extra: financialMetrics + '<div data-role="cover-proof" data-proof-purpose="comparison" data-fact-ids="product-prices">Device prices: $999 vs $1299</div>' });
+  const expect = (condition, message, result) => { if (!condition) throw new Error(`${message}\n${JSON.stringify(result, null, 2)}`); };
+  validModes.forEach(result => expect(result.issues.length === 0 && result.summary.contrastChecked >= 6, 'A valid language/palette/tone combination failed or escaped contrast auditing.', result));
+  expect(good.summary.language === 'zh-CN' && good.summary.palette === 'signal-blue-orange' && good.summary.tone === 'light', 'Legacy defaults changed.', good);
+  for (const name of ['language', 'palette', 'tone']) expect(invalidModes.issues.some(issue => issue.startsWith(`body[data-${name}]`)), `Invalid ${name} was accepted.`, invalidModes);
+  expect(paletteConflict.issues.some(issue => /Legacy class .* conflicts with/.test(issue)), 'Conflicting legacy palette class overrode declared palette silently.', paletteConflict);
+  expect(!matchingLegacyPalette.issues.length, 'A matching legacy palette class was rejected.', matchingLegacyPalette);
+  expect(multipleLegacyPalettes.issues.some(issue => /conflicting legacy palette classes/.test(issue)), 'Multiple incompatible legacy palettes were accepted.', multipleLegacyPalettes);
+  for (const { palette, result } of undeclaredLegacyPalettes) expect(!result.issues.length && result.summary.palette === palette && result.warnings.some(issue => issue.includes('body[data-palette] is missing')), 'A known legacy palette was not preserved when data-palette was absent.', result);
+  for (const result of [languageMismatch, languageMissing]) expect(result.issues.some(issue => /html\[lang\]/.test(issue)), 'Missing or mismatched document language was accepted.', result);
+  expect(chineseLeftover.issues.some(issue => /visible Chinese/.test(issue)), 'Chinese text leaked into an English edition.', chineseLeftover);
+  expect(chineseAlt.issues.some(issue => /Chinese alt text/.test(issue)), 'Chinese alt text leaked into an English edition.', chineseAlt);
+  expect(!chineseMarked.issues.length, 'Explicit Chinese name/quotation exception failed.', chineseMarked);
+  expect(!hiddenText.issues.length, 'Hidden or zero-width text caused a false failure.', hiddenText);
+  expect(restoredVisibility.issues.some(issue => /visible Chinese/.test(issue)), 'A visible child escaped the language audit because its parent had hidden visibility.', restoredVisibility);
+  expect(contrastBad.issues.filter(issue => /text contrast/.test(issue)).length === 2, 'Normal and large-text contrast thresholds were not enforced.', contrastBad);
+  expect(!contrastLargeGood.issues.length, 'Large text that clears 3:1 was rejected.', contrastLargeGood);
+  expect(signalDarkText.summary.whiteOnColorChecked === 1 && signalDarkText.issues.some(issue => /white-on-color rule/.test(issue)) && !signalDarkText.issues.some(issue => /text contrast/.test(issue)), 'High-contrast dark text escaped the Signal solid-fill white-text rule.', signalDarkText);
+  expect(signalLowContrast.issues.some(issue => /text contrast.*below 4\.5:1/.test(issue)) && !signalLowContrast.issues.some(issue => /white-on-color rule/.test(issue)), 'Large white text on a Signal fill escaped the 4.5:1 threshold.', signalLowContrast);
+  expect(!signalWhiteFills.issues.length && signalWhiteFills.summary.whiteOnColorChecked === 4, 'Readable white text on one of the four Signal solid-fill tokens failed or escaped checking.', signalWhiteFills);
+  expect(!signalNestedSoft.issues.length && signalNestedSoft.summary.whiteOnColorChecked === 1, 'Nested soft/neutral surfaces inherited an outer Signal fill white-text rule.', signalNestedSoft);
+  expect(!signalDarkFill.issues.length && signalDarkFill.summary.whiteOnColorChecked === 1, 'Near-white text on a dark Signal fill was rejected.', signalDarkFill);
+  expect(signalFadedText.summary.whiteOnColorChecked === 1 && signalFadedText.issues.some(issue => /#signal-faded-text/.test(issue) && /text contrast/.test(issue)), 'Opacity-reduced text on a Signal fill escaped contrast checking.', signalFadedText);
+  expect(!nonSignalFills.issues.length && nonSignalFills.summary.whiteOnColorChecked === 0, 'Signal white-text rules leaked into another palette.', nonSignalFills);
+  for (const id of ['alpha-background', 'alpha-text', 'group-opacity']) expect(alphaContrast.issues.some(issue => issue.includes(`#${id}`) && /text contrast/.test(issue)), `Transparent layer handling missed ${id}.`, alphaContrast);
+  expect(gradientContrast.summary.contrastManual === 1 && !gradientContrast.issues.length, 'Gradient background received an unreliable contrast verdict.', gradientContrast);
+  expect(opaqueOverGradient.summary.contrastManual === 0 && !opaqueOverGradient.issues.length, 'Opaque fill over a gradient was not measured.', opaqueOverGradient);
+  expect(overlappingImage.summary.contrastManual === 1 && !overlappingImage.issues.some(issue => /text contrast/.test(issue)), 'Image backdrop received an unreliable contrast verdict.', overlappingImage);
+  expect(!financialComparison.issues.length, 'Valuation metrics were treated as product prices.', financialComparison);
+  expect(financialWithUntypedPrices.issues.some(issue => /multi-price comparison/.test(issue)), 'Financial metrics allowed unrelated product prices to bypass the contract.', financialWithUntypedPrices);
   await browser.close();
   if (good.issues.length) throw new Error(`Good fixture failed:\n${good.issues.join('\n')}`);
   if (creative.issues.length) throw new Error(`Creative fixture failed:\n${creative.issues.join('\n')}`);
@@ -504,6 +751,8 @@ async function selfTest() {
   if (!performanceBad.issues.some(issue => /data-test-context/.test(issue))) throw new Error(`Incomplete performance context was not rejected:\n${performanceBad.issues.join('\n')}`);
   if (artMissing.issues.length < 2 || artGood.issues.length) throw new Error(`ART_DIRECTION asset-decision audit failed. missing=${artMissing.issues.join(' | ')} good=${artGood.issues.join(' | ')}`);
   console.log(`Audit self-test passed: valid fixtures=2; malformed base=${bad.issues.length} issues; card-count mismatch, split page shell, duplicate page numbers, low density, duplicate facts, mixed price bases, incomplete performance context, and missing text-cover rationale all rejected.`);
+  console.log('Mode regression passed: 12 language/palette/tone combinations; legacy defaults; invalid declarations; language mismatch; English text/alt; marked original language; hidden text; normal/large contrast; alpha layers; gradient/image manual review.');
+  console.log('Signal contrast regression passed: four solid-fill tokens require near-white text and 4.5:1 at every size; nested soft/neutral surfaces, dark tone, faded text, and other palettes checked.');
 }
 
 async function main() {

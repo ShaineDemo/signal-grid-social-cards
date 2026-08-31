@@ -6,7 +6,7 @@ Xiaohongshu/RedNote is the primary design target. X and LinkedIn are supported t
 
 | Platform | Canvas | Default package | Copy behavior |
 | --- | --- | --- | --- |
-| Xiaohongshu / RedNote | 1080×1440, 3:4 | 5–6 PNG cards | Conversational post, 3–6 hashtags |
+| Xiaohongshu / RedNote | 1080×1440, 3:4 | Evidence-determined PNG set; no fixed six-card ceiling | Conversational post, 3–6 hashtags |
 | X | 1080×1350, 4:5 | Up to 4 PNGs per post; split a longer story into a numbered thread | Keep each ordinary post within 280 characters including links; front-load the claim |
 | LinkedIn | 1080×1350, 4:5 | 5–8 PNGs for a multi-photo post, or one PDF document carousel | Professional context, one clear implication, restrained hashtags |
 
@@ -14,13 +14,13 @@ Use `<body data-platform="xiaohongshu">`, `<body data-platform="x">`, or `<body 
 
 ## Xiaohongshu / RedNote
 
-- This is the native/default mode and retains the six-card narrative arc when the evidence supports it.
+- This is the native/default mode. Let the evidence model and reader questions determine the page count; example sets must not become an implicit maximum.
 - Keep the first card legible as a feed cover and let later cards carry explanation and boundaries.
 - Deliver the complete `POST_COPY.md`, not just the images.
 
 ## X
 
-- A standard X post accepts up to four media items. A 5–6 card story therefore needs either compression to four cards or a thread such as `1/2` and `2/2`.
+- A standard X post accepts up to four media items. A longer story therefore needs either evidence-safe compression to four cards or a numbered thread. Do not drop a necessary evidence or boundary page merely to force one post.
 - Prefer 4:5 portrait images for this editorial-card treatment. Do not rely on 3:4 preview behavior.
 - Put the strongest standalone claim on card 1 because users may not open every image or thread post.
 - In `POST_COPY.md`, provide the first post and each follow-up post separately. Keep ordinary posts within 280 characters; count each link conservatively as 23 characters.

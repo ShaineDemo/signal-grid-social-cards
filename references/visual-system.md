@@ -32,6 +32,22 @@ Choose one palette for the entire carousel. Do not mix palette families page by 
 
 Keep the neutral ground paired with its palette. Test the cover against the recognition asset: if the portrait or product image visually fights the accents, switch the whole set rather than recoloring the asset. Palette choice never changes claim semantics; a secondary accent is emphasis, not automatic proof of danger or failure.
 
+## Light and dark tone
+
+Tone is independent of language and palette. New output declares `body[data-language="en"]`, `body[data-palette="petrol-raspberry"]`, and `body[data-tone="dark"]` (choose the requested values). Use one palette and one tone for the entire edition; put parallel editions in separate folders. The original palette classes remain supported for old documents, but do not combine a legacy class with a different `data-palette`.
+
+Use the **THEME TOKENS** block in `assets/template.html` as the executable source of truth. Copy that block with the starter; do not apply a filter to old PNGs. A dark edition keeps the original hue family in darker fills, tinted neutral surfaces, lighter text and brighter text accents. It remains flat and editorial, without glow, gradients or neon additions.
+
+| Palette | Dark ground `--paper` | Dark surface `--surface` | Primary `--blue` | Secondary `--orange` | Text `--ink` | Text accent `--accent-text` |
+| --- | --- | --- | --- | --- | --- | --- |
+| Signal Blue / Alert Orange | `#111829` | `#1c2740` | `#243e8a` | `#91351f` | `#edf1ff` | `#a9beff` |
+| Violet / Moss | `#181421` | `#292238` | `#4c3194` | `#405516` | `#f0ebff` | `#c7b2ff` |
+| Petrol / Raspberry | `#101d1c` | `#1d302e` | `#075652` | `#82274d` | `#e6f3ee` | `#8ad2c5` |
+
+`--blue` and `--orange` are legacy names for the palette's primary and secondary **fills**, not literal color requests. Use `--on-primary`, `--on-secondary`, `--on-mid`, and `--on-soft` for the corresponding fill text. Use `--ink` for text on `--paper` or `--surface`; `--text-muted` for secondary neutral-surface text and `--accent-text` for readable colored text. `--muted` is a decorative swatch, not a text token. Keep `--white`/`--asset-surface` as stable light surfaces for genuine source assets; do not turn every neutral panel into `--white` in a dark edition.
+
+Inherited text color is not safe after changing a panel fill. Explicitly pair every custom surface with its matching foreground, including labels, pills, footers, charts and captions. Keep at least 4.5:1 for ordinary text and 3:1 for large text (24 CSS px or 18.66 px bold); check the actual composed background. The template uses dark text on genuinely pale fills in light mode. Signal Blue / Alert Orange solid and mid-tone fills always use white/off-white text, including secondary labels; keep every text run on those fills at least 4.5:1 even when its export font size qualifies as large. If white is too weak, darken the fill within its original hue family instead of switching to dark text. A 1080-pixel export is viewed much smaller in a feed, so the generic 3:1 large-text threshold alone is not approval. Nested neutral/soft panels reset their foreground to dark text in light mode; do not force white on all descendants of a colored page. Do not recolor, invert, or blend-mode a logo or photo; use its original pixels and a suitable asset tile when contrast requires it.
+
 ## Tokens
 
 ### Signal Blue / Alert Orange — default
@@ -41,11 +57,15 @@ Keep the neutral ground paired with its palette. Test the cover against the reco
 --paper: #f2f4fb;
 --white: #fbfaf6;
 --blue: #315eea;
---blue-mid: #5378ee;
---blue-soft: #96aceb;
---orange: #f24b24;
---orange-mid: #f76743;
---orange-soft: #f3a18a;
+--blue-mid: #4969d1;
+--blue-soft: #d9e2fa;
+--orange: #ca3f1e;
+--orange-mid: #bb4e33;
+--orange-soft: #f9ddd2;
+--on-primary: #fbfaf6;
+--on-secondary: #fbfaf6;
+--on-mid: #fbfaf6;
+--on-soft: #171717;
 --muted: #a7b5dc;
 --radius-lg: 38px;
 --radius-md: 24px;
@@ -190,13 +210,13 @@ Empty space is intentional only when it strengthens hierarchy. It is not permiss
 
 ## Example page rhythm
 
-One possible six-card set alternates energy like this:
+For a multi-card set, alternate energy by narrative role rather than page number:
 
-- P1 high contrast / giant hook.
-- P2 pale ground / factual structure.
-- P3 saturated matrix / capability rhythm.
-- P4 pale ground / access conditions.
-- P5 split contrast / interpretation.
-- P6 saturated or warm white / closing thesis.
+- opening: high contrast / giant hook;
+- early evidence: neutral ground / factual structure;
+- capability or workflow: saturated matrix, path, or grouped sequence;
+- access, comparison, or conditions: neutral ground / explicit structure;
+- interpretation: split contrast or editorial field;
+- closing: saturated or neutral surface / synthesis and boundary. In dark mode, neutral surfaces use the dark tokens.
 
-This is an example, not a mandatory sequence. Derive the actual rhythm in `ART_DIRECTION.md`. In alternate palettes, “blue” means the palette's primary family and “orange” means its secondary family.
+Repeat or omit roles as the page table requires. This is an example, not a mandatory sequence or card count. Derive the actual rhythm in `ART_DIRECTION.md`. In alternate palettes, “blue” means the palette's primary family and “orange” means its secondary family.

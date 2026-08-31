@@ -11,7 +11,7 @@ Reduce the source in this order:
 5. Boundary: what is not confirmed, not available, or still limited.
 6. Takeaway: what the reader should check, try, or remember.
 
-## Common six-card arc
+## Example compact arc
 
 ```text
 01 Hook       — concrete event + emotional verb
@@ -22,7 +22,7 @@ Reduce the source in this order:
 06 Boundary   — limits, staged availability, and final takeaway
 ```
 
-This is a useful diagnostic, not a default template. Use a different arc and card count when the source supports a stronger argument. Four or five complete pages are better than six padded ones; a seventh page is justified only when it adds necessary evidence or a decision-changing boundary. Write the final reasoning in `STORY_PLAN.md`.
+These are six common reasoning moves, not six mandatory pages. Combine moves when one visual relationship can answer them cleanly; expand a move across multiple pages when the evidence, audience workflow, comparison basis, or boundary would otherwise be compressed beyond readability. Do not set the card count before writing the reader questions. Record the final reasoning in `STORY_PLAN.md`.
 
 ## Page novelty contract
 

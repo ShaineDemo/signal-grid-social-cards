@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.1.1 — 2026-09-01
+
+- Corrected Signal Blue / Alert Orange light-mode solid and mid-tone fields to use white text, with darker same-family fills that clear 4.5:1 for small feed-size text.
+- Separated genuinely pale fields from solid fills and preserved dark text only on pale/neutral light-mode surfaces.
+- Rebuilt the Mac desktop dark edition on a navy ground and added targeted white-foreground regressions.
+
+## 2.1.0 — 2026-09-01
+
+- Made language, palette, and tone explicit, independent output choices, with Simplified Chinese and light tone as the defaults.
+- Extended all three original palettes with dark tones while preserving each palette’s hue identity and authentic logo colors.
+- Strengthened complete English editions: natural editorial rewriting, English layout reflow, translated labels/alt text/disclosures, and unchanged facts, currencies, markets, and comparison bases.
+- Added portable `data-language`, `data-palette`, and `data-tone` declarations with matching document language, plus compatibility warnings for older outputs without mode declarations.
+- Added language and tone QA guidance covering inherited text contrast, complex image backgrounds, edition comparisons, and explicit reporting of tested combinations.
+- Added English dark and Chinese dark usage examples in both README editions.
+
 ## 2.0.0 — 2026-08-25
 
 - Renamed Signal Grid Social Cards to BriefGrid.

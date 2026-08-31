@@ -43,7 +43,17 @@ For page 1, record the same next question declared in the cover preflight. Use t
 
 ## Let evidence determine page count
 
-Use 4–7 cards for a typical Xiaohongshu story; 5–6 is common, not mandatory. Stop when the reader has enough evidence to understand the event, consequence, and boundary. Do not pad a weak capability, market-context, or closing page.
+There is no fixed six-card or seven-card ceiling. Determine the count from the page table after the fact ledger and reader questions are clear. A compact update may need only a few cards; a research-heavy comparison, tutorial, identity reveal, or audience-specific workflow may need more.
+
+Add a page when it protects one of these distinctions:
+
+- two reader questions require different answers;
+- confirmed fact and editorial interpretation would otherwise blur together;
+- identity/event context and practical audience use would otherwise compete for the same hierarchy;
+- a comparison, workflow, or boundary would become unreadable when compressed;
+- a new audience decision needs evidence not available on the previous page.
+
+Remove or merge a page when it adds no new answer. Stop when the reader has enough evidence to understand the event, consequence, practical use, and boundary. If the page table becomes too long for one comfortable reading session, propose a part-one/part-two split at a real narrative boundary, but do not delete necessary evidence merely to meet an inherited example count.
 
 Choose a narrative lens that fits the source:
 
@@ -77,7 +87,7 @@ Before layout, remove or rewrite any page that:
 - repeats a dominant number with the same purpose;
 - uses unrelated competitor or market context to manufacture importance;
 - converts an unknown into a definitive conclusion;
-- exists only to complete a six-card arc;
+- exists only to complete a familiar or preselected card count;
 - contains more caveats than useful information because the page question is wrong.
 
 Also compress or redesign a cover that:

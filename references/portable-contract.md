@@ -5,7 +5,11 @@ Use this contract in every generated card set. It turns the most important edito
 ## Required document metadata
 
 ```html
+<html lang="zh-CN">
 <body
+  data-language="zh-CN"
+  data-palette="signal-blue-orange"
+  data-tone="light"
   data-platform="xiaohongshu"
   data-card-count="6"
   data-topic-subject="Claude Code"
@@ -16,6 +20,10 @@ Use this contract in every generated card set. It turns the most important edito
   data-title-emphasis-mode="scale">
 ```
 
+- `data-language` is `zh-CN` or `en`, and exactly matches `<html lang>`. It controls the complete card and post-package language, including editorial labels, alt text, and disclosures.
+- `data-palette` is `signal-blue-orange`, `violet-moss`, or `petrol-raspberry`. `data-tone` is `light` or `dark`. These choices are independent of language: all 12 language × tone × palette combinations are supported. Use the corresponding semantic color tokens in `visual-system.md` and the template rather than introducing a fourth palette.
+- New outputs declare all three attributes explicitly. For older outputs, missing mode declarations retain compatibility and produce a warning rather than an automatic failure. If `data-palette` is absent, a known legacy palette class selects its palette; otherwise the fallback is `signal-blue-orange`. A legacy palette class that conflicts with an explicit `data-palette` is an error. Do not use that compatibility path for new work; invalid values or a declared language that disagrees with `<html lang>` are errors.
+- Unspecified language and tone default to `zh-CN` and `light` when creating a new output. Choose the palette for the topic; use `signal-blue-orange` if no alternate is more suitable.
 - `data-topic-subject` is the exact company, person, product, or model that should drive cover recognition.
 - `data-card-count` is the exact number of `.poster` elements in the file.
 - `data-cover-asset-availability` is `available`, `unavailable`, or `not-needed` after the asset search.
@@ -34,6 +42,19 @@ Cover asset reason: 官方产品图可用，但封面以“如何选择”作为
 ```
 
 The values must match the HTML. If an asset is available but `decision` is `none`, explain the stronger editorial relationship created by the text-led cover. A generic preference such as “cleaner” is insufficient.
+
+## Language and tone behavior
+
+Record the selected language, palette, and tone in `ART_DIRECTION.md` so reviewers can compare intent with the HTML. An English dark edition of the Violet / Moss palette declares:
+
+```html
+<html lang="en">
+<body data-language="en" data-palette="violet-moss" data-tone="dark" ...>
+```
+
+This snippet shows only the mode attributes; a deliverable still includes all required document and page metadata. Keep ordinary visible copy, accessibility text, and disclosure in English. Retain authoritative Chinese names or quotations only when needed for accuracy and mark those fragments, for example `<span lang="zh-CN">小马智行</span>`. English does not change a source’s currency, market, units, or comparison basis.
+
+Dark tone retains the chosen palette’s hue lineage and remaps semantic surfaces and foregrounds. Audit readable contrast on actual solid surfaces, including inherited and muted text; a tone declaration alone does not prove contrast. Images, transparency, overlapping layers, and complex backgrounds require visual review. Do not use page-wide inversion/brightness filters, recolor logos, or treat an unrelated dark scheme as a fourth palette.
 
 ## Card count and one-card page shell
 
@@ -182,6 +203,8 @@ Grammar diversity is a review signal rather than a quota. Repetition is acceptab
 - An `inference` or `mixed` page needs a visible element with `data-role="claim-label"`, such as “编辑判断” or “Editorial interpretation.”
 
 ## Numeric units
+
+For a valuation or funding amount, keep normal metric semantics and add `data-financial-kind="valuation"` or `data-financial-kind="funding"` on its `data-role="metric"` container. The price-comparison heuristic then treats the amount as a financial metric, not a product price. Use this only for actual financing/valuation facts; ordinary product prices still require SKU, price type and comparison basis.
 
 For an oversized number, mark the complete information unit:
 

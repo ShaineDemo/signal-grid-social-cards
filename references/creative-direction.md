@@ -93,7 +93,7 @@ Fix every material weakness and render again. A first pass may remain unchanged 
 ## Anti-patterns
 
 - Designing from the starter template before identifying the story relationship.
-- Generating six pages because the example has six pages.
+- Generating a fixed number of pages because an example happens to use that count.
 - Changing colors while repeating the same information or composition.
 - Adding a logo or portrait only because the topic mentions a company or person.
 - Treating audit compliance as proof of visual quality.
